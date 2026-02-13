@@ -196,11 +196,27 @@ function showAIResponse(bbId, text) {
     bb.innerHTML = '<div class="ai-badge">AI MAESTRO MARIO</div>' + text;
 }
 
+async function marioSpeak(text) {
+    try {
+        const res = await fetch('https://ucowlcrddzukykbaitzt.supabase.co/functions/v1/mario-ai', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ action: 'tts', text: text })
+        });
+        if (!res.ok) return;
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const audio = new Audio(url);
+        audio.play();
+    } catch(e) { console.log('TTS fallback:', e); }
+}
+
 async function marioSay(bbId, context, fallback) {
     showTyping(bbId);
     const aiText = await askMario(context);
     if (aiText) {
         showAIResponse(bbId, aiText);
+        marioSpeak(aiText);
     } else {
         const bb = document.getElementById(bbId);
         bb.classList.remove('ai-active');
