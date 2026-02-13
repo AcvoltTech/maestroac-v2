@@ -22,101 +22,24 @@
         .s.on{display:flex}
         @keyframes si{from{opacity:0;transform:translateY(36px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
         
-        /* ===== VIDEO AVATAR OVERLAY ===== */
-        .video-overlay{
-            position:fixed;
-            inset:0;
-            z-index:1000;
-            background:rgba(10,22,40,0.95);
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            flex-direction:column;
-            opacity:0;
-            visibility:hidden;
-            transition:opacity 0.5s ease, visibility 0.5s ease;
-        }
-        .video-overlay.active{
-            opacity:1;
-            visibility:visible;
-        }
-        .video-overlay.fade-out{
-            opacity:0;
-        }
-        .video-container{
-            position:relative;
-            width:90%;
-            max-width:360px;
-            border-radius:24px;
-            overflow:hidden;
-            box-shadow:0 20px 60px rgba(255,107,43,0.3), 0 0 0 3px rgba(0,212,255,0.3);
-            animation:videoEnter 0.6s cubic-bezier(.16,1,.3,1);
-        }
-        @keyframes videoEnter{
-            from{opacity:0;transform:scale(0.8) translateY(30px)}
-            to{opacity:1;transform:scale(1) translateY(0)}
-        }
-        .video-container video{
-            width:100%;
-            display:block;
-            background:#000;
-        }
-        .video-glow{
-            position:absolute;
-            inset:-4px;
-            border-radius:28px;
-            background:conic-gradient(var(--accent),var(--electric),var(--accent));
-            z-index:-1;
-            animation:sp 4s linear infinite;
-            opacity:0.6;
-        }
-        @keyframes sp{to{transform:rotate(360deg)}}
-        .video-label{
-            margin-top:20px;
-            display:flex;
-            align-items:center;
-            gap:10px;
-            background:linear-gradient(135deg,rgba(255,107,43,.2),rgba(0,212,255,.1));
-            border:1px solid rgba(0,212,255,.3);
-            border-radius:30px;
-            padding:10px 24px;
-            font-family:'Fredoka',sans-serif;
-            font-size:16px;
-            font-weight:600;
-            color:var(--electric);
-            animation:pulse 2s ease-in-out infinite;
-        }
-        @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.7}}
-        .video-label::before{
-            content:'';
-            width:10px;
-            height:10px;
-            border-radius:50%;
-            background:var(--accent);
-            animation:blink 1s ease-in-out infinite;
-        }
+        /* VIDEO OVERLAY */
+        .video-overlay{position:fixed;inset:0;z-index:1000;background:rgba(10,22,40,0.97);display:flex;align-items:center;justify-content:center;flex-direction:column;opacity:0;visibility:hidden;transition:opacity 0.5s ease, visibility 0.5s ease}
+        .video-overlay.active{opacity:1;visibility:visible}
+        .video-overlay.fade-out{opacity:0}
+        .video-container{position:relative;width:90%;max-width:340px;border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(255,107,43,0.4), 0 0 0 3px rgba(0,212,255,0.4);animation:videoEnter 0.6s cubic-bezier(.16,1,.3,1)}
+        @keyframes videoEnter{from{opacity:0;transform:scale(0.8) translateY(30px)}to{opacity:1;transform:scale(1) translateY(0)}}
+        .video-container video{width:100%;display:block;background:#000}
+        .video-glow{position:absolute;inset:-4px;border-radius:24px;background:conic-gradient(var(--accent),var(--electric),var(--accent));z-index:-1;animation:sp 4s linear infinite;opacity:0.7}
+        .video-label{margin-top:20px;display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,rgba(255,107,43,.2),rgba(0,212,255,.1));border:1px solid rgba(0,212,255,.3);border-radius:30px;padding:10px 24px;font-family:'Fredoka',sans-serif;font-size:16px;font-weight:600;color:var(--electric)}
+        .video-label::before{content:'';width:10px;height:10px;border-radius:50%;background:var(--accent);animation:blink 1s ease-in-out infinite}
         @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
-        .skip-btn{
-            margin-top:16px;
-            background:transparent;
-            border:1px solid rgba(255,255,255,0.2);
-            color:var(--muted);
-            padding:8px 20px;
-            border-radius:20px;
-            font-family:'Nunito',sans-serif;
-            font-size:13px;
-            cursor:pointer;
-            transition:all 0.3s;
-        }
-        .skip-btn:hover{
-            border-color:var(--accent);
-            color:var(--txt);
-        }
-        /* ===== END VIDEO AVATAR ===== */
+        .skip-btn{margin-top:16px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:var(--txt);padding:10px 24px;border-radius:20px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.3s}
+        .skip-btn:hover{background:var(--accent);border-color:var(--accent)}
         
         .aw{position:relative;margin:16px auto 12px}
         .aw.lg{width:190px;height:190px}.aw.md{width:140px;height:140px}.aw.sm{width:120px;height:120px}
         .ar{position:absolute;inset:-6px;border-radius:50%;background:conic-gradient(var(--accent),var(--electric),var(--accent));animation:sp 4s linear infinite}
+        @keyframes sp{to{transform:rotate(360deg)}}
         .ag{position:absolute;inset:-20px;border-radius:50%;background:radial-gradient(circle,var(--accent) 0%,transparent 70%);opacity:.25;animation:pu 3s ease-in-out infinite}
         @keyframes pu{0%,100%{transform:scale(1);opacity:.25}50%{transform:scale(1.12);opacity:.4}}
         .ai{position:relative;width:100%;height:100%;border-radius:50%;overflow:hidden;border:4px solid var(--dark);animation:fl 4.5s ease-in-out infinite}
@@ -155,17 +78,15 @@
         .sp-s{font-size:17px;color:var(--muted);max-width:280px}
         .badge{display:inline-flex;align-items:center;gap:7px;background:rgba(255,107,43,.1);border:1px solid rgba(255,107,43,.25);border-radius:28px;padding:5px 14px;font-family:'Fredoka',sans-serif;font-size:13px;color:var(--accent)}
         .rt{background:var(--card);border:1.5px solid rgba(0,212,255,.12);border-radius:var(--r);padding:16px 18px;margin-bottom:10px;display:flex;align-items:center;gap:14px;animation:ri .5s ease-out backwards}
-        .rt:nth-child(1){animation-delay:.15s}.rt:nth-child(3){animation-delay:.3s}.rt:nth-child(5){animation-delay:.45s}.rt:nth-child(7){animation-delay:.6s}.rt:nth-child(9){animation-delay:.75s}
         @keyframes ri{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:translateX(0)}}
         .rn{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--electric));display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-weight:700;font-size:16px;flex-shrink:0}
         .rtt{font-family:'Fredoka',sans-serif;font-size:14.5px;font-weight:600}.rd{font-size:12px;color:var(--muted)}
-        .rl{width:2px;height:16px;background:linear-gradient(var(--accent),var(--electric));margin-left:35px;border-radius:2px;animation:ri .4s ease-out backwards}
+        .rl{width:2px;height:16px;background:linear-gradient(var(--accent),var(--electric));margin-left:35px;border-radius:2px}
         .cw{position:fixed;inset:0;pointer-events:none;z-index:100}.cf{position:absolute;top:-16px;animation:cff 2.8s ease-out forwards}
         @keyframes cff{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
         .typing{display:inline-flex;gap:4px;align-items:center;padding:4px 0}
         .typing .dot{width:8px;height:8px;border-radius:50%;background:var(--electric);animation:tblink 1.4s infinite both}
-        .typing .dot:nth-child(2){animation-delay:.2s}
-        .typing .dot:nth-child(3){animation-delay:.4s}
+        .typing .dot:nth-child(2){animation-delay:.2s}.typing .dot:nth-child(3){animation-delay:.4s}
         @keyframes tblink{0%,80%,100%{opacity:.3;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
         .bb.ai-active{border-color:rgba(255,107,43,.35);box-shadow:0 6px 28px rgba(255,107,43,.15)}
         .ai-badge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,rgba(255,107,43,.15),rgba(0,212,255,.1));border:1px solid rgba(0,212,255,.2);border-radius:20px;padding:2px 10px 2px 6px;font-size:10px;color:var(--electric);font-weight:700;letter-spacing:.5px;margin-bottom:8px;font-family:'Fredoka',sans-serif}
@@ -176,87 +97,92 @@
 <div class="bg"><div class="o"></div><div class="o"></div><div class="o"></div></div>
 <div class="gr"></div>
 
-<!-- ===== VIDEO AVATAR OVERLAY ===== -->
+<!-- VIDEO OVERLAY -->
 <div class="video-overlay" id="videoOverlay">
     <div class="video-container">
         <div class="video-glow"></div>
         <video id="marioVideo" playsinline webkit-playsinline>
-            <source src="https://raw.githubusercontent.com/AcvoltTech/maestroac-app/main/assets/videos/bienvenida.mp4" type="video/mp4">
+            <source src="https://raw.githubusercontent.com/AcvoltTech/maestroac-v2/main/MAESTRO%20MARIO%20(1).mp4" type="video/mp4">
         </video>
     </div>
-    <div class="video-label">
-        <span>MAESTRO MARIO EN VIVO</span>
-    </div>
-    <button class="skip-btn" onclick="skipVideo()">Saltar ▸</button>
+    <div class="video-label"><span>MAESTRO MARIO EN VIVO</span></div>
+    <button class="skip-btn" onclick="skipVideo()">Saltar</button>
 </div>
-<!-- ===== END VIDEO AVATAR ===== -->
 
 <div class="app">
 
+<!-- PANTALLA INICIO -->
 <div class="s on" id="s0"><div class="sp">
-    <div class="aw lg"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-app/main/mario.jpg" alt="Maestro Mario"></div></div>
+    <div class="aw lg"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-v2/main/mario.jpg" alt="Maestro Mario"></div></div>
     <div><div class="sp-t">MAESTRO<br>MARIO</div><div class="badge">&#9889; NIVEL 33</div></div>
     <div class="sp-s">Si no mides, est&#225;s adivinando</div>
     <button class="bt" onclick="startWithVideo()" style="max-width:260px">Comenzar / Start</button>
 </div></div>
 
+<!-- IDIOMA -->
 <div class="s" id="s1">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div><div class="lo-s">HVAC &#8226; ELECTRICAL &#8226; TRAINING</div></div>
-    <div class="aw md"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-app/main/mario.jpg" alt="M"></div></div>
+    <div class="aw md"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-v2/main/mario.jpg" alt="M"></div></div>
     <div class="bb">&#161;Hola! Choose your language<br>Elige tu idioma</div>
     <div class="fl"><div class="fc" onclick="setLang('es')"><span class="fe">MX</span><span class="fn">Espa&#241;ol</span></div><div class="fc" onclick="setLang('en')"><span class="fe">US</span><span class="fn">English</span></div></div>
 </div>
 
+<!-- NOMBRE -->
 <div class="s" id="s2">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:20%"></div></div><div class="ps"><b data-t="step_1"></b></div>
-    <div class="aw md" id="a2"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-app/main/mario.jpg" alt="M"></div></div>
+    <div class="aw md" id="a2"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-v2/main/mario.jpg" alt="M"></div></div>
     <div class="bb" id="bb2"><span data-t="welcome_speech"></span></div>
     <div style="width:100%"><input class="ip" id="nm" data-tp="name_ph" oninput="document.getElementById('b2').disabled=this.value.trim().length<2"><button class="bt" id="b2" disabled onclick="sName()" data-t="continue"></button></div>
 </div>
 
+<!-- NIVEL -->
 <div class="s" id="s3">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:40%"></div></div><div class="ps"><b data-t="step_2"></b></div>
-    <div class="aw sm" id="a3"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-app/main/mario.jpg" alt="M"></div></div>
+    <div class="aw sm" id="a3"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-v2/main/mario.jpg" alt="M"></div></div>
     <div class="bb" id="bb3"><span data-t="level_speech"></span></div>
     <div class="os" id="lo"></div>
     <button class="bt" id="b3" disabled onclick="sLvl()" data-t="continue"></button>
 </div>
 
+<!-- ESPECIALIDADES -->
 <div class="s" id="s4">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:60%"></div></div><div class="ps"><b data-t="step_3"></b></div>
-    <div class="aw sm" id="a4"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-app/main/mario.jpg" alt="M"></div></div>
+    <div class="aw sm" id="a4"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-v2/main/mario.jpg" alt="M"></div></div>
     <div class="bb" id="bb4"><span data-t="spec_speech"></span></div>
     <p class="mh" data-t="multi_hint"></p>
     <div class="os" id="so"></div>
     <button class="bt" id="b4" disabled onclick="sSpc()" data-t="continue"></button>
 </div>
 
+<!-- ESCUELA -->
 <div class="s" id="s5">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:80%"></div></div><div class="ps"><b data-t="step_4"></b></div>
-    <div class="aw sm" id="a5"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-app/main/mario.jpg" alt="M"></div></div>
+    <div class="aw sm" id="a5"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-v2/main/mario.jpg" alt="M"></div></div>
     <div class="bb" id="bb5"><span data-t="school_speech"></span></div>
     <div class="os" id="sco"></div>
     <button class="bt" id="b5" disabled onclick="sSch()" data-t="continue"></button>
 </div>
 
+<!-- METAS -->
 <div class="s" id="s6">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:90%"></div></div><div class="ps"><b data-t="step_5"></b></div>
-    <div class="aw sm" id="a6"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-app/main/mario.jpg" alt="M"></div></div>
+    <div class="aw sm" id="a6"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-v2/main/mario.jpg" alt="M"></div></div>
     <div class="bb" id="bb6"><span data-t="goals_speech"></span></div>
     <p class="mh" data-t="multi_hint"></p>
     <div class="os" id="go2"></div>
     <button class="bt" id="b6" disabled onclick="sGol()" data-t="continue"></button>
 </div>
 
+<!-- RUTA FINAL -->
 <div class="s" id="s7">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:100%"></div></div>
-    <div class="aw md" id="a7"><div class="ag" style="background:radial-gradient(circle,var(--gold) 0%,transparent 70%)"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-app/main/mario.jpg" alt="M"></div></div>
+    <div class="aw md" id="a7"><div class="ag" style="background:radial-gradient(circle,var(--gold) 0%,transparent 70%)"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-v2/main/mario.jpg" alt="M"></div></div>
     <div class="bb" id="bb7"><span data-t="route_speech"></span></div>
     <div id="rl" style="width:100%"></div>
     <button class="bt" onclick="startApp()" data-t="start_btn"></button>
@@ -267,211 +193,267 @@
 
 <script>
 const D={lang:'es',name:'',level:null,specs:[],school:null,goals:[]};
+let videoPlaying=false;
 
-/* ===== VIDEO AVATAR SYSTEM ===== */
-const VIDEO_URLS = {
-    bienvenida: 'https://raw.githubusercontent.com/AcvoltTech/maestroac-app/main/assets/videos/bienvenida.mp4',
-    correcto: 'https://raw.githubusercontent.com/AcvoltTech/maestroac-app/main/assets/videos/correcto.mp4',
-    incorrecto: 'https://raw.githubusercontent.com/AcvoltTech/maestroac-app/main/assets/videos/incorrecto.mp4',
-    felicitacion: 'https://raw.githubusercontent.com/AcvoltTech/maestroac-app/main/assets/videos/felicitacion.mp4'
-};
-
-let videoPlaying = false;
-
-function showMarioVideo(videoKey, callback) {
-    if (videoPlaying) return;
-    videoPlaying = true;
-    
-    const overlay = document.getElementById('videoOverlay');
-    const video = document.getElementById('marioVideo');
-    
-    // Set video source
-    const videoUrl = VIDEO_URLS[videoKey] || VIDEO_URLS.bienvenida;
-    video.src = videoUrl;
-    
-    // Show overlay with animation
-    overlay.classList.add('active');
-    overlay.classList.remove('fade-out');
-    
-    // Play video
-    video.play().catch(e => {
-        console.log('Video autoplay blocked, user interaction needed:', e);
-    });
-    
-    // When video ends, fade out and call callback
-    video.onended = function() {
-        hideVideoOverlay(callback);
-    };
-    
-    // Also handle errors
-    video.onerror = function() {
-        console.log('Video error, closing overlay');
-        hideVideoOverlay(callback);
-    };
+// VIDEO FUNCTIONS
+function showMarioVideo(cb){
+    if(videoPlaying)return;
+    videoPlaying=true;
+    const o=document.getElementById('videoOverlay');
+    const v=document.getElementById('marioVideo');
+    o.classList.add('active');
+    o.classList.remove('fade-out');
+    v.currentTime=0;
+    v.play().catch(e=>console.log('Autoplay blocked:',e));
+    v.onended=function(){hideVideoOverlay(cb)};
+    v.onerror=function(){hideVideoOverlay(cb)};
 }
 
-function hideVideoOverlay(callback) {
-    const overlay = document.getElementById('videoOverlay');
-    const video = document.getElementById('marioVideo');
-    
-    // Fade out
-    overlay.classList.add('fade-out');
-    
-    // After fade animation, hide completely
-    setTimeout(() => {
-        overlay.classList.remove('active');
-        overlay.classList.remove('fade-out');
-        video.pause();
-        video.currentTime = 0;
-        videoPlaying = false;
-        
-        // Execute callback if provided
-        if (callback && typeof callback === 'function') {
-            callback();
-        }
-    }, 500);
+function hideVideoOverlay(cb){
+    const o=document.getElementById('videoOverlay');
+    const v=document.getElementById('marioVideo');
+    o.classList.add('fade-out');
+    setTimeout(()=>{
+        o.classList.remove('active','fade-out');
+        v.pause();
+        v.currentTime=0;
+        videoPlaying=false;
+        if(cb)cb();
+    },500);
 }
 
-function skipVideo() {
-    const video = document.getElementById('marioVideo');
-    video.pause();
-    hideVideoOverlay();
+function skipVideo(){
+    document.getElementById('marioVideo').pause();
+    hideVideoOverlay(()=>go('s1'));
 }
 
-// Start app with welcome video
-function startWithVideo() {
-    showMarioVideo('bienvenida', function() {
-        go('s1');
-    });
+function startWithVideo(){
+    showMarioVideo(()=>go('s1'));
 }
 
-// Show Mario after user makes a selection (for feedback)
-function showMarioFeedback(type, callback) {
-    showMarioVideo(type, callback);
-}
-/* ===== END VIDEO AVATAR SYSTEM ===== */
-
+// TRANSLATIONS
 const T={
-es:{step_1:'Paso 1 de 5',step_2:'Paso 2 de 5',step_3:'Paso 3 de 5',step_4:'Paso 4 de 5',step_5:'Paso 5 de 5',welcome_speech:'\u00a1Bienvenido t\u00e9cnico! Soy el Maestro Mario y voy a ser tu gu\u00eda. \u00bfC\u00f3mo te llamas?',name_ph:'Escribe tu nombre aqu\u00ed...',continue:'Continuar \u2192',level_speech:'\u00a1Mucho gusto, {name}! \u00bfEn qu\u00e9 nivel t\u00e9cnico te encuentras?',spec_speech:'\u00a1Excelente, {name}! \u00bfEn qu\u00e9 \u00e1reas te sientes m\u00e1s fuerte?',multi_hint:'Selecciona una o m\u00e1s opciones',school_speech:'\u00a1Vas muy bien, {name}! \u00bfD\u00f3nde est\u00e1s estudiando?',goals_speech:'\u00a1\u00daltima pregunta, {name}! \u00bfQu\u00e9 quieres lograr?',route_speech:'\u00a1Perfecto, {name}! He creado tu ruta personalizada. \u00a1Vamos con todo!',start_btn:'\ud83d\ude80 \u00a1Empezar a Aprender!',lv1:'Estudiante',lv1d:'Estoy aprendiendo lo b\u00e1sico',lv2:'Ayudante',lv2d:'Ya ando en el campo con un t\u00e9cnico',lv3:'T\u00e9cnico',lv3d:'Ya trabajo solo pero quiero mejorar',lv4:'Avanzado',lv4d:'Quiero dominar el oficio',lv5:'Maestro',lv5d:'Quiero ser l\u00edder / abrir mi empresa',sp_e:'Electricidad',sp_ed:'Circuitos, controles, cableado',sp_a:'Aire Acondicionado',sp_ad:'Splits, centrales, mini splits',sp_r:'Refrigeraci\u00f3n',sp_rd:'C\u00e1maras fr\u00edas, refrigeradores comerciales',sp_h:'Calefacci\u00f3n',sp_hd:'Furnaces, bombas de calor',sp_x:'Estoy empezando en todo',sp_xd:'Quiero aprender de todo',sc_ac:'ACVOLT Tech School',sc_acd:'Estudiante actual de ACVOLT',sc_ot:'Otra escuela',sc_otd:'Estoy en otra instituci\u00f3n',sc_sf:'Aprendo por mi cuenta',sc_sfd:'YouTube, libros, campo',sc_dn:'Ya termin\u00e9 mis estudios',sc_dnd:'Tengo certificaci\u00f3n/diploma',gl_c:'Pasar mis certificaciones',gl_cd:'EPA, NATE, OSHA, NCCER',gl_d:'Mejorar mis diagn\u00f3sticos',gl_dd:'Ser m\u00e1s preciso en el campo',gl_b:'Abrir mi propio negocio',gl_bd:'De t\u00e9cnico a empresario',gl_m:'Ganar m\u00e1s dinero',gl_md:'Subir mi valor como t\u00e9cnico',r_elec:'Fundamentos El\u00e9ctricos',r_elecd:'Circuitos, Ley de Ohm, diagramas',r_ac:'Aire Acondicionado',r_acd:'Presiones, carga de refrigerante',r_ref:'Refrigeraci\u00f3n Comercial',r_refd:'C\u00e1maras fr\u00edas, controles, defrost',r_heat:'Calefacci\u00f3n',r_heatd:'Furnaces, bombas de calor, gas',r_cert:'Preparaci\u00f3n para Certificaciones',r_certd:'EPA 608 \u2022 NATE \u2022 OSHA \u2022 NCCER',r_biz:'De T\u00e9cnico a Empresario',r_bizd:'Licencias, estimados, clientes'},
-en:{step_1:'Step 1 of 5',step_2:'Step 2 of 5',step_3:'Step 3 of 5',step_4:'Step 4 of 5',step_5:'Step 5 of 5',welcome_speech:"Welcome technician! I'm Maestro Mario and I'll be your guide. What's your name?",name_ph:'Type your name here...',continue:'Continue \u2192',level_speech:"Nice to meet you, {name}! What's your technical level?",spec_speech:'Excellent, {name}! What areas are you strongest in?',multi_hint:'Select one or more options',school_speech:'Great progress, {name}! Where are you studying?',goals_speech:'Last question, {name}! What do you want to achieve?',route_speech:"Perfect, {name}! I've created your personalized path. Let's go!",start_btn:'\ud83d\ude80 Start Learning!',lv1:'Student',lv1d:"I'm learning the basics",lv2:'Helper',lv2d:"I'm in the field with a technician",lv3:'Technician',lv3d:'I work solo but want to improve',lv4:'Advanced',lv4d:'I want to master the trade',lv5:'Master',lv5d:'I want to lead / start my business',sp_e:'Electrical',sp_ed:'Circuits, controls, wiring',sp_a:'Air Conditioning',sp_ad:'Splits, central, mini splits',sp_r:'Refrigeration',sp_rd:'Walk-in coolers, commercial',sp_h:'Heating',sp_hd:'Furnaces, heat pumps',sp_x:'Starting in everything',sp_xd:'I want to learn it all',sc_ac:'ACVOLT Tech School',sc_acd:'Current ACVOLT student',sc_ot:'Another school',sc_otd:"I'm at another institution",sc_sf:'Self-taught',sc_sfd:'YouTube, books, field',sc_dn:'Completed studies',sc_dnd:'I have certification/diploma',gl_c:'Pass certifications',gl_cd:'EPA, NATE, OSHA, NCCER',gl_d:'Improve diagnostics',gl_dd:'Be more precise in the field',gl_b:'Start my business',gl_bd:'From tech to owner',gl_m:'Earn more money',gl_md:'Increase my value',r_elec:'Electrical Fundamentals',r_elecd:"Circuits, Ohm's law, diagrams",r_ac:'Air Conditioning',r_acd:'Pressure diagnostics, charging',r_ref:'Commercial Refrigeration',r_refd:'Walk-in coolers, controls, defrost',r_heat:'Heating Systems',r_heatd:'Furnaces, heat pumps, gas',r_cert:'Certification Prep',r_certd:'EPA 608 \u2022 NATE \u2022 OSHA \u2022 NCCER',r_biz:'Tech to Business Owner',r_bizd:'Licensing, estimates, clients'}
+es:{step_1:'Paso 1 de 5',step_2:'Paso 2 de 5',step_3:'Paso 3 de 5',step_4:'Paso 4 de 5',step_5:'Paso 5 de 5',welcome_speech:'¡Bienvenido técnico! Soy el Maestro Mario y voy a ser tu guía. ¿Cómo te llamas?',name_ph:'Escribe tu nombre aquí...',continue:'Continuar →',level_speech:'¡Mucho gusto, {name}! ¿En qué nivel técnico te encuentras?',spec_speech:'¡Excelente, {name}! ¿En qué áreas te sientes más fuerte?',multi_hint:'Selecciona una o más opciones',school_speech:'¡Vas muy bien, {name}! ¿Dónde estás estudiando?',goals_speech:'¡Última pregunta, {name}! ¿Qué quieres lograr?',route_speech:'¡Perfecto, {name}! He creado tu ruta personalizada. ¡Vamos con todo!',start_btn:'🚀 ¡Empezar a Aprender!',lv1:'Estudiante',lv1d:'Estoy aprendiendo lo básico',lv2:'Ayudante',lv2d:'Ya ando en el campo con un técnico',lv3:'Técnico',lv3d:'Ya trabajo solo pero quiero mejorar',lv4:'Avanzado',lv4d:'Quiero dominar el oficio',lv5:'Maestro',lv5d:'Quiero ser líder / abrir mi empresa',sp_e:'Electricidad',sp_ed:'Circuitos, controles, cableado',sp_a:'Aire Acondicionado',sp_ad:'Splits, centrales, mini splits',sp_r:'Refrigeración',sp_rd:'Cámaras frías, refrigeradores comerciales',sp_h:'Calefacción',sp_hd:'Furnaces, bombas de calor',sp_x:'Estoy empezando en todo',sp_xd:'Quiero aprender de todo',sc_ac:'ACVOLT Tech School',sc_acd:'Estudiante actual de ACVOLT',sc_ot:'Otra escuela',sc_otd:'Estoy en otra institución',sc_sf:'Aprendo por mi cuenta',sc_sfd:'YouTube, libros, campo',sc_dn:'Ya terminé mis estudios',sc_dnd:'Tengo certificación/diploma',gl_c:'Pasar mis certificaciones',gl_cd:'EPA, NATE, OSHA, NCCER',gl_d:'Mejorar mis diagnósticos',gl_dd:'Ser más preciso en el campo',gl_b:'Abrir mi propio negocio',gl_bd:'De técnico a empresario',gl_m:'Ganar más dinero',gl_md:'Subir mi valor como técnico',r_elec:'Fundamentos Eléctricos',r_elecd:'Circuitos, Ley de Ohm, diagramas',r_ac:'Aire Acondicionado',r_acd:'Presiones, carga de refrigerante',r_ref:'Refrigeración Comercial',r_refd:'Cámaras frías, controles, defrost',r_heat:'Calefacción',r_heatd:'Furnaces, bombas de calor, gas',r_cert:'Preparación para Certificaciones',r_certd:'EPA 608 • NATE • OSHA • NCCER',r_biz:'De Técnico a Empresario',r_bizd:'Licencias, estimados, clientes'},
+en:{step_1:'Step 1 of 5',step_2:'Step 2 of 5',step_3:'Step 3 of 5',step_4:'Step 4 of 5',step_5:'Step 5 of 5',welcome_speech:"Welcome technician! I'm Maestro Mario and I'll be your guide. What's your name?",name_ph:'Type your name here...',continue:'Continue →',level_speech:"Nice to meet you, {name}! What's your technical level?",spec_speech:'Excellent, {name}! What areas are you strongest in?',multi_hint:'Select one or more options',school_speech:'Great progress, {name}! Where are you studying?',goals_speech:'Last question, {name}! What do you want to achieve?',route_speech:"Perfect, {name}! I've created your personalized path. Let's go!",start_btn:'🚀 Start Learning!',lv1:'Student',lv1d:"I'm learning the basics",lv2:'Helper',lv2d:"I'm in the field with a technician",lv3:'Technician',lv3d:'I work solo but want to improve',lv4:'Advanced',lv4d:'I want to master the trade',lv5:'Master',lv5d:'I want to lead / start my business',sp_e:'Electrical',sp_ed:'Circuits, controls, wiring',sp_a:'Air Conditioning',sp_ad:'Splits, central, mini splits',sp_r:'Refrigeration',sp_rd:'Walk-in coolers, commercial',sp_h:'Heating',sp_hd:'Furnaces, heat pumps',sp_x:'Starting in everything',sp_xd:'I want to learn it all',sc_ac:'ACVOLT Tech School',sc_acd:'Current ACVOLT student',sc_ot:'Another school',sc_otd:"I'm at another institution",sc_sf:'Self-taught',sc_sfd:'YouTube, books, field',sc_dn:'Completed studies',sc_dnd:'I have certification/diploma',gl_c:'Pass certifications',gl_cd:'EPA, NATE, OSHA, NCCER',gl_d:'Improve diagnostics',gl_dd:'Be more precise in the field',gl_b:'Start my business',gl_bd:'From tech to owner',gl_m:'Earn more money',gl_md:'Increase my value',r_elec:'Electrical Fundamentals',r_elecd:"Circuits, Ohm's law, diagrams",r_ac:'Air Conditioning',r_acd:'Pressure diagnostics, charging',r_ref:'Commercial Refrigeration',r_refd:'Walk-in coolers, controls, defrost',r_heat:'Heating Systems',r_heatd:'Furnaces, heat pumps, gas',r_cert:'Certification Prep',r_certd:'EPA 608 • NATE • OSHA • NCCER',r_biz:'Tech to Business Owner',r_bizd:'Licensing, estimates, clients'}
 };
 
-/* ===== AI ENGINE - Maestro Mario powered by Claude ===== */
-const MARIO_SYSTEM = "Eres el Maestro Mario Flores Corona, instructor de HVAC/Refrigeracion/Electricidad con 25+ anos de experiencia. Tienes C-10 y C-20 contractor licenses y certificaciones NATE, EPA, OSHA, ESCO, ACCA, NCCER. Tu escuela es ACVOLT Tech School en San Bernardino, California. Tu marca es Nivel 33 con 640,000+ seguidores. Tu frase es: Si no mides, estas adivinando.\n\nPERSONALIDAD: Eres directo, motivador, autentico. Hablas como un maestro de campo - no como un robot. Usas frases como orale, vamos con todo, asi se hace. Eres exigente pero carinoso. Siempre motivas al estudiante.\n\nREGLAS:\n- Responde en 1-2 oraciones MAX (esto es una app movil, poco espacio)\n- Si el idioma es es responde en espanol. Si es en responde en ingles\n- Se personal - usa el nombre del estudiante\n- Incluye un tip o dato tecnico cuando sea relevante\n- NO uses markdown, solo texto plano\n- NO uses emojis excesivos, maximo 1 por respuesta";
+// AI ENGINE
+const MARIO_SYSTEM="Eres el Maestro Mario Flores Corona, instructor de HVAC con 25+ anos. Tu frase: Si no mides, estas adivinando. Responde en 1-2 oraciones MAX. Se personal, motivador, autentico.";
 
-async function askMario(context) {
-    try {
-        const res = await fetch('https://ucowlcrddzukykbaitzt.supabase.co/functions/v1/mario-ai', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                model: 'claude-sonnet-4-20250514',
-                max_tokens: 150,
-                system: MARIO_SYSTEM,
-                messages: [{role:'user', content: context}]
-            })
+async function askMario(ctx){
+    try{
+        const r=await fetch('https://ucowlcrddzukykbaitzt.supabase.co/functions/v1/mario-ai',{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:150,system:MARIO_SYSTEM,messages:[{role:'user',content:ctx}]})
         });
-        const data = await res.json();
-        if (data.content && data.content[0]) return data.content[0].text;
-        return null;
-    } catch(e) { console.log('AI fallback:', e); return null; }
+        const d=await r.json();
+        return d.content&&d.content[0]?d.content[0].text:null;
+    }catch(e){return null}
 }
 
-function showTyping(bbId) {
-    const bb = document.getElementById(bbId);
-    bb.classList.add('ai-active');
-    bb.innerHTML = '<div class="ai-badge">AI MAESTRO MARIO</div><div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
+function showTyping(id){
+    const b=document.getElementById(id);
+    b.classList.add('ai-active');
+    b.innerHTML='<div class="ai-badge">AI MAESTRO MARIO</div><div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
 }
 
-function showAIResponse(bbId, text) {
-    const bb = document.getElementById(bbId);
-    bb.innerHTML = '<div class="ai-badge">AI MAESTRO MARIO</div>' + text;
+function showAIResponse(id,txt){
+    document.getElementById(id).innerHTML='<div class="ai-badge">AI MAESTRO MARIO</div>'+txt;
 }
 
-async function marioSpeak(text) {
-    try {
-        const res = await fetch('https://ucowlcrddzukykbaitzt.supabase.co/functions/v1/mario-ai', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ action: 'tts', text: text })
-        });
-        if (!res.ok) return;
-        const blob = await res.blob();
-        const url = URL.createObjectURL(blob);
-        const audio = new Audio(url);
-        audio.play();
-    } catch(e) { console.log('TTS fallback:', e); }
-}
-
-async function marioSay(bbId, context, fallback) {
-    showTyping(bbId);
-    const aiText = await askMario(context);
-    if (aiText) {
-        showAIResponse(bbId, aiText);
-        marioSpeak(aiText);
-    } else {
-        const bb = document.getElementById(bbId);
-        bb.classList.remove('ai-active');
-        bb.innerHTML = fallback;
+async function marioSay(id,ctx,fb){
+    showTyping(id);
+    const ai=await askMario(ctx);
+    if(ai){
+        showAIResponse(id,ai);
+    }else{
+        document.getElementById(id).classList.remove('ai-active');
+        document.getElementById(id).innerHTML=fb;
     }
 }
-/* ===== END AI ENGINE ===== */
 
+// UTILITY FUNCTIONS
 const t=k=>(T[D.lang][k]||k).replace('{name}',D.name);
-const u=()=>{document.querySelectorAll('[data-t]').forEach(e=>e.textContent=t(e.getAttribute('data-t')));document.querySelectorAll('[data-tp]').forEach(e=>e.placeholder=t(e.getAttribute('data-tp')));};
-const go=id=>{document.querySelectorAll('.s').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on');window.scrollTo(0,0);};
-const rx=(id,c)=>{const e=document.getElementById(id);e.classList.add(c);setTimeout(()=>e.classList.remove(c),1500);};
+const u=()=>{
+    document.querySelectorAll('[data-t]').forEach(e=>e.textContent=t(e.getAttribute('data-t')));
+    document.querySelectorAll('[data-tp]').forEach(e=>e.placeholder=t(e.getAttribute('data-tp')));
+};
+const go=id=>{
+    document.querySelectorAll('.s').forEach(s=>s.classList.remove('on'));
+    document.getElementById(id).classList.add('on');
+    window.scrollTo(0,0);
+};
+const rx=(id,c)=>{
+    const e=document.getElementById(id);
+    e.classList.add(c);
+    setTimeout(()=>e.classList.remove(c),1500);
+};
 
-function setLang(l){D.lang=l;u();go('s2');document.getElementById('nm').placeholder=t('name_ph');
-    marioSay('bb2', 'Idioma: '+(l==='es'?'espanol':'english')+'. El estudiante acaba de entrar a la app por primera vez. Dale la bienvenida y preguntale su nombre. Responde en '+(l==='es'?'espanol':'ingles')+'.', t('welcome_speech'));
+// NAVIGATION FUNCTIONS
+function setLang(l){
+    D.lang=l;
+    u();
+    go('s2');
+    document.getElementById('nm').placeholder=t('name_ph');
+    marioSay('bb2','Idioma: '+(l==='es'?'espanol':'english')+'. Dale la bienvenida al tecnico y preguntale su nombre.',t('welcome_speech'));
 }
 
 function sName(){
-    D.name=document.getElementById('nm').value.trim();u();bLvl();go('s3');rx('a3','nod');
-    marioSay('bb3', 'Idioma: '+D.lang+'. El estudiante se llama "'+D.name+'". Acaba de darte su nombre. Reacciona a su nombre de forma personal y preguntale en que nivel tecnico esta. Los niveles son: Estudiante, Ayudante, Tecnico, Avanzado, Maestro. Responde en '+(D.lang==='es'?'espanol':'ingles')+'.', t('level_speech'));
+    D.name=document.getElementById('nm').value.trim();
+    u();
+    bLvl();
+    go('s3');
+    rx('a3','nod');
+    marioSay('bb3','El estudiante se llama '+D.name+'. Reacciona y pregunta su nivel tecnico.',t('level_speech'));
 }
 
-function pLvl(e,v){document.querySelectorAll('#lo .oc').forEach(o=>o.classList.remove('sel'));e.classList.add('sel');D.level=v;document.getElementById('b3').disabled=false;rx('a3','nod');}
+function pLvl(e,v){
+    document.querySelectorAll('#lo .oc').forEach(o=>o.classList.remove('sel'));
+    e.classList.add('sel');
+    D.level=v;
+    document.getElementById('b3').disabled=false;
+    rx('a3','nod');
+}
 
 function sLvl(){
-    u();bSpc();go('s4');
-    var lvl=['','Estudiante','Ayudante','Tecnico','Avanzado','Maestro'][D.level];
-    marioSay('bb4', 'Idioma: '+D.lang+'. Estudiante: "'+D.name+'", nivel: '+lvl+' ('+D.level+'/5). Comenta brevemente sobre su nivel y preguntale en que areas se siente mas fuerte: Electricidad, Aire Acondicionado, Refrigeracion, Calefaccion, o Todo. Responde en '+(D.lang==='es'?'espanol':'ingles')+'.', t('spec_speech'));
+    u();
+    bSpc();
+    go('s4');
+    marioSay('bb4','Estudiante '+D.name+' nivel '+D.level+'/5. Pregunta sus areas fuertes.',t('spec_speech'));
 }
 
-function tSpc(e,k){if(k==='all'){document.querySelectorAll('#so .oc').forEach(o=>o.classList.remove('sel'));e.classList.add('sel');D.specs=['all'];}else{document.querySelector('#so .oc:last-child').classList.remove('sel');D.specs=D.specs.filter(s=>s!=='all');e.classList.toggle('sel');if(e.classList.contains('sel'))D.specs.push(k);else D.specs=D.specs.filter(s=>s!==k);}document.getElementById('b4').disabled=D.specs.length===0;rx('a4','nod');}
+function tSpc(e,k){
+    if(k==='all'){
+        document.querySelectorAll('#so .oc').forEach(o=>o.classList.remove('sel'));
+        e.classList.add('sel');
+        D.specs=['all'];
+    }else{
+        document.querySelector('#so .oc:last-child').classList.remove('sel');
+        D.specs=D.specs.filter(s=>s!=='all');
+        e.classList.toggle('sel');
+        if(e.classList.contains('sel'))D.specs.push(k);
+        else D.specs=D.specs.filter(s=>s!==k);
+    }
+    document.getElementById('b4').disabled=D.specs.length===0;
+    rx('a4','nod');
+}
 
 function sSpc(){
-    u();bSch();go('s5');
-    marioSay('bb5', 'Idioma: '+D.lang+'. Estudiante: "'+D.name+'", nivel: '+D.level+'/5, especialidades: '+D.specs.join(', ')+'. Comenta algo positivo sobre las areas que eligio y preguntale donde esta estudiando: ACVOLT Tech School, otra escuela, autodidacta, o ya termino. Responde en '+(D.lang==='es'?'espanol':'ingles')+'.', t('school_speech'));
+    u();
+    bSch();
+    go('s5');
+    marioSay('bb5','Areas: '+D.specs.join(', ')+'. Pregunta donde estudia.',t('school_speech'));
 }
 
-function pSch(e,v){document.querySelectorAll('#sco .oc').forEach(o=>o.classList.remove('sel'));e.classList.add('sel');D.school=v;document.getElementById('b5').disabled=false;rx('a5','nod');}
+function pSch(e,v){
+    document.querySelectorAll('#sco .oc').forEach(o=>o.classList.remove('sel'));
+    e.classList.add('sel');
+    D.school=v;
+    document.getElementById('b5').disabled=false;
+    rx('a5','nod');
+}
 
 function sSch(){
-    u();bGol();go('s6');
-    var sn={acvolt:'ACVOLT Tech School',other:'otra escuela',self:'autodidacta',done:'ya termino'}[D.school];
-    marioSay('bb6', 'Idioma: '+D.lang+'. Estudiante: "'+D.name+'", nivel: '+D.level+'/5, especialidades: '+D.specs.join(', ')+', escuela: '+sn+'. '+(D.school==='acvolt'?'Es tu alumno de ACVOLT! Reconocelo con orgullo.':'Comenta sobre donde estudia.')+' Preguntale que quiere lograr: certificaciones, mejorar diagnosticos, abrir negocio, o ganar mas dinero. Responde en '+(D.lang==='es'?'espanol':'ingles')+'.', t('goals_speech'));
+    u();
+    bGol();
+    go('s6');
+    marioSay('bb6','Escuela: '+D.school+'. Pregunta sus metas.',t('goals_speech'));
 }
 
-function tGol(e,k){e.classList.toggle('sel');if(e.classList.contains('sel'))D.goals.push(k);else D.goals=D.goals.filter(g=>g!==k);document.getElementById('b6').disabled=D.goals.length===0;rx('a6','nod');}
+function tGol(e,k){
+    e.classList.toggle('sel');
+    if(e.classList.contains('sel'))D.goals.push(k);
+    else D.goals=D.goals.filter(g=>g!==k);
+    document.getElementById('b6').disabled=D.goals.length===0;
+    rx('a6','nod');
+}
 
 function sGol(){
-    // Show celebration video before final screen
-    showMarioVideo('felicitacion', function() {
-        u();bRt();go('s7');cft();rx('a7','cel');
-        marioSay('bb7', 'Idioma: '+D.lang+'. RESUMEN del estudiante: Nombre: '+D.name+', Nivel: '+D.level+'/5, Especialidades: '+D.specs.join(', ')+', Escuela: '+D.school+', Metas: '+D.goals.join(', ')+'. Acabas de crear su ruta personalizada. Dale un mensaje final motivador y personalizado basado en TODO su perfil. Dile que su ruta esta lista y que vamos con todo. Responde en '+(D.lang==='es'?'espanol':'ingles')+'.', t('route_speech'));
-    });
+    u();
+    bRt();
+    go('s7');
+    cft();
+    rx('a7','cel');
+    marioSay('bb7','Perfil completo: '+D.name+', nivel '+D.level+', areas '+D.specs.join(',')+', metas '+D.goals.join(',')+'. Dale mensaje final motivador.',t('route_speech'));
 }
 
-function bLvl(){var d=[{k:1,i:'\ud83d\udcda',t:'lv1',d:'lv1d'},{k:2,i:'\ud83d\udd27',t:'lv2',d:'lv2d'},{k:3,i:'\u2699\ufe0f',t:'lv3',d:'lv3d'},{k:4,i:'\ud83c\udfaf',t:'lv4',d:'lv4d'},{k:5,i:'\ud83d\udc51',t:'lv5',d:'lv5d'}];document.getElementById('lo').innerHTML=d.map(function(x){return '<div class="oc" onclick="pLvl(this,'+x.k+')"><div class="oi">'+x.i+'</div><div><div class="ot">'+t(x.t)+'</div><div class="od">'+t(x.d)+'</div></div></div>';}).join('');}
-function bSpc(){var d=[{k:'electrical',i:'\u26a1',t:'sp_e',d:'sp_ed'},{k:'ac',i:'\u2744\ufe0f',t:'sp_a',d:'sp_ad'},{k:'refrigeration',i:'\ud83e\uddca',t:'sp_r',d:'sp_rd'},{k:'heating',i:'\ud83d\udd25',t:'sp_h',d:'sp_hd'},{k:'all',i:'\ud83c\udf1f',t:'sp_x',d:'sp_xd'}];document.getElementById('so').innerHTML=d.map(function(x){return '<div class="oc" onclick="tSpc(this,\''+x.k+'\')"><div class="oi">'+x.i+'</div><div><div class="ot">'+t(x.t)+'</div><div class="od">'+t(x.d)+'</div></div><div class="ck"></div></div>';}).join('');}
-function bSch(){var d=[{k:'acvolt',i:'\ud83c\udf93',t:'sc_ac',d:'sc_acd'},{k:'other',i:'\ud83c\udfeb',t:'sc_ot',d:'sc_otd'},{k:'self',i:'\ud83d\udcaa',t:'sc_sf',d:'sc_sfd'},{k:'done',i:'\u2705',t:'sc_dn',d:'sc_dnd'}];document.getElementById('sco').innerHTML=d.map(function(x){return '<div class="oc" onclick="pSch(this,\''+x.k+'\')"><div class="oi">'+x.i+'</div><div><div class="ot">'+t(x.t)+'</div><div class="od">'+t(x.d)+'</div></div></div>';}).join('');}
-function bGol(){var d=[{k:'certs',i:'\ud83d\udccb',t:'gl_c',d:'gl_cd'},{k:'diag',i:'\ud83d\udd0d',t:'gl_d',d:'gl_dd'},{k:'biz',i:'\ud83c\udfe2',t:'gl_b',d:'gl_bd'},{k:'money',i:'\ud83d\udcb0',t:'gl_m',d:'gl_md'}];document.getElementById('go2').innerHTML=d.map(function(x){return '<div class="oc" onclick="tGol(this,\''+x.k+'\')"><div class="oi">'+x.i+'</div><div><div class="ot">'+t(x.t)+'</div><div class="od">'+t(x.d)+'</div></div><div class="ck"></div></div>';}).join('');}
-function bRt(){var r=[];if(D.specs.includes('all')||D.specs.includes('electrical'))r.push({i:'\u26a1',t:'r_elec',d:'r_elecd'});if(D.specs.includes('all')||D.specs.includes('ac'))r.push({i:'\u2744\ufe0f',t:'r_ac',d:'r_acd'});if(D.specs.includes('all')||D.specs.includes('refrigeration'))r.push({i:'\ud83e\uddca',t:'r_ref',d:'r_refd'});if(D.specs.includes('all')||D.specs.includes('heating'))r.push({i:'\ud83d\udd25',t:'r_heat',d:'r_heatd'});if(D.goals.includes('certs'))r.push({i:'\ud83d\udccb',t:'r_cert',d:'r_certd'});if(D.goals.includes('biz'))r.push({i:'\ud83c\udfe2',t:'r_biz',d:'r_bizd'});var h='';r.forEach(function(x,i){h+='<div class="rt"><div class="rn">'+(i+1)+'</div><div><div class="rtt">'+x.i+' '+t(x.t)+'</div><div class="rd">'+t(x.d)+'</div></div></div>';if(i<r.length-1)h+='<div class="rl"></div>';});document.getElementById('rl').innerHTML=h;}
-function cft(){var c=document.getElementById('conf'),cols=['#ff6b2b','#00d4ff','#f1c40f','#2ecc71','#e74c3c','#9b59b6'];for(var i=0;i<55;i++){var p=document.createElement('div');p.className='cf';p.style.left=Math.random()*100+'%';p.style.background=cols[Math.floor(Math.random()*cols.length)];p.style.animationDelay=Math.random()*1.8+'s';p.style.animationDuration=(2+Math.random()*2)+'s';p.style.width=(6+Math.random()*7)+'px';p.style.height=p.style.width;p.style.borderRadius=Math.random()>.5?'50%':'2px';c.appendChild(p);}setTimeout(function(){c.innerHTML='';},4500);}
-function startApp(){alert(D.lang==='es'?('\u00a1'+D.name+', tu ruta est\u00e1 lista! Aqu\u00ed conectaremos con el dashboard.'):(D.name+', your path is ready! Dashboard coming next.'));console.log('Profile:',JSON.stringify(D,null,2));}
-document.getElementById('nm').addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.value.trim().length>=2)sName();});
+// BUILD FUNCTIONS
+function bLvl(){
+    document.getElementById('lo').innerHTML=[
+        {k:1,i:'📚',t:'lv1',d:'lv1d'},
+        {k:2,i:'🔧',t:'lv2',d:'lv2d'},
+        {k:3,i:'⚙️',t:'lv3',d:'lv3d'},
+        {k:4,i:'🎯',t:'lv4',d:'lv4d'},
+        {k:5,i:'👑',t:'lv5',d:'lv5d'}
+    ].map(x=>'<div class="oc" onclick="pLvl(this,'+x.k+')"><div class="oi">'+x.i+'</div><div><div class="ot">'+t(x.t)+'</div><div class="od">'+t(x.d)+'</div></div></div>').join('');
+}
+
+function bSpc(){
+    document.getElementById('so').innerHTML=[
+        {k:'electrical',i:'⚡',t:'sp_e',d:'sp_ed'},
+        {k:'ac',i:'❄️',t:'sp_a',d:'sp_ad'},
+        {k:'refrigeration',i:'🧊',t:'sp_r',d:'sp_rd'},
+        {k:'heating',i:'🔥',t:'sp_h',d:'sp_hd'},
+        {k:'all',i:'🌟',t:'sp_x',d:'sp_xd'}
+    ].map(x=>'<div class="oc" onclick="tSpc(this,\''+x.k+'\')"><div class="oi">'+x.i+'</div><div><div class="ot">'+t(x.t)+'</div><div class="od">'+t(x.d)+'</div></div><div class="ck"></div></div>').join('');
+}
+
+function bSch(){
+    document.getElementById('sco').innerHTML=[
+        {k:'acvolt',i:'🎓',t:'sc_ac',d:'sc_acd'},
+        {k:'other',i:'🏫',t:'sc_ot',d:'sc_otd'},
+        {k:'self',i:'💪',t:'sc_sf',d:'sc_sfd'},
+        {k:'done',i:'✅',t:'sc_dn',d:'sc_dnd'}
+    ].map(x=>'<div class="oc" onclick="pSch(this,\''+x.k+'\')"><div class="oi">'+x.i+'</div><div><div class="ot">'+t(x.t)+'</div><div class="od">'+t(x.d)+'</div></div></div>').join('');
+}
+
+function bGol(){
+    document.getElementById('go2').innerHTML=[
+        {k:'certs',i:'📋',t:'gl_c',d:'gl_cd'},
+        {k:'diag',i:'🔍',t:'gl_d',d:'gl_dd'},
+        {k:'biz',i:'🏢',t:'gl_b',d:'gl_bd'},
+        {k:'money',i:'💰',t:'gl_m',d:'gl_md'}
+    ].map(x=>'<div class="oc" onclick="tGol(this,\''+x.k+'\')"><div class="oi">'+x.i+'</div><div><div class="ot">'+t(x.t)+'</div><div class="od">'+t(x.d)+'</div></div><div class="ck"></div></div>').join('');
+}
+
+function bRt(){
+    var r=[];
+    if(D.specs.includes('all')||D.specs.includes('electrical'))r.push({i:'⚡',t:'r_elec',d:'r_elecd'});
+    if(D.specs.includes('all')||D.specs.includes('ac'))r.push({i:'❄️',t:'r_ac',d:'r_acd'});
+    if(D.specs.includes('all')||D.specs.includes('refrigeration'))r.push({i:'🧊',t:'r_ref',d:'r_refd'});
+    if(D.specs.includes('all')||D.specs.includes('heating'))r.push({i:'🔥',t:'r_heat',d:'r_heatd'});
+    if(D.goals.includes('certs'))r.push({i:'📋',t:'r_cert',d:'r_certd'});
+    if(D.goals.includes('biz'))r.push({i:'🏢',t:'r_biz',d:'r_bizd'});
+    document.getElementById('rl').innerHTML=r.map((x,i)=>'<div class="rt"><div class="rn">'+(i+1)+'</div><div><div class="rtt">'+x.i+' '+t(x.t)+'</div><div class="rd">'+t(x.d)+'</div></div></div>'+(i<r.length-1?'<div class="rl"></div>':'')).join('');
+}
+
+function cft(){
+    var c=document.getElementById('conf');
+    var cols=['#ff6b2b','#00d4ff','#f1c40f','#2ecc71','#e74c3c','#9b59b6'];
+    for(var i=0;i<55;i++){
+        var p=document.createElement('div');
+        p.className='cf';
+        p.style.left=Math.random()*100+'%';
+        p.style.background=cols[Math.floor(Math.random()*cols.length)];
+        p.style.animationDelay=Math.random()*1.8+'s';
+        p.style.animationDuration=(2+Math.random()*2)+'s';
+        p.style.width=(6+Math.random()*7)+'px';
+        p.style.height=p.style.width;
+        p.style.borderRadius=Math.random()>.5?'50%':'2px';
+        c.appendChild(p);
+    }
+    setTimeout(()=>c.innerHTML='',4500);
+}
+
+function startApp(){
+    alert(D.lang==='es'?'¡'+D.name+', tu ruta está lista!':D.name+', your path is ready!');
+    console.log('Profile:',JSON.stringify(D,null,2));
+}
+
+document.getElementById('nm').addEventListener('keydown',e=>{
+    if(e.key==='Enter'&&e.target.value.trim().length>=2)sName();
+});
 </script>
 </body>
 </html>
