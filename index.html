@@ -42,14 +42,6 @@
         .music-btn.muted{border-color:var(--muted);opacity:0.6}
         .music-btn.muted .icon{opacity:0.5}
         
-        /* BOTON AI FLOTANTE */
-        .ai-float-btn{position:fixed;bottom:20px;right:16px;z-index:500;width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#e84500);border:3px solid rgba(255,255,255,0.3);display:none;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s;box-shadow:0 8px 32px rgba(255,107,43,0.5);overflow:hidden}
-        .ai-float-btn:hover{transform:scale(1.1)}
-        .ai-float-btn img{width:100%;height:100%;object-fit:cover}
-        .ai-float-btn::after{content:'AI';position:absolute;bottom:0;right:0;background:var(--electric);color:var(--dark);font-size:10px;font-weight:800;padding:2px 6px;border-radius:8px 0 0 0}
-        .ai-float-btn.pulse{animation:pulse-btn 2s ease-in-out infinite}
-        @keyframes pulse-btn{0%,100%{box-shadow:0 8px 32px rgba(255,107,43,0.5)}50%{box-shadow:0 8px 32px rgba(255,107,43,0.8),0 0 0 10px rgba(255,107,43,0.2)}}
-        
         /* MODAL AI CHAT */
         .ai-modal{position:fixed;inset:0;z-index:600;background:rgba(10,22,40,0.95);display:flex;align-items:flex-end;justify-content:center;opacity:0;visibility:hidden;transition:all 0.3s}
         .ai-modal.active{opacity:1;visibility:visible}
@@ -76,8 +68,9 @@
         .cw{position:fixed;inset:0;pointer-events:none;z-index:100}.cf{position:absolute;top:-16px;animation:cff 2.8s ease-out forwards}
         @keyframes cff{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
         
-        /* AVATAR */
-        .aw{position:relative;margin:16px auto 12px}
+        /* AVATAR - CLICKEABLE PARA ABRIR AI */
+        .aw{position:relative;margin:16px auto 12px;cursor:pointer;transition:transform 0.3s}
+        .aw:hover{transform:scale(1.05)}
         .aw.lg{width:190px;height:190px}.aw.md{width:140px;height:140px}.aw.sm{width:120px;height:120px}
         .ar{position:absolute;inset:-6px;border-radius:50%;background:conic-gradient(var(--accent),var(--electric),var(--accent));animation:sp 4s linear infinite}
         @keyframes sp{to{transform:rotate(360deg)}}
@@ -90,6 +83,10 @@
         @keyframes nd{0%,100%{transform:rotate(0)}30%{transform:rotate(5deg)}70%{transform:rotate(-3deg)}}
         .aw.cel .ai{animation:ce .6s ease-in-out 2}
         @keyframes ce{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-18px) scale(1.06)}}
+        
+        /* INDICADOR DE AI EN AVATAR */
+        .aw::after{content:'Toca para preguntar';position:absolute;bottom:-30px;left:50%;transform:translateX(-50%);background:var(--accent);color:white;font-family:'Fredoka',sans-serif;font-size:11px;padding:4px 12px;border-radius:12px;white-space:nowrap;opacity:0;transition:opacity 0.3s}
+        .aw:hover::after{opacity:1}
         
         /* BURBUJA */
         .bb{background:var(--card);border:1.5px solid rgba(0,212,255,.15);border-radius:var(--r);padding:18px 22px;margin:0 6px 20px;position:relative;box-shadow:0 6px 28px rgba(0,0,0,.25);text-align:center;font-size:16.5px;line-height:1.55;font-weight:600;min-height:60px}
@@ -141,11 +138,6 @@
     <span class="icon">🎵</span>
 </div>
 
-<!-- BOTON AI FLOTANTE -->
-<div class="ai-float-btn pulse" id="aiFloatBtn" onclick="openAIChat()">
-    <img src="mario.jpg" alt="Maestro Mario AI">
-</div>
-
 <!-- VIDEO FLOTANTE DESDE LA DERECHA -->
 <div class="video-float" id="videoFloat">
     <div class="video-float-glow"></div>
@@ -182,7 +174,7 @@
 <div class="app">
 <!-- PANTALLA INICIO -->
 <div class="s on" id="s0"><div class="sp">
-    <div class="aw lg"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="Maestro Mario"></div></div>
+    <div class="aw lg" onclick="openAIChat()"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="Maestro Mario"></div></div>
     <div><div class="sp-t">MAESTRO<br>MARIO</div><div class="badge">⚡ NIVEL 33</div></div>
     <div class="sp-s">Si no mides, estás adivinando</div>
     <button class="bt" onclick="startWithVideo()" style="max-width:260px">Comenzar / Start</button>
@@ -191,7 +183,7 @@
 <!-- IDIOMA -->
 <div class="s" id="s1">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div><div class="lo-s">HVAC • ELECTRICAL • TRAINING</div></div>
-    <div class="aw md"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
+    <div class="aw md" onclick="openAIChat()"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
     <div class="bb">¡Hola! Choose your language<br>Elige tu idioma</div>
     <div class="fl"><div class="fc" onclick="setLang('es')"><span class="fe">🇲🇽</span><span class="fn">Español</span></div><div class="fc" onclick="setLang('en')"><span class="fe">🇺🇸</span><span class="fn">English</span></div></div>
 </div>
@@ -200,7 +192,7 @@
 <div class="s" id="s2">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:20%"></div></div><div class="ps"><b data-t="step_1"></b></div>
-    <div class="aw md" id="a2"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
+    <div class="aw md" id="a2" onclick="openAIChat()"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
     <div class="bb" id="bb2"><span data-t="welcome_speech"></span></div>
     <div style="width:100%"><input class="ip" id="nm" data-tp="name_ph" oninput="document.getElementById('b2').disabled=this.value.trim().length<2"><button class="bt" id="b2" disabled onclick="sName()" data-t="continue"></button></div>
 </div>
@@ -209,7 +201,7 @@
 <div class="s" id="s3">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:40%"></div></div><div class="ps"><b data-t="step_2"></b></div>
-    <div class="aw sm" id="a3"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
+    <div class="aw sm" id="a3" onclick="openAIChat()"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
     <div class="bb" id="bb3"><span data-t="level_speech"></span></div>
     <div class="os" id="lo"></div>
     <button class="bt" id="b3" disabled onclick="sLvl()" data-t="continue"></button>
@@ -219,7 +211,7 @@
 <div class="s" id="s4">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:60%"></div></div><div class="ps"><b data-t="step_3"></b></div>
-    <div class="aw sm" id="a4"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
+    <div class="aw sm" id="a4" onclick="openAIChat()"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
     <div class="bb" id="bb4"><span data-t="spec_speech"></span></div>
     <p class="mh" data-t="multi_hint"></p>
     <div class="os" id="so"></div>
@@ -230,7 +222,7 @@
 <div class="s" id="s5">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:80%"></div></div><div class="ps"><b data-t="step_4"></b></div>
-    <div class="aw sm" id="a5"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
+    <div class="aw sm" id="a5" onclick="openAIChat()"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
     <div class="bb" id="bb5"><span data-t="school_speech"></span></div>
     <div class="os" id="sco"></div>
     <button class="bt" id="b5" disabled onclick="sSch()" data-t="continue"></button>
@@ -240,7 +232,7 @@
 <div class="s" id="s6">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:90%"></div></div><div class="ps"><b data-t="step_5"></b></div>
-    <div class="aw sm" id="a6"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
+    <div class="aw sm" id="a6" onclick="openAIChat()"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
     <div class="bb" id="bb6"><span data-t="goals_speech"></span></div>
     <p class="mh" data-t="multi_hint"></p>
     <div class="os" id="go2"></div>
@@ -251,7 +243,7 @@
 <div class="s" id="s7">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:100%"></div></div>
-    <div class="aw md" id="a7"><div class="ag" style="background:radial-gradient(circle,var(--gold) 0%,transparent 70%)"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
+    <div class="aw md" id="a7" onclick="openAIChat()"><div class="ag" style="background:radial-gradient(circle,var(--gold) 0%,transparent 70%)"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
     <div class="bb" id="bb7"><span data-t="route_speech"></span></div>
     <div id="rl" style="width:100%"></div>
     <button class="bt" onclick="startApp()" data-t="start_btn"></button>
@@ -322,20 +314,15 @@ function closeVideo(){
 function startWithVideo(){
     showVideo('bienvenida',()=>{
         go('s1');
-        showControls();
     });
 }
 
-function showControls(){
-    document.getElementById('aiFloatBtn').style.display='flex';
-}
-
-// AI CHAT
+// AI CHAT - Solo se abre cuando tocan el círculo grande
 const MARIO_SYSTEM="Eres el Maestro Mario Flores Corona, instructor de HVAC/Refrigeracion/Electricidad con 25+ años. Tu escuela es ACVOLT Tech School. Tu frase: Si no mides, estás adivinando. Responde en 2-3 oraciones MAX. Usa frases como órale, vamos con todo. NO uses markdown.";
 
 async function askMarioAI(msg){
     try{
-        const r=await fetch('https://ucowlcrddzukykbaitzt.supabase.co/functions/v1/mario-ai',{
+        const r=await fetch('https://htklsowiyjwsjnacnvnr.supabase.co/functions/v1/tutor-ia-chat',{
             method:'POST',
             headers:{'Content-Type':'application/json'},
             body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:200,system:MARIO_SYSTEM,messages:[{role:'user',content:msg}]})
@@ -345,8 +332,13 @@ async function askMarioAI(msg){
     }catch(e){return '¡Órale! Problema de conexión.';}
 }
 
-function openAIChat(){document.getElementById('aiModal').classList.add('active');document.getElementById('aiFloatBtn').classList.remove('pulse');}
-function closeAIChat(){document.getElementById('aiModal').classList.remove('active');}
+function openAIChat(){
+    document.getElementById('aiModal').classList.add('active');
+}
+
+function closeAIChat(){
+    document.getElementById('aiModal').classList.remove('active');
+}
 
 async function sendAIMessage(){
     const input=document.getElementById('aiInput');
