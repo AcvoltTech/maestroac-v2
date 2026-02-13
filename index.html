@@ -22,7 +22,6 @@
         .s.on{display:flex}
         @keyframes si{from{opacity:0;transform:translateY(36px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
         
-        /* VIDEO OVERLAY */
         .video-overlay{position:fixed;inset:0;z-index:1000;background:rgba(10,22,40,0.98);display:flex;align-items:center;justify-content:center;flex-direction:column;opacity:0;visibility:hidden;transition:opacity 0.6s ease, visibility 0.6s ease}
         .video-overlay.active{opacity:1;visibility:visible}
         .video-overlay.fade-out{opacity:0}
@@ -36,7 +35,6 @@
         .skip-btn{margin-top:20px;background:rgba(255,255,255,0.1);border:2px solid rgba(255,255,255,0.25);color:var(--txt);padding:12px 32px;border-radius:25px;font-family:'Fredoka',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.3s}
         .skip-btn:hover{background:var(--accent);border-color:var(--accent);transform:scale(1.05)}
         
-        /* MUSIC CONTROL */
         .music-btn{position:fixed;top:16px;right:16px;z-index:500;width:48px;height:48px;border-radius:50%;background:var(--card);border:2px solid rgba(0,212,255,0.3);display:none;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s;font-size:20px}
         .music-btn:hover{border-color:var(--accent);transform:scale(1.1)}
         .music-btn.muted{opacity:0.5}
@@ -49,7 +47,6 @@
         .music-btn.muted .bar{animation:none;height:6px;background:var(--muted)}
         @keyframes musicBar{0%,100%{height:8px}50%{height:20px}}
         
-        /* FLOATING AI BUTTON */
         .ai-float-btn{position:fixed;bottom:100px;right:16px;z-index:500;width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#e84500);border:3px solid rgba(255,255,255,0.2);display:none;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s;box-shadow:0 8px 32px rgba(255,107,43,0.4);overflow:hidden}
         .ai-float-btn:hover{transform:scale(1.1);box-shadow:0 12px 40px rgba(255,107,43,0.6)}
         .ai-float-btn img{width:100%;height:100%;object-fit:cover;border-radius:50%}
@@ -57,7 +54,6 @@
         .ai-float-btn.pulse{animation:pulse-btn 2s ease-in-out infinite}
         @keyframes pulse-btn{0%,100%{box-shadow:0 8px 32px rgba(255,107,43,0.4)}50%{box-shadow:0 8px 32px rgba(255,107,43,0.8),0 0 0 8px rgba(255,107,43,0.2)}}
         
-        /* AI CHAT MODAL */
         .ai-modal{position:fixed;inset:0;z-index:600;background:rgba(10,22,40,0.95);display:flex;align-items:flex-end;justify-content:center;opacity:0;visibility:hidden;transition:all 0.3s}
         .ai-modal.active{opacity:1;visibility:visible}
         .ai-chat{width:100%;max-width:460px;height:70vh;background:var(--card);border-radius:24px 24px 0 0;display:flex;flex-direction:column;transform:translateY(100%);transition:transform 0.4s cubic-bezier(.16,1,.3,1)}
@@ -78,11 +74,9 @@
         .ai-chat-input input:focus{border-color:var(--accent)}
         .ai-chat-input button{width:48px;height:48px;border-radius:50%;background:var(--accent);border:none;color:white;font-size:20px;cursor:pointer}
         
-        /* CONFETTI */
         .cw{position:fixed;inset:0;pointer-events:none;z-index:100}.cf{position:absolute;top:-16px;animation:cff 2.8s ease-out forwards}
         @keyframes cff{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
         
-        /* REST OF STYLES */
         .aw{position:relative;margin:16px auto 12px}
         .aw.lg{width:190px;height:190px}.aw.md{width:140px;height:140px}.aw.sm{width:120px;height:120px}
         .ar{position:absolute;inset:-6px;border-radius:50%;background:conic-gradient(var(--accent),var(--electric),var(--accent));animation:sp 4s linear infinite}
@@ -115,7 +109,7 @@
         .fl{display:flex;gap:18px;justify-content:center;margin-top:16px}
         .fc{width:135px;height:155px;background:var(--card);border:2.5px solid rgba(255,255,255,.06);border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:all .3s cubic-bezier(.16,1,.3,1)}
         .fc:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 10px 28px rgba(255,107,43,.18)}.fc:active{transform:scale(.95)}
-        .fe{font-size:42px;line-height:1;font-family:'Fredoka',sans-serif;font-weight:700}.fn{font-family:'Fredoka',sans-serif;font-size:17px;font-weight:600}
+        .fe{font-size:42px;line-height:1}.fn{font-family:'Fredoka',sans-serif;font-size:17px;font-weight:600}
         .bt{width:100%;padding:16px;border:none;border-radius:var(--r);background:linear-gradient(135deg,var(--accent),#e84500);color:white;font-family:'Fredoka',sans-serif;font-size:17px;font-weight:700;cursor:pointer;margin-top:20px;transition:all .25s;box-shadow:0 4px 18px rgba(255,107,43,.25);position:relative;overflow:hidden}
         .bt::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(135deg,transparent 30%,rgba(255,255,255,.12) 50%,transparent 70%);transform:translateX(-100%);transition:transform .45s}
         .bt:hover::after{transform:translateX(100%)}.bt:hover{transform:translateY(-2px);box-shadow:0 7px 24px rgba(255,107,43,.35)}.bt:disabled{opacity:.35;cursor:not-allowed;transform:none}
@@ -139,124 +133,105 @@
 <div class="bg"><div class="o"></div><div class="o"></div><div class="o"></div></div>
 <div class="gr"></div>
 
-<!-- MUSIC CONTROL -->
-<div class="music-btn" id="musicBtn" onclick="toggleMusic()">
+<div class="music-btn muted" id="musicBtn" onclick="toggleMusic()">
     <div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
 </div>
 
-<!-- FLOATING AI BUTTON -->
 <div class="ai-float-btn pulse" id="aiFloatBtn" onclick="openAIChat()">
-    <img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-v2/main/mario.jpg" alt="Maestro Mario AI">
+    <img src="mario.jpg" alt="Maestro Mario AI">
 </div>
 
-<!-- AI CHAT MODAL -->
 <div class="ai-modal" id="aiModal">
     <div class="ai-chat">
         <div class="ai-chat-header">
-            <div class="ai-chat-avatar"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-v2/main/mario.jpg" alt="Mario"></div>
-            <div class="ai-chat-title"><h3>Maestro Mario AI</h3><span>🟢 Disponible para ayudarte</span></div>
-            <button class="ai-chat-close" onclick="closeAIChat()">✕</button>
+            <div class="ai-chat-avatar"><img src="mario.jpg" alt="Mario"></div>
+            <div class="ai-chat-title"><h3>Maestro Mario AI</h3><span>Disponible para ayudarte</span></div>
+            <button class="ai-chat-close" onclick="closeAIChat()">X</button>
         </div>
         <div class="ai-chat-messages" id="aiMessages">
-            <div class="ai-msg mario">¡Órale técnico! Soy el Maestro Mario con inteligencia artificial. ¿En qué te puedo ayudar? Pregúntame lo que quieras sobre HVAC, refrigeración, o electricidad. 🔧</div>
+            <div class="ai-msg mario">Orale tecnico! Soy el Maestro Mario con inteligencia artificial. En que te puedo ayudar? Preguntame lo que quieras sobre HVAC, refrigeracion, o electricidad.</div>
         </div>
         <div class="ai-chat-input">
             <input type="text" id="aiInput" placeholder="Escribe tu pregunta..." onkeydown="if(event.key==='Enter')sendAIMessage()">
-            <button onclick="sendAIMessage()">➤</button>
+            <button onclick="sendAIMessage()">></button>
         </div>
     </div>
 </div>
 
-<!-- VIDEO OVERLAY -->
 <div class="video-overlay" id="videoOverlay">
     <div class="video-container">
         <div class="video-glow"></div>
-        <video id="marioVideo" playsinline webkit-playsinline>
-            <source src="https://raw.githubusercontent.com/AcvoltTech/maestroac-v2/main/MAESTRO%20MARIO%20(1).mp4" type="video/mp4">
-        </video>
+        <video id="marioVideo" playsinline webkit-playsinline></video>
     </div>
     <div class="video-label"><span>MAESTRO MARIO EN VIVO</span></div>
-    <button class="skip-btn" onclick="skipVideo()">Saltar ▸</button>
+    <button class="skip-btn" onclick="skipVideo()">Saltar</button>
 </div>
 
-<!-- BACKGROUND MUSIC - Pokemon style epic music -->
-<audio id="bgMusic" loop preload="auto">
-    <source src="https://raw.githubusercontent.com/AcvoltTech/maestroac-v2/main/epic-music.mp3" type="audio/mpeg">
-</audio>
-
 <div class="app">
-<!-- PANTALLA INICIO -->
 <div class="s on" id="s0"><div class="sp">
-    <div class="aw lg"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-v2/main/mario.jpg" alt="Maestro Mario"></div></div>
-    <div><div class="sp-t">MAESTRO<br>MARIO</div><div class="badge">⚡ NIVEL 33</div></div>
-    <div class="sp-s">Si no mides, estás adivinando</div>
+    <div class="aw lg"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="Maestro Mario"></div></div>
+    <div><div class="sp-t">MAESTRO<br>MARIO</div><div class="badge">NIVEL 33</div></div>
+    <div class="sp-s">Si no mides, estas adivinando</div>
     <button class="bt" onclick="startWithVideo()" style="max-width:260px">Comenzar / Start</button>
 </div></div>
 
-<!-- IDIOMA -->
 <div class="s" id="s1">
-    <div class="lo"><div class="lo-t">MAESTRO MARIO</div><div class="lo-s">HVAC • ELECTRICAL • TRAINING</div></div>
-    <div class="aw md"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-v2/main/mario.jpg" alt="M"></div></div>
-    <div class="bb">¡Hola! Choose your language<br>Elige tu idioma</div>
-    <div class="fl"><div class="fc" onclick="setLang('es')"><span class="fe">🇲🇽</span><span class="fn">Español</span></div><div class="fc" onclick="setLang('en')"><span class="fe">🇺🇸</span><span class="fn">English</span></div></div>
+    <div class="lo"><div class="lo-t">MAESTRO MARIO</div><div class="lo-s">HVAC - ELECTRICAL - TRAINING</div></div>
+    <div class="aw md"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
+    <div class="bb">Hola! Choose your language<br>Elige tu idioma</div>
+    <div class="fl"><div class="fc" onclick="setLang('es')"><span class="fe">MX</span><span class="fn">Espanol</span></div><div class="fc" onclick="setLang('en')"><span class="fe">US</span><span class="fn">English</span></div></div>
 </div>
 
-<!-- NOMBRE -->
 <div class="s" id="s2">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:20%"></div></div><div class="ps"><b data-t="step_1"></b></div>
-    <div class="aw md" id="a2"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-v2/main/mario.jpg" alt="M"></div></div>
+    <div class="aw md" id="a2"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
     <div class="bb" id="bb2"><span data-t="welcome_speech"></span></div>
     <div style="width:100%"><input class="ip" id="nm" data-tp="name_ph" oninput="document.getElementById('b2').disabled=this.value.trim().length<2"><button class="bt" id="b2" disabled onclick="sName()" data-t="continue"></button></div>
 </div>
 
-<!-- NIVEL -->
 <div class="s" id="s3">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:40%"></div></div><div class="ps"><b data-t="step_2"></b></div>
-    <div class="aw sm" id="a3"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-v2/main/mario.jpg" alt="M"></div></div>
+    <div class="aw sm" id="a3"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
     <div class="bb" id="bb3"><span data-t="level_speech"></span></div>
     <div class="os" id="lo"></div>
     <button class="bt" id="b3" disabled onclick="sLvl()" data-t="continue"></button>
 </div>
 
-<!-- ESPECIALIDADES -->
 <div class="s" id="s4">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:60%"></div></div><div class="ps"><b data-t="step_3"></b></div>
-    <div class="aw sm" id="a4"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-v2/main/mario.jpg" alt="M"></div></div>
+    <div class="aw sm" id="a4"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
     <div class="bb" id="bb4"><span data-t="spec_speech"></span></div>
     <p class="mh" data-t="multi_hint"></p>
     <div class="os" id="so"></div>
     <button class="bt" id="b4" disabled onclick="sSpc()" data-t="continue"></button>
 </div>
 
-<!-- ESCUELA -->
 <div class="s" id="s5">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:80%"></div></div><div class="ps"><b data-t="step_4"></b></div>
-    <div class="aw sm" id="a5"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-v2/main/mario.jpg" alt="M"></div></div>
+    <div class="aw sm" id="a5"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
     <div class="bb" id="bb5"><span data-t="school_speech"></span></div>
     <div class="os" id="sco"></div>
     <button class="bt" id="b5" disabled onclick="sSch()" data-t="continue"></button>
 </div>
 
-<!-- METAS -->
 <div class="s" id="s6">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:90%"></div></div><div class="ps"><b data-t="step_5"></b></div>
-    <div class="aw sm" id="a6"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-v2/main/mario.jpg" alt="M"></div></div>
+    <div class="aw sm" id="a6"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
     <div class="bb" id="bb6"><span data-t="goals_speech"></span></div>
     <p class="mh" data-t="multi_hint"></p>
     <div class="os" id="go2"></div>
     <button class="bt" id="b6" disabled onclick="sGol()" data-t="continue"></button>
 </div>
 
-<!-- RUTA FINAL -->
 <div class="s" id="s7">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:100%"></div></div>
-    <div class="aw md" id="a7"><div class="ag" style="background:radial-gradient(circle,var(--gold) 0%,transparent 70%)"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-v2/main/mario.jpg" alt="M"></div></div>
+    <div class="aw md" id="a7"><div class="ag" style="background:radial-gradient(circle,var(--gold) 0%,transparent 70%)"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
     <div class="bb" id="bb7"><span data-t="route_speech"></span></div>
     <div id="rl" style="width:100%"></div>
     <button class="bt" onclick="startApp()" data-t="start_btn"></button>
@@ -268,21 +243,57 @@
 const D={lang:'es',name:'',level:null,specs:[],school:null,goals:[]};
 let videoPlaying=false;
 let musicPlaying=false;
+let currentVideoCallback=null;
 
-// MUSIC SYSTEM
-const bgMusic=document.getElementById('bgMusic');
-bgMusic.volume=0.25;
+const VIDEOS={
+    bienvenida:'MAESTRO MARIO (1).mp4',
+    correcto:'correcto.mp4.mp4',
+    incorrecto:'incorrecto.mp4.mp4',
+    medalla:'medalla.mp4.mp4'
+};
 
-function toggleMusic(){
-    const btn=document.getElementById('musicBtn');
-    if(musicPlaying){bgMusic.pause();btn.classList.add('muted');musicPlaying=false;}
-    else{bgMusic.play().catch(e=>console.log('Music:',e));btn.classList.remove('muted');musicPlaying=true;}
+function showMarioVideo(type,cb){
+    if(videoPlaying)return;
+    videoPlaying=true;
+    currentVideoCallback=cb;
+    const o=document.getElementById('videoOverlay');
+    const v=document.getElementById('marioVideo');
+    v.src=VIDEOS[type]||VIDEOS.bienvenida;
+    o.classList.add('active');
+    o.classList.remove('fade-out');
+    v.load();
+    v.play().catch(e=>{console.log('Video error:',e);hideVideoOverlay();});
+    v.onended=function(){hideVideoOverlay();};
+    v.onerror=function(){hideVideoOverlay();};
 }
 
-function startMusic(){
-    bgMusic.play().catch(e=>console.log('Music autoplay:',e));
-    musicPlaying=true;
-    document.getElementById('musicBtn').classList.remove('muted');
+function hideVideoOverlay(){
+    const o=document.getElementById('videoOverlay');
+    const v=document.getElementById('marioVideo');
+    o.classList.add('fade-out');
+    setTimeout(()=>{
+        o.classList.remove('active','fade-out');
+        v.pause();
+        v.src='';
+        videoPlaying=false;
+        if(currentVideoCallback){
+            currentVideoCallback();
+            currentVideoCallback=null;
+        }
+    },600);
+}
+
+function skipVideo(){
+    const v=document.getElementById('marioVideo');
+    v.pause();
+    hideVideoOverlay();
+}
+
+function startWithVideo(){
+    showMarioVideo('bienvenida',()=>{
+        go('s1');
+        showControls();
+    });
 }
 
 function showControls(){
@@ -290,75 +301,78 @@ function showControls(){
     document.getElementById('musicBtn').style.display='flex';
 }
 
-// VIDEO SYSTEM
-function showMarioVideo(cb){
-    if(videoPlaying)return;
-    videoPlaying=true;
-    const o=document.getElementById('videoOverlay'),v=document.getElementById('marioVideo');
-    o.classList.add('active');o.classList.remove('fade-out');
-    v.currentTime=0;
-    v.play().catch(e=>console.log('Video:',e));
-    v.onended=function(){hideVideoOverlay(cb)};
-    v.onerror=function(){hideVideoOverlay(cb)};
+function toggleMusic(){
+    const btn=document.getElementById('musicBtn');
+    if(musicPlaying){
+        btn.classList.add('muted');
+        musicPlaying=false;
+    }else{
+        btn.classList.remove('muted');
+        musicPlaying=true;
+    }
 }
 
-function hideVideoOverlay(cb){
-    const o=document.getElementById('videoOverlay'),v=document.getElementById('marioVideo');
-    o.classList.add('fade-out');
-    setTimeout(()=>{o.classList.remove('active','fade-out');v.pause();v.currentTime=0;videoPlaying=false;if(cb)cb();},600);
-}
-
-function skipVideo(){document.getElementById('marioVideo').pause();hideVideoOverlay(()=>{go('s1');startMusic();showControls();});}
-
-function startWithVideo(){showMarioVideo(()=>{go('s1');startMusic();showControls();});}
-
-// AI CHAT SYSTEM
-const MARIO_SYSTEM="Eres el Maestro Mario Flores Corona, instructor de HVAC/Refrigeracion/Electricidad con 25+ años. Tu escuela es ACVOLT Tech School en San Bernardino, California. Tu marca es Nivel 33. Tu frase: Si no mides, estás adivinando. Eres directo, motivador, auténtico. Usas frases como órale, vamos con todo, así se hace. Responde en 2-3 oraciones MAX. NO uses markdown. Máximo 1 emoji.";
+const MARIO_SYSTEM="Eres el Maestro Mario Flores Corona, instructor de HVAC con 25+ anos. Tu frase: Si no mides, estas adivinando. Responde en 2-3 oraciones MAX. Se personal, motivador. Usa frases como orale, vamos con todo. NO uses markdown.";
 
 async function askMarioAI(msg){
     try{
-        const r=await fetch('https://ucowlcrddzukykbaitzt.supabase.co/functions/v1/mario-ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:200,system:MARIO_SYSTEM,messages:[{role:'user',content:msg}]})});
+        const r=await fetch('https://ucowlcrddzukykbaitzt.supabase.co/functions/v1/mario-ai',{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:200,system:MARIO_SYSTEM,messages:[{role:'user',content:msg}]})
+        });
         const d=await r.json();
-        return d.content&&d.content[0]?d.content[0].text:'¡Órale! Problema técnico, intenta de nuevo.';
-    }catch(e){return '¡Órale! Problema de conexión, intenta de nuevo.';}
+        return d.content&&d.content[0]?d.content[0].text:'Orale! Problema tecnico, intenta de nuevo.';
+    }catch(e){return 'Orale! Problema de conexion.';}
 }
 
 function openAIChat(){document.getElementById('aiModal').classList.add('active');document.getElementById('aiFloatBtn').classList.remove('pulse');}
 function closeAIChat(){document.getElementById('aiModal').classList.remove('active');}
 
 async function sendAIMessage(){
-    const input=document.getElementById('aiInput'),msgs=document.getElementById('aiMessages'),txt=input.value.trim();
+    const input=document.getElementById('aiInput');
+    const msgs=document.getElementById('aiMessages');
+    const txt=input.value.trim();
     if(!txt)return;
     msgs.innerHTML+='<div class="ai-msg user">'+txt+'</div>';
     input.value='';
     msgs.innerHTML+='<div class="ai-msg mario" id="typing"><div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>';
     msgs.scrollTop=msgs.scrollHeight;
     const resp=await askMarioAI(txt);
-    document.getElementById('typing').remove();
+    const typing=document.getElementById('typing');
+    if(typing)typing.remove();
     msgs.innerHTML+='<div class="ai-msg mario">'+resp+'</div>';
     msgs.scrollTop=msgs.scrollHeight;
 }
 
-// CONFETTI
 function cft(){
-    var c=document.getElementById('conf'),cols=['#ff6b2b','#00d4ff','#f1c40f','#2ecc71','#e74c3c','#9b59b6'];
-    for(var i=0;i<55;i++){var p=document.createElement('div');p.className='cf';p.style.left=Math.random()*100+'%';p.style.background=cols[Math.floor(Math.random()*cols.length)];p.style.animationDelay=Math.random()*1.8+'s';p.style.animationDuration=(2+Math.random()*2)+'s';p.style.width=(6+Math.random()*7)+'px';p.style.height=p.style.width;p.style.borderRadius=Math.random()>.5?'50%':'2px';c.appendChild(p);}
+    const c=document.getElementById('conf');
+    const cols=['#ff6b2b','#00d4ff','#f1c40f','#2ecc71','#e74c3c','#9b59b6'];
+    for(let i=0;i<55;i++){
+        const p=document.createElement('div');
+        p.className='cf';
+        p.style.left=Math.random()*100+'%';
+        p.style.background=cols[Math.floor(Math.random()*cols.length)];
+        p.style.animationDelay=Math.random()*1.8+'s';
+        p.style.animationDuration=(2+Math.random()*2)+'s';
+        p.style.width=(6+Math.random()*7)+'px';
+        p.style.height=p.style.width;
+        p.style.borderRadius=Math.random()>.5?'50%':'2px';
+        c.appendChild(p);
+    }
     setTimeout(()=>c.innerHTML='',4500);
 }
 
-// TRANSLATIONS
 const T={
-es:{step_1:'Paso 1 de 5',step_2:'Paso 2 de 5',step_3:'Paso 3 de 5',step_4:'Paso 4 de 5',step_5:'Paso 5 de 5',welcome_speech:'¡Bienvenido técnico! Soy el Maestro Mario y voy a ser tu guía. ¿Cómo te llamas?',name_ph:'Escribe tu nombre aquí...',continue:'Continuar →',level_speech:'¡Mucho gusto, {name}! ¿En qué nivel técnico te encuentras?',spec_speech:'¡Excelente, {name}! ¿En qué áreas te sientes más fuerte?',multi_hint:'Selecciona una o más opciones',school_speech:'¡Vas muy bien, {name}! ¿Dónde estás estudiando?',goals_speech:'¡Última pregunta, {name}! ¿Qué quieres lograr?',route_speech:'¡Perfecto, {name}! He creado tu ruta personalizada. ¡Vamos con todo!',start_btn:'🚀 ¡Empezar a Aprender!',lv1:'Estudiante',lv1d:'Estoy aprendiendo lo básico',lv2:'Ayudante',lv2d:'Ya ando en el campo con un técnico',lv3:'Técnico',lv3d:'Ya trabajo solo pero quiero mejorar',lv4:'Avanzado',lv4d:'Quiero dominar el oficio',lv5:'Maestro',lv5d:'Quiero ser líder / abrir mi empresa',sp_e:'Electricidad',sp_ed:'Circuitos, controles, cableado',sp_a:'Aire Acondicionado',sp_ad:'Splits, centrales, mini splits',sp_r:'Refrigeración',sp_rd:'Cámaras frías, refrigeradores comerciales',sp_h:'Calefacción',sp_hd:'Furnaces, bombas de calor',sp_x:'Estoy empezando en todo',sp_xd:'Quiero aprender de todo',sc_ac:'ACVOLT Tech School',sc_acd:'Estudiante actual de ACVOLT',sc_ot:'Otra escuela',sc_otd:'Estoy en otra institución',sc_sf:'Aprendo por mi cuenta',sc_sfd:'YouTube, libros, campo',sc_dn:'Ya terminé mis estudios',sc_dnd:'Tengo certificación/diploma',gl_c:'Pasar mis certificaciones',gl_cd:'EPA, NATE, OSHA, NCCER',gl_d:'Mejorar mis diagnósticos',gl_dd:'Ser más preciso en el campo',gl_b:'Abrir mi propio negocio',gl_bd:'De técnico a empresario',gl_m:'Ganar más dinero',gl_md:'Subir mi valor como técnico',r_elec:'Fundamentos Eléctricos',r_elecd:'Circuitos, Ley de Ohm, diagramas',r_ac:'Aire Acondicionado',r_acd:'Presiones, carga de refrigerante',r_ref:'Refrigeración Comercial',r_refd:'Cámaras frías, controles, defrost',r_heat:'Calefacción',r_heatd:'Furnaces, bombas de calor, gas',r_cert:'Preparación para Certificaciones',r_certd:'EPA 608 • NATE • OSHA • NCCER',r_biz:'De Técnico a Empresario',r_bizd:'Licencias, estimados, clientes'},
-en:{step_1:'Step 1 of 5',step_2:'Step 2 of 5',step_3:'Step 3 of 5',step_4:'Step 4 of 5',step_5:'Step 5 of 5',welcome_speech:"Welcome technician! I'm Maestro Mario and I'll be your guide. What's your name?",name_ph:'Type your name here...',continue:'Continue →',level_speech:"Nice to meet you, {name}! What's your technical level?",spec_speech:'Excellent, {name}! What areas are you strongest in?',multi_hint:'Select one or more options',school_speech:'Great progress, {name}! Where are you studying?',goals_speech:'Last question, {name}! What do you want to achieve?',route_speech:"Perfect, {name}! I've created your personalized path. Let's go!",start_btn:'🚀 Start Learning!',lv1:'Student',lv1d:"I'm learning the basics",lv2:'Helper',lv2d:"I'm in the field with a technician",lv3:'Technician',lv3d:'I work solo but want to improve',lv4:'Advanced',lv4d:'I want to master the trade',lv5:'Master',lv5d:'I want to lead / start my business',sp_e:'Electrical',sp_ed:'Circuits, controls, wiring',sp_a:'Air Conditioning',sp_ad:'Splits, central, mini splits',sp_r:'Refrigeration',sp_rd:'Walk-in coolers, commercial',sp_h:'Heating',sp_hd:'Furnaces, heat pumps',sp_x:'Starting in everything',sp_xd:'I want to learn it all',sc_ac:'ACVOLT Tech School',sc_acd:'Current ACVOLT student',sc_ot:'Another school',sc_otd:"I'm at another institution",sc_sf:'Self-taught',sc_sfd:'YouTube, books, field',sc_dn:'Completed studies',sc_dnd:'I have certification/diploma',gl_c:'Pass certifications',gl_cd:'EPA, NATE, OSHA, NCCER',gl_d:'Improve diagnostics',gl_dd:'Be more precise in the field',gl_b:'Start my business',gl_bd:'From tech to owner',gl_m:'Earn more money',gl_md:'Increase my value',r_elec:'Electrical Fundamentals',r_elecd:"Circuits, Ohm's law, diagrams",r_ac:'Air Conditioning',r_acd:'Pressure diagnostics, charging',r_ref:'Commercial Refrigeration',r_refd:'Walk-in coolers, controls, defrost',r_heat:'Heating Systems',r_heatd:'Furnaces, heat pumps, gas',r_cert:'Certification Prep',r_certd:'EPA 608 • NATE • OSHA • NCCER',r_biz:'Tech to Business Owner',r_bizd:'Licensing, estimates, clients'}
+es:{step_1:'Paso 1 de 5',step_2:'Paso 2 de 5',step_3:'Paso 3 de 5',step_4:'Paso 4 de 5',step_5:'Paso 5 de 5',welcome_speech:'Bienvenido tecnico! Soy el Maestro Mario y voy a ser tu guia. Como te llamas?',name_ph:'Escribe tu nombre aqui...',continue:'Continuar',level_speech:'Mucho gusto, {name}! En que nivel tecnico te encuentras?',spec_speech:'Excelente, {name}! En que areas te sientes mas fuerte?',multi_hint:'Selecciona una o mas opciones',school_speech:'Vas muy bien, {name}! Donde estas estudiando?',goals_speech:'Ultima pregunta, {name}! Que quieres lograr?',route_speech:'Perfecto, {name}! He creado tu ruta personalizada. Vamos con todo!',start_btn:'Empezar a Aprender!',lv1:'Estudiante',lv1d:'Estoy aprendiendo lo basico',lv2:'Ayudante',lv2d:'Ya ando en el campo con un tecnico',lv3:'Tecnico',lv3d:'Ya trabajo solo pero quiero mejorar',lv4:'Avanzado',lv4d:'Quiero dominar el oficio',lv5:'Maestro',lv5d:'Quiero ser lider / abrir mi empresa',sp_e:'Electricidad',sp_ed:'Circuitos, controles, cableado',sp_a:'Aire Acondicionado',sp_ad:'Splits, centrales, mini splits',sp_r:'Refrigeracion',sp_rd:'Camaras frias, refrigeradores comerciales',sp_h:'Calefaccion',sp_hd:'Furnaces, bombas de calor',sp_x:'Estoy empezando en todo',sp_xd:'Quiero aprender de todo',sc_ac:'ACVOLT Tech School',sc_acd:'Estudiante actual de ACVOLT',sc_ot:'Otra escuela',sc_otd:'Estoy en otra institucion',sc_sf:'Aprendo por mi cuenta',sc_sfd:'YouTube, libros, campo',sc_dn:'Ya termine mis estudios',sc_dnd:'Tengo certificacion/diploma',gl_c:'Pasar mis certificaciones',gl_cd:'EPA, NATE, OSHA, NCCER',gl_d:'Mejorar mis diagnosticos',gl_dd:'Ser mas preciso en el campo',gl_b:'Abrir mi propio negocio',gl_bd:'De tecnico a empresario',gl_m:'Ganar mas dinero',gl_md:'Subir mi valor como tecnico',r_elec:'Fundamentos Electricos',r_elecd:'Circuitos, Ley de Ohm, diagramas',r_ac:'Aire Acondicionado',r_acd:'Presiones, carga de refrigerante',r_ref:'Refrigeracion Comercial',r_refd:'Camaras frias, controles, defrost',r_heat:'Calefaccion',r_heatd:'Furnaces, bombas de calor, gas',r_cert:'Preparacion para Certificaciones',r_certd:'EPA 608, NATE, OSHA, NCCER',r_biz:'De Tecnico a Empresario',r_bizd:'Licencias, estimados, clientes'},
+en:{step_1:'Step 1 of 5',step_2:'Step 2 of 5',step_3:'Step 3 of 5',step_4:'Step 4 of 5',step_5:'Step 5 of 5',welcome_speech:"Welcome technician! I'm Maestro Mario and I'll be your guide. What's your name?",name_ph:'Type your name here...',continue:'Continue',level_speech:"Nice to meet you, {name}! What's your technical level?",spec_speech:'Excellent, {name}! What areas are you strongest in?',multi_hint:'Select one or more options',school_speech:'Great progress, {name}! Where are you studying?',goals_speech:'Last question, {name}! What do you want to achieve?',route_speech:"Perfect, {name}! I've created your personalized path. Let's go!",start_btn:'Start Learning!',lv1:'Student',lv1d:"I'm learning the basics",lv2:'Helper',lv2d:"I'm in the field with a technician",lv3:'Technician',lv3d:'I work solo but want to improve',lv4:'Advanced',lv4d:'I want to master the trade',lv5:'Master',lv5d:'I want to lead / start my business',sp_e:'Electrical',sp_ed:'Circuits, controls, wiring',sp_a:'Air Conditioning',sp_ad:'Splits, central, mini splits',sp_r:'Refrigeration',sp_rd:'Walk-in coolers, commercial',sp_h:'Heating',sp_hd:'Furnaces, heat pumps',sp_x:'Starting in everything',sp_xd:'I want to learn it all',sc_ac:'ACVOLT Tech School',sc_acd:'Current ACVOLT student',sc_ot:'Another school',sc_otd:"I'm at another institution",sc_sf:'Self-taught',sc_sfd:'YouTube, books, field',sc_dn:'Completed studies',sc_dnd:'I have certification/diploma',gl_c:'Pass certifications',gl_cd:'EPA, NATE, OSHA, NCCER',gl_d:'Improve diagnostics',gl_dd:'Be more precise in the field',gl_b:'Start my business',gl_bd:'From tech to owner',gl_m:'Earn more money',gl_md:'Increase my value',r_elec:'Electrical Fundamentals',r_elecd:"Circuits, Ohm's law, diagrams",r_ac:'Air Conditioning',r_acd:'Pressure diagnostics, charging',r_ref:'Commercial Refrigeration',r_refd:'Walk-in coolers, controls, defrost',r_heat:'Heating Systems',r_heatd:'Furnaces, heat pumps, gas',r_cert:'Certification Prep',r_certd:'EPA 608, NATE, OSHA, NCCER',r_biz:'Tech to Business Owner',r_bizd:'Licensing, estimates, clients'}
 };
 
-// UTILITY
 const t=k=>(T[D.lang][k]||k).replace('{name}',D.name);
 const u=()=>{document.querySelectorAll('[data-t]').forEach(e=>e.textContent=t(e.getAttribute('data-t')));document.querySelectorAll('[data-tp]').forEach(e=>e.placeholder=t(e.getAttribute('data-tp')));};
 const go=id=>{document.querySelectorAll('.s').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on');window.scrollTo(0,0);};
 const rx=(id,c)=>{const e=document.getElementById(id);if(e){e.classList.add(c);setTimeout(()=>e.classList.remove(c),1500);}};
 
-// NAVIGATION
 function setLang(l){D.lang=l;u();go('s2');document.getElementById('nm').placeholder=t('name_ph');}
 function sName(){D.name=document.getElementById('nm').value.trim();u();bLvl();go('s3');rx('a3','nod');}
 function pLvl(e,v){document.querySelectorAll('#lo .oc').forEach(o=>o.classList.remove('sel'));e.classList.add('sel');D.level=v;document.getElementById('b3').disabled=false;rx('a3','nod');}
@@ -370,14 +384,13 @@ function sSch(){u();bGol();go('s6');}
 function tGol(e,k){e.classList.toggle('sel');if(e.classList.contains('sel'))D.goals.push(k);else D.goals=D.goals.filter(g=>g!==k);document.getElementById('b6').disabled=D.goals.length===0;rx('a6','nod');}
 function sGol(){u();bRt();go('s7');cft();rx('a7','cel');}
 
-// BUILD
-function bLvl(){document.getElementById('lo').innerHTML=[{k:1,i:'📚',t:'lv1',d:'lv1d'},{k:2,i:'🔧',t:'lv2',d:'lv2d'},{k:3,i:'⚙️',t:'lv3',d:'lv3d'},{k:4,i:'🎯',t:'lv4',d:'lv4d'},{k:5,i:'👑',t:'lv5',d:'lv5d'}].map(x=>'<div class="oc" onclick="pLvl(this,'+x.k+')"><div class="oi">'+x.i+'</div><div><div class="ot">'+t(x.t)+'</div><div class="od">'+t(x.d)+'</div></div></div>').join('');}
-function bSpc(){document.getElementById('so').innerHTML=[{k:'electrical',i:'⚡',t:'sp_e',d:'sp_ed'},{k:'ac',i:'❄️',t:'sp_a',d:'sp_ad'},{k:'refrigeration',i:'🧊',t:'sp_r',d:'sp_rd'},{k:'heating',i:'🔥',t:'sp_h',d:'sp_hd'},{k:'all',i:'🌟',t:'sp_x',d:'sp_xd'}].map(x=>'<div class="oc" onclick="tSpc(this,\''+x.k+'\')"><div class="oi">'+x.i+'</div><div><div class="ot">'+t(x.t)+'</div><div class="od">'+t(x.d)+'</div></div><div class="ck"></div></div>').join('');}
-function bSch(){document.getElementById('sco').innerHTML=[{k:'acvolt',i:'🎓',t:'sc_ac',d:'sc_acd'},{k:'other',i:'🏫',t:'sc_ot',d:'sc_otd'},{k:'self',i:'💪',t:'sc_sf',d:'sc_sfd'},{k:'done',i:'✅',t:'sc_dn',d:'sc_dnd'}].map(x=>'<div class="oc" onclick="pSch(this,\''+x.k+'\')"><div class="oi">'+x.i+'</div><div><div class="ot">'+t(x.t)+'</div><div class="od">'+t(x.d)+'</div></div></div>').join('');}
-function bGol(){document.getElementById('go2').innerHTML=[{k:'certs',i:'📋',t:'gl_c',d:'gl_cd'},{k:'diag',i:'🔍',t:'gl_d',d:'gl_dd'},{k:'biz',i:'🏢',t:'gl_b',d:'gl_bd'},{k:'money',i:'💰',t:'gl_m',d:'gl_md'}].map(x=>'<div class="oc" onclick="tGol(this,\''+x.k+'\')"><div class="oi">'+x.i+'</div><div><div class="ot">'+t(x.t)+'</div><div class="od">'+t(x.d)+'</div></div><div class="ck"></div></div>').join('');}
-function bRt(){var r=[];if(D.specs.includes('all')||D.specs.includes('electrical'))r.push({i:'⚡',t:'r_elec',d:'r_elecd'});if(D.specs.includes('all')||D.specs.includes('ac'))r.push({i:'❄️',t:'r_ac',d:'r_acd'});if(D.specs.includes('all')||D.specs.includes('refrigeration'))r.push({i:'🧊',t:'r_ref',d:'r_refd'});if(D.specs.includes('all')||D.specs.includes('heating'))r.push({i:'🔥',t:'r_heat',d:'r_heatd'});if(D.goals.includes('certs'))r.push({i:'📋',t:'r_cert',d:'r_certd'});if(D.goals.includes('biz'))r.push({i:'🏢',t:'r_biz',d:'r_bizd'});document.getElementById('rl').innerHTML=r.map((x,i)=>'<div class="rt"><div class="rn">'+(i+1)+'</div><div><div class="rtt">'+x.i+' '+t(x.t)+'</div><div class="rd">'+t(x.d)+'</div></div></div>'+(i<r.length-1?'<div class="rl"></div>':'')).join('');}
+function bLvl(){document.getElementById('lo').innerHTML=[{k:1,i:'1',t:'lv1',d:'lv1d'},{k:2,i:'2',t:'lv2',d:'lv2d'},{k:3,i:'3',t:'lv3',d:'lv3d'},{k:4,i:'4',t:'lv4',d:'lv4d'},{k:5,i:'5',t:'lv5',d:'lv5d'}].map(x=>'<div class="oc" onclick="pLvl(this,'+x.k+')"><div class="oi">'+x.i+'</div><div><div class="ot">'+t(x.t)+'</div><div class="od">'+t(x.d)+'</div></div></div>').join('');}
+function bSpc(){document.getElementById('so').innerHTML=[{k:'electrical',i:'E',t:'sp_e',d:'sp_ed'},{k:'ac',i:'A',t:'sp_a',d:'sp_ad'},{k:'refrigeration',i:'R',t:'sp_r',d:'sp_rd'},{k:'heating',i:'H',t:'sp_h',d:'sp_hd'},{k:'all',i:'*',t:'sp_x',d:'sp_xd'}].map(x=>'<div class="oc" onclick="tSpc(this,\''+x.k+'\')"><div class="oi">'+x.i+'</div><div><div class="ot">'+t(x.t)+'</div><div class="od">'+t(x.d)+'</div></div><div class="ck"></div></div>').join('');}
+function bSch(){document.getElementById('sco').innerHTML=[{k:'acvolt',i:'A',t:'sc_ac',d:'sc_acd'},{k:'other',i:'O',t:'sc_ot',d:'sc_otd'},{k:'self',i:'S',t:'sc_sf',d:'sc_sfd'},{k:'done',i:'D',t:'sc_dn',d:'sc_dnd'}].map(x=>'<div class="oc" onclick="pSch(this,\''+x.k+'\')"><div class="oi">'+x.i+'</div><div><div class="ot">'+t(x.t)+'</div><div class="od">'+t(x.d)+'</div></div></div>').join('');}
+function bGol(){document.getElementById('go2').innerHTML=[{k:'certs',i:'C',t:'gl_c',d:'gl_cd'},{k:'diag',i:'D',t:'gl_d',d:'gl_dd'},{k:'biz',i:'B',t:'gl_b',d:'gl_bd'},{k:'money',i:'$',t:'gl_m',d:'gl_md'}].map(x=>'<div class="oc" onclick="tGol(this,\''+x.k+'\')"><div class="oi">'+x.i+'</div><div><div class="ot">'+t(x.t)+'</div><div class="od">'+t(x.d)+'</div></div><div class="ck"></div></div>').join('');}
+function bRt(){var r=[];if(D.specs.includes('all')||D.specs.includes('electrical'))r.push({i:'E',t:'r_elec',d:'r_elecd'});if(D.specs.includes('all')||D.specs.includes('ac'))r.push({i:'A',t:'r_ac',d:'r_acd'});if(D.specs.includes('all')||D.specs.includes('refrigeration'))r.push({i:'R',t:'r_ref',d:'r_refd'});if(D.specs.includes('all')||D.specs.includes('heating'))r.push({i:'H',t:'r_heat',d:'r_heatd'});if(D.goals.includes('certs'))r.push({i:'C',t:'r_cert',d:'r_certd'});if(D.goals.includes('biz'))r.push({i:'B',t:'r_biz',d:'r_bizd'});document.getElementById('rl').innerHTML=r.map((x,i)=>'<div class="rt"><div class="rn">'+(i+1)+'</div><div><div class="rtt">'+x.i+' '+t(x.t)+'</div><div class="rd">'+t(x.d)+'</div></div></div>'+(i<r.length-1?'<div class="rl"></div>':'')).join('');}
 
-function startApp(){alert(D.lang==='es'?'¡'+D.name+', tu ruta está lista! Próximamente: Quiz y Medallas 🏅':D.name+', your path is ready! Coming: Quiz & Medals 🏅');console.log('Profile:',JSON.stringify(D,null,2));}
+function startApp(){alert(D.lang==='es'?''+D.name+', tu ruta esta lista! Proximamente: Quiz y Medallas':D.name+', your path is ready! Coming: Quiz & Medals');console.log('Profile:',JSON.stringify(D,null,2));}
 document.getElementById('nm').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.value.trim().length>=2)sName();});
 </script>
 </body>
