@@ -22,61 +22,61 @@
         .s.on{display:flex}
         @keyframes si{from{opacity:0;transform:translateY(36px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
         
-        .video-overlay{position:fixed;inset:0;z-index:1000;background:rgba(10,22,40,0.98);display:flex;align-items:center;justify-content:center;flex-direction:column;opacity:0;visibility:hidden;transition:opacity 0.6s ease, visibility 0.6s ease}
-        .video-overlay.active{opacity:1;visibility:visible}
-        .video-overlay.fade-out{opacity:0}
-        .video-container{position:relative;width:92%;max-width:380px;border-radius:24px;overflow:hidden;box-shadow:0 25px 80px rgba(255,107,43,0.5), 0 0 0 4px rgba(0,212,255,0.4);animation:videoEnter 0.7s cubic-bezier(.16,1,.3,1)}
-        @keyframes videoEnter{from{opacity:0;transform:scale(0.7) translateY(40px)}to{opacity:1;transform:scale(1) translateY(0)}}
-        .video-container video{width:100%;display:block;background:#000;border-radius:20px}
-        .video-glow{position:absolute;inset:-5px;border-radius:28px;background:conic-gradient(var(--accent),var(--electric),var(--gold),var(--accent));z-index:-1;animation:sp 3s linear infinite;opacity:0.8}
-        .video-label{margin-top:24px;display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,rgba(255,107,43,.25),rgba(0,212,255,.15));border:2px solid rgba(0,212,255,.4);border-radius:40px;padding:12px 28px;font-family:'Fredoka',sans-serif;font-size:18px;font-weight:700;color:var(--electric);text-transform:uppercase;letter-spacing:1px}
-        .video-label::before{content:'';width:12px;height:12px;border-radius:50%;background:var(--accent);animation:pulse-dot 1s ease-in-out infinite}
-        @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.8)}}
-        .skip-btn{margin-top:20px;background:rgba(255,255,255,0.1);border:2px solid rgba(255,255,255,0.25);color:var(--txt);padding:12px 32px;border-radius:25px;font-family:'Fredoka',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.3s}
-        .skip-btn:hover{background:var(--accent);border-color:var(--accent);transform:scale(1.05)}
+        /* VIDEO FLOTANTE DESDE LA DERECHA */
+        .video-float{position:fixed;bottom:120px;right:-320px;z-index:900;width:280px;transition:right 0.5s cubic-bezier(.16,1,.3,1);pointer-events:none}
+        .video-float.active{right:16px;pointer-events:auto}
+        .video-float.hiding{right:-320px}
+        .video-float-inner{position:relative;border-radius:20px;overflow:hidden;box-shadow:0 10px 40px rgba(255,107,43,0.5),0 0 0 3px var(--accent);background:#000}
+        .video-float video{width:100%;display:block;border-radius:17px}
+        .video-float-label{position:absolute;top:10px;left:10px;background:rgba(255,107,43,0.9);color:white;font-family:'Fredoka',sans-serif;font-size:11px;font-weight:700;padding:4px 10px;border-radius:12px;display:flex;align-items:center;gap:6px}
+        .video-float-label::before{content:'';width:8px;height:8px;border-radius:50%;background:white;animation:blink 1s infinite}
+        @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+        .video-float-close{position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,0.6);border:none;color:white;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+        .video-float-close:hover{background:var(--accent)}
+        .video-float-glow{position:absolute;inset:-3px;border-radius:23px;background:conic-gradient(var(--accent),var(--electric),var(--gold),var(--accent));z-index:-1;animation:sp 3s linear infinite}
         
-        .music-btn{position:fixed;top:16px;right:16px;z-index:500;width:48px;height:48px;border-radius:50%;background:var(--card);border:2px solid rgba(0,212,255,0.3);display:none;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s;font-size:20px}
-        .music-btn:hover{border-color:var(--accent);transform:scale(1.1)}
-        .music-btn.muted{opacity:0.5}
-        .music-btn .bars{display:flex;align-items:flex-end;gap:3px;height:20px}
-        .music-btn .bar{width:4px;background:var(--electric);border-radius:2px;animation:musicBar 0.8s ease-in-out infinite}
-        .music-btn .bar:nth-child(1){height:8px;animation-delay:0s}
-        .music-btn .bar:nth-child(2){height:16px;animation-delay:0.2s}
-        .music-btn .bar:nth-child(3){height:12px;animation-delay:0.4s}
-        .music-btn .bar:nth-child(4){height:18px;animation-delay:0.1s}
-        .music-btn.muted .bar{animation:none;height:6px;background:var(--muted)}
-        @keyframes musicBar{0%,100%{height:8px}50%{height:20px}}
+        /* BOTON DE MUSICA */
+        .music-btn{position:fixed;top:16px;right:16px;z-index:500;width:50px;height:50px;border-radius:50%;background:var(--card);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s;box-shadow:0 4px 15px rgba(255,107,43,0.3)}
+        .music-btn:hover{transform:scale(1.1);box-shadow:0 6px 20px rgba(255,107,43,0.5)}
+        .music-btn .icon{font-size:22px}
+        .music-btn.muted{border-color:var(--muted);opacity:0.6}
+        .music-btn.muted .icon{opacity:0.5}
         
-        .ai-float-btn{position:fixed;bottom:100px;right:16px;z-index:500;width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#e84500);border:3px solid rgba(255,255,255,0.2);display:none;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s;box-shadow:0 8px 32px rgba(255,107,43,0.4);overflow:hidden}
-        .ai-float-btn:hover{transform:scale(1.1);box-shadow:0 12px 40px rgba(255,107,43,0.6)}
-        .ai-float-btn img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-        .ai-float-btn::after{content:'AI';position:absolute;bottom:-2px;right:-2px;background:var(--electric);color:var(--dark);font-size:10px;font-weight:800;padding:2px 6px;border-radius:10px;font-family:'Fredoka',sans-serif}
+        /* BOTON AI FLOTANTE */
+        .ai-float-btn{position:fixed;bottom:20px;right:16px;z-index:500;width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#e84500);border:3px solid rgba(255,255,255,0.3);display:none;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s;box-shadow:0 8px 32px rgba(255,107,43,0.5);overflow:hidden}
+        .ai-float-btn:hover{transform:scale(1.1)}
+        .ai-float-btn img{width:100%;height:100%;object-fit:cover}
+        .ai-float-btn::after{content:'AI';position:absolute;bottom:0;right:0;background:var(--electric);color:var(--dark);font-size:10px;font-weight:800;padding:2px 6px;border-radius:8px 0 0 0}
         .ai-float-btn.pulse{animation:pulse-btn 2s ease-in-out infinite}
-        @keyframes pulse-btn{0%,100%{box-shadow:0 8px 32px rgba(255,107,43,0.4)}50%{box-shadow:0 8px 32px rgba(255,107,43,0.8),0 0 0 8px rgba(255,107,43,0.2)}}
+        @keyframes pulse-btn{0%,100%{box-shadow:0 8px 32px rgba(255,107,43,0.5)}50%{box-shadow:0 8px 32px rgba(255,107,43,0.8),0 0 0 10px rgba(255,107,43,0.2)}}
         
+        /* MODAL AI CHAT */
         .ai-modal{position:fixed;inset:0;z-index:600;background:rgba(10,22,40,0.95);display:flex;align-items:flex-end;justify-content:center;opacity:0;visibility:hidden;transition:all 0.3s}
         .ai-modal.active{opacity:1;visibility:visible}
-        .ai-chat{width:100%;max-width:460px;height:70vh;background:var(--card);border-radius:24px 24px 0 0;display:flex;flex-direction:column;transform:translateY(100%);transition:transform 0.4s cubic-bezier(.16,1,.3,1)}
+        .ai-chat{width:100%;max-width:460px;height:75vh;background:var(--card);border-radius:24px 24px 0 0;display:flex;flex-direction:column;transform:translateY(100%);transition:transform 0.4s cubic-bezier(.16,1,.3,1)}
         .ai-modal.active .ai-chat{transform:translateY(0)}
         .ai-chat-header{padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;gap:12px}
-        .ai-chat-avatar{width:44px;height:44px;border-radius:50%;overflow:hidden;border:2px solid var(--accent)}
+        .ai-chat-avatar{width:48px;height:48px;border-radius:50%;overflow:hidden;border:2px solid var(--accent)}
         .ai-chat-avatar img{width:100%;height:100%;object-fit:cover}
         .ai-chat-title{flex:1}
-        .ai-chat-title h3{font-family:'Fredoka',sans-serif;font-size:16px;color:var(--txt)}
+        .ai-chat-title h3{font-family:'Fredoka',sans-serif;font-size:17px;color:var(--txt)}
         .ai-chat-title span{font-size:12px;color:var(--electric)}
-        .ai-chat-close{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.1);border:none;color:var(--txt);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+        .ai-chat-close{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.1);border:none;color:var(--txt);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+        .ai-chat-close:hover{background:var(--accent)}
         .ai-chat-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
-        .ai-msg{max-width:85%;padding:12px 16px;border-radius:16px;font-size:14px;line-height:1.5}
+        .ai-msg{max-width:85%;padding:14px 18px;border-radius:18px;font-size:15px;line-height:1.5}
         .ai-msg.mario{background:linear-gradient(135deg,rgba(255,107,43,0.2),rgba(0,212,255,0.1));border:1px solid rgba(255,107,43,0.3);align-self:flex-start;border-bottom-left-radius:4px}
         .ai-msg.user{background:var(--card2);align-self:flex-end;border-bottom-right-radius:4px}
         .ai-chat-input{padding:16px;border-top:1px solid rgba(255,255,255,0.1);display:flex;gap:12px}
-        .ai-chat-input input{flex:1;padding:14px 18px;border-radius:25px;border:2px solid rgba(255,255,255,0.1);background:var(--dark);color:var(--txt);font-size:14px;outline:none}
+        .ai-chat-input input{flex:1;padding:14px 18px;border-radius:25px;border:2px solid rgba(255,255,255,0.1);background:var(--dark);color:var(--txt);font-size:15px;outline:none}
         .ai-chat-input input:focus{border-color:var(--accent)}
-        .ai-chat-input button{width:48px;height:48px;border-radius:50%;background:var(--accent);border:none;color:white;font-size:20px;cursor:pointer}
+        .ai-chat-input button{width:50px;height:50px;border-radius:50%;background:var(--accent);border:none;color:white;font-size:22px;cursor:pointer}
         
+        /* CONFETTI */
         .cw{position:fixed;inset:0;pointer-events:none;z-index:100}.cf{position:absolute;top:-16px;animation:cff 2.8s ease-out forwards}
         @keyframes cff{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
         
+        /* AVATAR */
         .aw{position:relative;margin:16px auto 12px}
         .aw.lg{width:190px;height:190px}.aw.md{width:140px;height:140px}.aw.sm{width:120px;height:120px}
         .ar{position:absolute;inset:-6px;border-radius:50%;background:conic-gradient(var(--accent),var(--electric),var(--accent));animation:sp 4s linear infinite}
@@ -90,30 +90,33 @@
         @keyframes nd{0%,100%{transform:rotate(0)}30%{transform:rotate(5deg)}70%{transform:rotate(-3deg)}}
         .aw.cel .ai{animation:ce .6s ease-in-out 2}
         @keyframes ce{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-18px) scale(1.06)}}
-        .bb{background:var(--card);border:1.5px solid rgba(0,212,255,.15);border-radius:var(--r);padding:18px 22px;margin:0 6px 20px;position:relative;box-shadow:0 6px 28px rgba(0,0,0,.25);text-align:center;font-size:16.5px;line-height:1.55;font-weight:600;min-height:60px;transition:all .3s}
+        
+        /* BURBUJA */
+        .bb{background:var(--card);border:1.5px solid rgba(0,212,255,.15);border-radius:var(--r);padding:18px 22px;margin:0 6px 20px;position:relative;box-shadow:0 6px 28px rgba(0,0,0,.25);text-align:center;font-size:16.5px;line-height:1.55;font-weight:600;min-height:60px}
         .bb::before{content:'';position:absolute;top:-10px;left:50%;transform:translateX(-50%);border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:10px solid rgba(0,212,255,.15)}
         .bb::after{content:'';position:absolute;top:-8px;left:50%;transform:translateX(-50%);border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:8px solid var(--card)}
+        
+        /* OTROS */
         .lo{text-align:center;padding:4px 0}.lo-t{font-family:'Fredoka',sans-serif;font-size:26px;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--electric));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.lo-s{font-size:12px;color:var(--muted);letter-spacing:2.5px;text-transform:uppercase;margin-top:2px}
-        .pb{width:100%;height:5px;background:rgba(255,255,255,.06);border-radius:3px;margin:12px 0 6px;overflow:hidden}.pbf{height:100%;background:linear-gradient(90deg,var(--accent),var(--electric));border-radius:3px;transition:width .6s cubic-bezier(.16,1,.3,1)}
+        .pb{width:100%;height:5px;background:rgba(255,255,255,.06);border-radius:3px;margin:12px 0 6px;overflow:hidden}.pbf{height:100%;background:linear-gradient(90deg,var(--accent),var(--electric));border-radius:3px;transition:width .6s}
         .ps{font-size:12px;color:var(--muted);margin-bottom:12px;text-align:center}.ps b{color:var(--accent)}
         .os{width:100%;display:flex;flex-direction:column;gap:10px}
-        .oc{background:var(--card);border:2px solid rgba(255,255,255,.06);border-radius:var(--r);padding:16px 18px;cursor:pointer;transition:all .25s cubic-bezier(.16,1,.3,1);display:flex;align-items:center;gap:14px}
-        .oc:hover{border-color:rgba(255,107,43,.4);background:var(--card2);transform:translateY(-1px)}.oc:active{transform:scale(.97)}
+        .oc{background:var(--card);border:2px solid rgba(255,255,255,.06);border-radius:var(--r);padding:16px 18px;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:14px}
+        .oc:hover{border-color:rgba(255,107,43,.4);background:var(--card2);transform:translateY(-1px)}
         .oc.sel{border-color:var(--accent);background:linear-gradient(135deg,rgba(255,107,43,.12),rgba(0,212,255,.06))}
         .oi{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;transition:all .25s}
         .oc.sel .oi{background:var(--accent);transform:scale(1.08)}
         .ot{font-family:'Fredoka',sans-serif;font-size:15px;font-weight:600}.od{font-size:12.5px;color:var(--muted);margin-top:1px}
-        .ck{width:22px;height:22px;border-radius:7px;border:2px solid rgba(255,255,255,.12);margin-left:auto;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .25s;font-size:13px;color:white}
-        .oc.sel .ck{background:var(--accent);border-color:var(--accent)}.oc.sel .ck::after{content:'\2713'}
+        .ck{width:22px;height:22px;border-radius:7px;border:2px solid rgba(255,255,255,.12);margin-left:auto;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:white}
+        .oc.sel .ck{background:var(--accent);border-color:var(--accent)}.oc.sel .ck::after{content:'✓'}
         .mh{font-size:12.5px;color:var(--muted);text-align:center;margin-bottom:8px}
         .fl{display:flex;gap:18px;justify-content:center;margin-top:16px}
-        .fc{width:135px;height:155px;background:var(--card);border:2.5px solid rgba(255,255,255,.06);border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:all .3s cubic-bezier(.16,1,.3,1)}
-        .fc:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 10px 28px rgba(255,107,43,.18)}.fc:active{transform:scale(.95)}
+        .fc{width:135px;height:155px;background:var(--card);border:2.5px solid rgba(255,255,255,.06);border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:all .3s}
+        .fc:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 10px 28px rgba(255,107,43,.18)}
         .fe{font-size:42px;line-height:1}.fn{font-family:'Fredoka',sans-serif;font-size:17px;font-weight:600}
-        .bt{width:100%;padding:16px;border:none;border-radius:var(--r);background:linear-gradient(135deg,var(--accent),#e84500);color:white;font-family:'Fredoka',sans-serif;font-size:17px;font-weight:700;cursor:pointer;margin-top:20px;transition:all .25s;box-shadow:0 4px 18px rgba(255,107,43,.25);position:relative;overflow:hidden}
-        .bt::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(135deg,transparent 30%,rgba(255,255,255,.12) 50%,transparent 70%);transform:translateX(-100%);transition:transform .45s}
-        .bt:hover::after{transform:translateX(100%)}.bt:hover{transform:translateY(-2px);box-shadow:0 7px 24px rgba(255,107,43,.35)}.bt:disabled{opacity:.35;cursor:not-allowed;transform:none}
-        .ip{width:100%;padding:16px 18px;border:2px solid rgba(255,255,255,.06);border-radius:var(--r);background:var(--card);color:var(--txt);font-family:'Nunito',sans-serif;font-size:16px;font-weight:600;outline:none;transition:border-color .25s}.ip:focus{border-color:var(--accent)}.ip::placeholder{color:var(--muted);font-weight:400}
+        .bt{width:100%;padding:16px;border:none;border-radius:var(--r);background:linear-gradient(135deg,var(--accent),#e84500);color:white;font-family:'Fredoka',sans-serif;font-size:17px;font-weight:700;cursor:pointer;margin-top:20px;transition:all .25s;box-shadow:0 4px 18px rgba(255,107,43,.25)}
+        .bt:hover{transform:translateY(-2px);box-shadow:0 7px 24px rgba(255,107,43,.35)}.bt:disabled{opacity:.35;cursor:not-allowed;transform:none}
+        .ip{width:100%;padding:16px 18px;border:2px solid rgba(255,255,255,.06);border-radius:var(--r);background:var(--card);color:var(--txt);font-size:16px;font-weight:600;outline:none}.ip:focus{border-color:var(--accent)}.ip::placeholder{color:var(--muted)}
         .sp{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;text-align:center}
         .sp-t{font-family:'Fredoka',sans-serif;font-size:40px;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--electric));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.15}
         .sp-s{font-size:17px;color:var(--muted);max-width:280px}
@@ -133,55 +136,67 @@
 <div class="bg"><div class="o"></div><div class="o"></div><div class="o"></div></div>
 <div class="gr"></div>
 
+<!-- BOTON MUSICA -->
 <div class="music-btn muted" id="musicBtn" onclick="toggleMusic()">
-    <div class="bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+    <span class="icon">🎵</span>
 </div>
 
+<!-- BOTON AI FLOTANTE -->
 <div class="ai-float-btn pulse" id="aiFloatBtn" onclick="openAIChat()">
     <img src="mario.jpg" alt="Maestro Mario AI">
 </div>
 
+<!-- VIDEO FLOTANTE DESDE LA DERECHA -->
+<div class="video-float" id="videoFloat">
+    <div class="video-float-glow"></div>
+    <div class="video-float-inner">
+        <div class="video-float-label">EN VIVO</div>
+        <button class="video-float-close" onclick="closeVideo()">✕</button>
+        <video id="marioVideo" playsinline webkit-playsinline></video>
+    </div>
+</div>
+
+<!-- MODAL AI CHAT -->
 <div class="ai-modal" id="aiModal">
     <div class="ai-chat">
         <div class="ai-chat-header">
             <div class="ai-chat-avatar"><img src="mario.jpg" alt="Mario"></div>
-            <div class="ai-chat-title"><h3>Maestro Mario AI</h3><span>Disponible para ayudarte</span></div>
-            <button class="ai-chat-close" onclick="closeAIChat()">X</button>
+            <div class="ai-chat-title"><h3>Maestro Mario AI</h3><span>🟢 Disponible para ayudarte</span></div>
+            <button class="ai-chat-close" onclick="closeAIChat()">✕</button>
         </div>
         <div class="ai-chat-messages" id="aiMessages">
-            <div class="ai-msg mario">Orale tecnico! Soy el Maestro Mario con inteligencia artificial. En que te puedo ayudar? Preguntame lo que quieras sobre HVAC, refrigeracion, o electricidad.</div>
+            <div class="ai-msg mario">¡Órale técnico! Soy el Maestro Mario con inteligencia artificial. ¿En qué te puedo ayudar? Pregúntame lo que quieras sobre HVAC, refrigeración, o electricidad. 🔧</div>
         </div>
         <div class="ai-chat-input">
             <input type="text" id="aiInput" placeholder="Escribe tu pregunta..." onkeydown="if(event.key==='Enter')sendAIMessage()">
-            <button onclick="sendAIMessage()">></button>
+            <button onclick="sendAIMessage()">➤</button>
         </div>
     </div>
 </div>
 
-<div class="video-overlay" id="videoOverlay">
-    <div class="video-container">
-        <div class="video-glow"></div>
-        <video id="marioVideo" playsinline webkit-playsinline></video>
-    </div>
-    <div class="video-label"><span>MAESTRO MARIO EN VIVO</span></div>
-    <button class="skip-btn" onclick="skipVideo()">Saltar</button>
-</div>
+<!-- AUDIO MUSICA DE FONDO -->
+<audio id="bgMusic" loop preload="auto">
+    <source src="musica.mp3" type="audio/mpeg">
+</audio>
 
 <div class="app">
+<!-- PANTALLA INICIO -->
 <div class="s on" id="s0"><div class="sp">
     <div class="aw lg"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="Maestro Mario"></div></div>
-    <div><div class="sp-t">MAESTRO<br>MARIO</div><div class="badge">NIVEL 33</div></div>
-    <div class="sp-s">Si no mides, estas adivinando</div>
+    <div><div class="sp-t">MAESTRO<br>MARIO</div><div class="badge">⚡ NIVEL 33</div></div>
+    <div class="sp-s">Si no mides, estás adivinando</div>
     <button class="bt" onclick="startWithVideo()" style="max-width:260px">Comenzar / Start</button>
 </div></div>
 
+<!-- IDIOMA -->
 <div class="s" id="s1">
-    <div class="lo"><div class="lo-t">MAESTRO MARIO</div><div class="lo-s">HVAC - ELECTRICAL - TRAINING</div></div>
+    <div class="lo"><div class="lo-t">MAESTRO MARIO</div><div class="lo-s">HVAC • ELECTRICAL • TRAINING</div></div>
     <div class="aw md"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
-    <div class="bb">Hola! Choose your language<br>Elige tu idioma</div>
-    <div class="fl"><div class="fc" onclick="setLang('es')"><span class="fe">MX</span><span class="fn">Espanol</span></div><div class="fc" onclick="setLang('en')"><span class="fe">US</span><span class="fn">English</span></div></div>
+    <div class="bb">¡Hola! Choose your language<br>Elige tu idioma</div>
+    <div class="fl"><div class="fc" onclick="setLang('es')"><span class="fe">🇲🇽</span><span class="fn">Español</span></div><div class="fc" onclick="setLang('en')"><span class="fe">🇺🇸</span><span class="fn">English</span></div></div>
 </div>
 
+<!-- NOMBRE -->
 <div class="s" id="s2">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:20%"></div></div><div class="ps"><b data-t="step_1"></b></div>
@@ -190,6 +205,7 @@
     <div style="width:100%"><input class="ip" id="nm" data-tp="name_ph" oninput="document.getElementById('b2').disabled=this.value.trim().length<2"><button class="bt" id="b2" disabled onclick="sName()" data-t="continue"></button></div>
 </div>
 
+<!-- NIVEL -->
 <div class="s" id="s3">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:40%"></div></div><div class="ps"><b data-t="step_2"></b></div>
@@ -199,6 +215,7 @@
     <button class="bt" id="b3" disabled onclick="sLvl()" data-t="continue"></button>
 </div>
 
+<!-- ESPECIALIDADES -->
 <div class="s" id="s4">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:60%"></div></div><div class="ps"><b data-t="step_3"></b></div>
@@ -209,6 +226,7 @@
     <button class="bt" id="b4" disabled onclick="sSpc()" data-t="continue"></button>
 </div>
 
+<!-- ESCUELA -->
 <div class="s" id="s5">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:80%"></div></div><div class="ps"><b data-t="step_4"></b></div>
@@ -218,6 +236,7 @@
     <button class="bt" id="b5" disabled onclick="sSch()" data-t="continue"></button>
 </div>
 
+<!-- METAS -->
 <div class="s" id="s6">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:90%"></div></div><div class="ps"><b data-t="step_5"></b></div>
@@ -228,6 +247,7 @@
     <button class="bt" id="b6" disabled onclick="sGol()" data-t="continue"></button>
 </div>
 
+<!-- RUTA FINAL -->
 <div class="s" id="s7">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:100%"></div></div>
@@ -246,33 +266,49 @@ let musicPlaying=false;
 let currentVideoCallback=null;
 
 const VIDEOS={
-    bienvenida:'MAESTRO MARIO (1).mp4',
+    bienvenida:'bienvenida.mp4',
     correcto:'correcto.mp4.mp4',
     incorrecto:'incorrecto.mp4.mp4',
     medalla:'medalla.mp4.mp4'
 };
 
-function showMarioVideo(type,cb){
+const bgMusic=document.getElementById('bgMusic');
+bgMusic.volume=0.3;
+
+function toggleMusic(){
+    const btn=document.getElementById('musicBtn');
+    if(musicPlaying){
+        bgMusic.pause();
+        btn.classList.add('muted');
+        musicPlaying=false;
+    }else{
+        bgMusic.play().catch(e=>console.log('Music blocked'));
+        btn.classList.remove('muted');
+        musicPlaying=true;
+    }
+}
+
+function showVideo(type,cb){
     if(videoPlaying)return;
     videoPlaying=true;
     currentVideoCallback=cb;
-    const o=document.getElementById('videoOverlay');
+    const vf=document.getElementById('videoFloat');
     const v=document.getElementById('marioVideo');
     v.src=VIDEOS[type]||VIDEOS.bienvenida;
-    o.classList.add('active');
-    o.classList.remove('fade-out');
     v.load();
-    v.play().catch(e=>{console.log('Video error:',e);hideVideoOverlay();});
-    v.onended=function(){hideVideoOverlay();};
-    v.onerror=function(){hideVideoOverlay();};
+    vf.classList.add('active');
+    vf.classList.remove('hiding');
+    v.play().catch(e=>{console.log('Video error:',e);closeVideo();});
+    v.onended=function(){closeVideo();};
+    v.onerror=function(){closeVideo();};
 }
 
-function hideVideoOverlay(){
-    const o=document.getElementById('videoOverlay');
+function closeVideo(){
+    const vf=document.getElementById('videoFloat');
     const v=document.getElementById('marioVideo');
-    o.classList.add('fade-out');
+    vf.classList.add('hiding');
+    vf.classList.remove('active');
     setTimeout(()=>{
-        o.classList.remove('active','fade-out');
         v.pause();
         v.src='';
         videoPlaying=false;
@@ -280,17 +316,11 @@ function hideVideoOverlay(){
             currentVideoCallback();
             currentVideoCallback=null;
         }
-    },600);
-}
-
-function skipVideo(){
-    const v=document.getElementById('marioVideo');
-    v.pause();
-    hideVideoOverlay();
+    },500);
 }
 
 function startWithVideo(){
-    showMarioVideo('bienvenida',()=>{
+    showVideo('bienvenida',()=>{
         go('s1');
         showControls();
     });
@@ -298,21 +328,10 @@ function startWithVideo(){
 
 function showControls(){
     document.getElementById('aiFloatBtn').style.display='flex';
-    document.getElementById('musicBtn').style.display='flex';
 }
 
-function toggleMusic(){
-    const btn=document.getElementById('musicBtn');
-    if(musicPlaying){
-        btn.classList.add('muted');
-        musicPlaying=false;
-    }else{
-        btn.classList.remove('muted');
-        musicPlaying=true;
-    }
-}
-
-const MARIO_SYSTEM="Eres el Maestro Mario Flores Corona, instructor de HVAC con 25+ anos. Tu frase: Si no mides, estas adivinando. Responde en 2-3 oraciones MAX. Se personal, motivador. Usa frases como orale, vamos con todo. NO uses markdown.";
+// AI CHAT
+const MARIO_SYSTEM="Eres el Maestro Mario Flores Corona, instructor de HVAC/Refrigeracion/Electricidad con 25+ años. Tu escuela es ACVOLT Tech School. Tu frase: Si no mides, estás adivinando. Responde en 2-3 oraciones MAX. Usa frases como órale, vamos con todo. NO uses markdown.";
 
 async function askMarioAI(msg){
     try{
@@ -322,8 +341,8 @@ async function askMarioAI(msg){
             body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:200,system:MARIO_SYSTEM,messages:[{role:'user',content:msg}]})
         });
         const d=await r.json();
-        return d.content&&d.content[0]?d.content[0].text:'Orale! Problema tecnico, intenta de nuevo.';
-    }catch(e){return 'Orale! Problema de conexion.';}
+        return d.content&&d.content[0]?d.content[0].text:'¡Órale! Problema técnico, intenta de nuevo.';
+    }catch(e){return '¡Órale! Problema de conexión.';}
 }
 
 function openAIChat(){document.getElementById('aiModal').classList.add('active');document.getElementById('aiFloatBtn').classList.remove('pulse');}
@@ -345,6 +364,7 @@ async function sendAIMessage(){
     msgs.scrollTop=msgs.scrollHeight;
 }
 
+// CONFETTI
 function cft(){
     const c=document.getElementById('conf');
     const cols=['#ff6b2b','#00d4ff','#f1c40f','#2ecc71','#e74c3c','#9b59b6'];
@@ -363,9 +383,10 @@ function cft(){
     setTimeout(()=>c.innerHTML='',4500);
 }
 
+// TRANSLATIONS
 const T={
-es:{step_1:'Paso 1 de 5',step_2:'Paso 2 de 5',step_3:'Paso 3 de 5',step_4:'Paso 4 de 5',step_5:'Paso 5 de 5',welcome_speech:'Bienvenido tecnico! Soy el Maestro Mario y voy a ser tu guia. Como te llamas?',name_ph:'Escribe tu nombre aqui...',continue:'Continuar',level_speech:'Mucho gusto, {name}! En que nivel tecnico te encuentras?',spec_speech:'Excelente, {name}! En que areas te sientes mas fuerte?',multi_hint:'Selecciona una o mas opciones',school_speech:'Vas muy bien, {name}! Donde estas estudiando?',goals_speech:'Ultima pregunta, {name}! Que quieres lograr?',route_speech:'Perfecto, {name}! He creado tu ruta personalizada. Vamos con todo!',start_btn:'Empezar a Aprender!',lv1:'Estudiante',lv1d:'Estoy aprendiendo lo basico',lv2:'Ayudante',lv2d:'Ya ando en el campo con un tecnico',lv3:'Tecnico',lv3d:'Ya trabajo solo pero quiero mejorar',lv4:'Avanzado',lv4d:'Quiero dominar el oficio',lv5:'Maestro',lv5d:'Quiero ser lider / abrir mi empresa',sp_e:'Electricidad',sp_ed:'Circuitos, controles, cableado',sp_a:'Aire Acondicionado',sp_ad:'Splits, centrales, mini splits',sp_r:'Refrigeracion',sp_rd:'Camaras frias, refrigeradores comerciales',sp_h:'Calefaccion',sp_hd:'Furnaces, bombas de calor',sp_x:'Estoy empezando en todo',sp_xd:'Quiero aprender de todo',sc_ac:'ACVOLT Tech School',sc_acd:'Estudiante actual de ACVOLT',sc_ot:'Otra escuela',sc_otd:'Estoy en otra institucion',sc_sf:'Aprendo por mi cuenta',sc_sfd:'YouTube, libros, campo',sc_dn:'Ya termine mis estudios',sc_dnd:'Tengo certificacion/diploma',gl_c:'Pasar mis certificaciones',gl_cd:'EPA, NATE, OSHA, NCCER',gl_d:'Mejorar mis diagnosticos',gl_dd:'Ser mas preciso en el campo',gl_b:'Abrir mi propio negocio',gl_bd:'De tecnico a empresario',gl_m:'Ganar mas dinero',gl_md:'Subir mi valor como tecnico',r_elec:'Fundamentos Electricos',r_elecd:'Circuitos, Ley de Ohm, diagramas',r_ac:'Aire Acondicionado',r_acd:'Presiones, carga de refrigerante',r_ref:'Refrigeracion Comercial',r_refd:'Camaras frias, controles, defrost',r_heat:'Calefaccion',r_heatd:'Furnaces, bombas de calor, gas',r_cert:'Preparacion para Certificaciones',r_certd:'EPA 608, NATE, OSHA, NCCER',r_biz:'De Tecnico a Empresario',r_bizd:'Licencias, estimados, clientes'},
-en:{step_1:'Step 1 of 5',step_2:'Step 2 of 5',step_3:'Step 3 of 5',step_4:'Step 4 of 5',step_5:'Step 5 of 5',welcome_speech:"Welcome technician! I'm Maestro Mario and I'll be your guide. What's your name?",name_ph:'Type your name here...',continue:'Continue',level_speech:"Nice to meet you, {name}! What's your technical level?",spec_speech:'Excellent, {name}! What areas are you strongest in?',multi_hint:'Select one or more options',school_speech:'Great progress, {name}! Where are you studying?',goals_speech:'Last question, {name}! What do you want to achieve?',route_speech:"Perfect, {name}! I've created your personalized path. Let's go!",start_btn:'Start Learning!',lv1:'Student',lv1d:"I'm learning the basics",lv2:'Helper',lv2d:"I'm in the field with a technician",lv3:'Technician',lv3d:'I work solo but want to improve',lv4:'Advanced',lv4d:'I want to master the trade',lv5:'Master',lv5d:'I want to lead / start my business',sp_e:'Electrical',sp_ed:'Circuits, controls, wiring',sp_a:'Air Conditioning',sp_ad:'Splits, central, mini splits',sp_r:'Refrigeration',sp_rd:'Walk-in coolers, commercial',sp_h:'Heating',sp_hd:'Furnaces, heat pumps',sp_x:'Starting in everything',sp_xd:'I want to learn it all',sc_ac:'ACVOLT Tech School',sc_acd:'Current ACVOLT student',sc_ot:'Another school',sc_otd:"I'm at another institution",sc_sf:'Self-taught',sc_sfd:'YouTube, books, field',sc_dn:'Completed studies',sc_dnd:'I have certification/diploma',gl_c:'Pass certifications',gl_cd:'EPA, NATE, OSHA, NCCER',gl_d:'Improve diagnostics',gl_dd:'Be more precise in the field',gl_b:'Start my business',gl_bd:'From tech to owner',gl_m:'Earn more money',gl_md:'Increase my value',r_elec:'Electrical Fundamentals',r_elecd:"Circuits, Ohm's law, diagrams",r_ac:'Air Conditioning',r_acd:'Pressure diagnostics, charging',r_ref:'Commercial Refrigeration',r_refd:'Walk-in coolers, controls, defrost',r_heat:'Heating Systems',r_heatd:'Furnaces, heat pumps, gas',r_cert:'Certification Prep',r_certd:'EPA 608, NATE, OSHA, NCCER',r_biz:'Tech to Business Owner',r_bizd:'Licensing, estimates, clients'}
+es:{step_1:'Paso 1 de 5',step_2:'Paso 2 de 5',step_3:'Paso 3 de 5',step_4:'Paso 4 de 5',step_5:'Paso 5 de 5',welcome_speech:'¡Bienvenido técnico! Soy el Maestro Mario y voy a ser tu guía. ¿Cómo te llamas?',name_ph:'Escribe tu nombre aquí...',continue:'Continuar →',level_speech:'¡Mucho gusto, {name}! ¿En qué nivel técnico te encuentras?',spec_speech:'¡Excelente, {name}! ¿En qué áreas te sientes más fuerte?',multi_hint:'Selecciona una o más opciones',school_speech:'¡Vas muy bien, {name}! ¿Dónde estás estudiando?',goals_speech:'¡Última pregunta, {name}! ¿Qué quieres lograr?',route_speech:'¡Perfecto, {name}! He creado tu ruta personalizada. ¡Vamos con todo!',start_btn:'🚀 ¡Empezar a Aprender!',lv1:'Estudiante',lv1d:'Estoy aprendiendo lo básico',lv2:'Ayudante',lv2d:'Ya ando en el campo con un técnico',lv3:'Técnico',lv3d:'Ya trabajo solo pero quiero mejorar',lv4:'Avanzado',lv4d:'Quiero dominar el oficio',lv5:'Maestro',lv5d:'Quiero ser líder / abrir mi empresa',sp_e:'Electricidad',sp_ed:'Circuitos, controles, cableado',sp_a:'Aire Acondicionado',sp_ad:'Splits, centrales, mini splits',sp_r:'Refrigeración',sp_rd:'Cámaras frías, refrigeradores comerciales',sp_h:'Calefacción',sp_hd:'Furnaces, bombas de calor',sp_x:'Estoy empezando en todo',sp_xd:'Quiero aprender de todo',sc_ac:'ACVOLT Tech School',sc_acd:'Estudiante actual de ACVOLT',sc_ot:'Otra escuela',sc_otd:'Estoy en otra institución',sc_sf:'Aprendo por mi cuenta',sc_sfd:'YouTube, libros, campo',sc_dn:'Ya terminé mis estudios',sc_dnd:'Tengo certificación/diploma',gl_c:'Pasar mis certificaciones',gl_cd:'EPA, NATE, OSHA, NCCER',gl_d:'Mejorar mis diagnósticos',gl_dd:'Ser más preciso en el campo',gl_b:'Abrir mi propio negocio',gl_bd:'De técnico a empresario',gl_m:'Ganar más dinero',gl_md:'Subir mi valor como técnico',r_elec:'Fundamentos Eléctricos',r_elecd:'Circuitos, Ley de Ohm, diagramas',r_ac:'Aire Acondicionado',r_acd:'Presiones, carga de refrigerante',r_ref:'Refrigeración Comercial',r_refd:'Cámaras frías, controles, defrost',r_heat:'Calefacción',r_heatd:'Furnaces, bombas de calor, gas',r_cert:'Preparación para Certificaciones',r_certd:'EPA 608 • NATE • OSHA • NCCER',r_biz:'De Técnico a Empresario',r_bizd:'Licencias, estimados, clientes'},
+en:{step_1:'Step 1 of 5',step_2:'Step 2 of 5',step_3:'Step 3 of 5',step_4:'Step 4 of 5',step_5:'Step 5 of 5',welcome_speech:"Welcome technician! I'm Maestro Mario and I'll be your guide. What's your name?",name_ph:'Type your name here...',continue:'Continue →',level_speech:"Nice to meet you, {name}! What's your technical level?",spec_speech:'Excellent, {name}! What areas are you strongest in?',multi_hint:'Select one or more options',school_speech:'Great progress, {name}! Where are you studying?',goals_speech:'Last question, {name}! What do you want to achieve?',route_speech:"Perfect, {name}! I've created your personalized path. Let's go!",start_btn:'🚀 Start Learning!',lv1:'Student',lv1d:"I'm learning the basics",lv2:'Helper',lv2d:"I'm in the field with a technician",lv3:'Technician',lv3d:'I work solo but want to improve',lv4:'Advanced',lv4d:'I want to master the trade',lv5:'Master',lv5d:'I want to lead / start my business',sp_e:'Electrical',sp_ed:'Circuits, controls, wiring',sp_a:'Air Conditioning',sp_ad:'Splits, central, mini splits',sp_r:'Refrigeration',sp_rd:'Walk-in coolers, commercial',sp_h:'Heating',sp_hd:'Furnaces, heat pumps',sp_x:'Starting in everything',sp_xd:'I want to learn it all',sc_ac:'ACVOLT Tech School',sc_acd:'Current ACVOLT student',sc_ot:'Another school',sc_otd:"I'm at another institution",sc_sf:'Self-taught',sc_sfd:'YouTube, books, field',sc_dn:'Completed studies',sc_dnd:'I have certification/diploma',gl_c:'Pass certifications',gl_cd:'EPA, NATE, OSHA, NCCER',gl_d:'Improve diagnostics',gl_dd:'Be more precise in the field',gl_b:'Start my business',gl_bd:'From tech to owner',gl_m:'Earn more money',gl_md:'Increase my value',r_elec:'Electrical Fundamentals',r_elecd:"Circuits, Ohm's law, diagrams",r_ac:'Air Conditioning',r_acd:'Pressure diagnostics, charging',r_ref:'Commercial Refrigeration',r_refd:'Walk-in coolers, controls, defrost',r_heat:'Heating Systems',r_heatd:'Furnaces, heat pumps, gas',r_cert:'Certification Prep',r_certd:'EPA 608 • NATE • OSHA • NCCER',r_biz:'Tech to Business Owner',r_bizd:'Licensing, estimates, clients'}
 };
 
 const t=k=>(T[D.lang][k]||k).replace('{name}',D.name);
@@ -384,13 +405,13 @@ function sSch(){u();bGol();go('s6');}
 function tGol(e,k){e.classList.toggle('sel');if(e.classList.contains('sel'))D.goals.push(k);else D.goals=D.goals.filter(g=>g!==k);document.getElementById('b6').disabled=D.goals.length===0;rx('a6','nod');}
 function sGol(){u();bRt();go('s7');cft();rx('a7','cel');}
 
-function bLvl(){document.getElementById('lo').innerHTML=[{k:1,i:'1',t:'lv1',d:'lv1d'},{k:2,i:'2',t:'lv2',d:'lv2d'},{k:3,i:'3',t:'lv3',d:'lv3d'},{k:4,i:'4',t:'lv4',d:'lv4d'},{k:5,i:'5',t:'lv5',d:'lv5d'}].map(x=>'<div class="oc" onclick="pLvl(this,'+x.k+')"><div class="oi">'+x.i+'</div><div><div class="ot">'+t(x.t)+'</div><div class="od">'+t(x.d)+'</div></div></div>').join('');}
-function bSpc(){document.getElementById('so').innerHTML=[{k:'electrical',i:'E',t:'sp_e',d:'sp_ed'},{k:'ac',i:'A',t:'sp_a',d:'sp_ad'},{k:'refrigeration',i:'R',t:'sp_r',d:'sp_rd'},{k:'heating',i:'H',t:'sp_h',d:'sp_hd'},{k:'all',i:'*',t:'sp_x',d:'sp_xd'}].map(x=>'<div class="oc" onclick="tSpc(this,\''+x.k+'\')"><div class="oi">'+x.i+'</div><div><div class="ot">'+t(x.t)+'</div><div class="od">'+t(x.d)+'</div></div><div class="ck"></div></div>').join('');}
-function bSch(){document.getElementById('sco').innerHTML=[{k:'acvolt',i:'A',t:'sc_ac',d:'sc_acd'},{k:'other',i:'O',t:'sc_ot',d:'sc_otd'},{k:'self',i:'S',t:'sc_sf',d:'sc_sfd'},{k:'done',i:'D',t:'sc_dn',d:'sc_dnd'}].map(x=>'<div class="oc" onclick="pSch(this,\''+x.k+'\')"><div class="oi">'+x.i+'</div><div><div class="ot">'+t(x.t)+'</div><div class="od">'+t(x.d)+'</div></div></div>').join('');}
-function bGol(){document.getElementById('go2').innerHTML=[{k:'certs',i:'C',t:'gl_c',d:'gl_cd'},{k:'diag',i:'D',t:'gl_d',d:'gl_dd'},{k:'biz',i:'B',t:'gl_b',d:'gl_bd'},{k:'money',i:'$',t:'gl_m',d:'gl_md'}].map(x=>'<div class="oc" onclick="tGol(this,\''+x.k+'\')"><div class="oi">'+x.i+'</div><div><div class="ot">'+t(x.t)+'</div><div class="od">'+t(x.d)+'</div></div><div class="ck"></div></div>').join('');}
-function bRt(){var r=[];if(D.specs.includes('all')||D.specs.includes('electrical'))r.push({i:'E',t:'r_elec',d:'r_elecd'});if(D.specs.includes('all')||D.specs.includes('ac'))r.push({i:'A',t:'r_ac',d:'r_acd'});if(D.specs.includes('all')||D.specs.includes('refrigeration'))r.push({i:'R',t:'r_ref',d:'r_refd'});if(D.specs.includes('all')||D.specs.includes('heating'))r.push({i:'H',t:'r_heat',d:'r_heatd'});if(D.goals.includes('certs'))r.push({i:'C',t:'r_cert',d:'r_certd'});if(D.goals.includes('biz'))r.push({i:'B',t:'r_biz',d:'r_bizd'});document.getElementById('rl').innerHTML=r.map((x,i)=>'<div class="rt"><div class="rn">'+(i+1)+'</div><div><div class="rtt">'+x.i+' '+t(x.t)+'</div><div class="rd">'+t(x.d)+'</div></div></div>'+(i<r.length-1?'<div class="rl"></div>':'')).join('');}
+function bLvl(){document.getElementById('lo').innerHTML=[{k:1,i:'📚',t:'lv1',d:'lv1d'},{k:2,i:'🔧',t:'lv2',d:'lv2d'},{k:3,i:'⚙️',t:'lv3',d:'lv3d'},{k:4,i:'🎯',t:'lv4',d:'lv4d'},{k:5,i:'👑',t:'lv5',d:'lv5d'}].map(x=>'<div class="oc" onclick="pLvl(this,'+x.k+')"><div class="oi">'+x.i+'</div><div><div class="ot">'+t(x.t)+'</div><div class="od">'+t(x.d)+'</div></div></div>').join('');}
+function bSpc(){document.getElementById('so').innerHTML=[{k:'electrical',i:'⚡',t:'sp_e',d:'sp_ed'},{k:'ac',i:'❄️',t:'sp_a',d:'sp_ad'},{k:'refrigeration',i:'🧊',t:'sp_r',d:'sp_rd'},{k:'heating',i:'🔥',t:'sp_h',d:'sp_hd'},{k:'all',i:'🌟',t:'sp_x',d:'sp_xd'}].map(x=>'<div class="oc" onclick="tSpc(this,\''+x.k+'\')"><div class="oi">'+x.i+'</div><div><div class="ot">'+t(x.t)+'</div><div class="od">'+t(x.d)+'</div></div><div class="ck"></div></div>').join('');}
+function bSch(){document.getElementById('sco').innerHTML=[{k:'acvolt',i:'🎓',t:'sc_ac',d:'sc_acd'},{k:'other',i:'🏫',t:'sc_ot',d:'sc_otd'},{k:'self',i:'💪',t:'sc_sf',d:'sc_sfd'},{k:'done',i:'✅',t:'sc_dn',d:'sc_dnd'}].map(x=>'<div class="oc" onclick="pSch(this,\''+x.k+'\')"><div class="oi">'+x.i+'</div><div><div class="ot">'+t(x.t)+'</div><div class="od">'+t(x.d)+'</div></div></div>').join('');}
+function bGol(){document.getElementById('go2').innerHTML=[{k:'certs',i:'📋',t:'gl_c',d:'gl_cd'},{k:'diag',i:'🔍',t:'gl_d',d:'gl_dd'},{k:'biz',i:'🏢',t:'gl_b',d:'gl_bd'},{k:'money',i:'💰',t:'gl_m',d:'gl_md'}].map(x=>'<div class="oc" onclick="tGol(this,\''+x.k+'\')"><div class="oi">'+x.i+'</div><div><div class="ot">'+t(x.t)+'</div><div class="od">'+t(x.d)+'</div></div><div class="ck"></div></div>').join('');}
+function bRt(){var r=[];if(D.specs.includes('all')||D.specs.includes('electrical'))r.push({i:'⚡',t:'r_elec',d:'r_elecd'});if(D.specs.includes('all')||D.specs.includes('ac'))r.push({i:'❄️',t:'r_ac',d:'r_acd'});if(D.specs.includes('all')||D.specs.includes('refrigeration'))r.push({i:'🧊',t:'r_ref',d:'r_refd'});if(D.specs.includes('all')||D.specs.includes('heating'))r.push({i:'🔥',t:'r_heat',d:'r_heatd'});if(D.goals.includes('certs'))r.push({i:'📋',t:'r_cert',d:'r_certd'});if(D.goals.includes('biz'))r.push({i:'🏢',t:'r_biz',d:'r_bizd'});document.getElementById('rl').innerHTML=r.map((x,i)=>'<div class="rt"><div class="rn">'+(i+1)+'</div><div><div class="rtt">'+x.i+' '+t(x.t)+'</div><div class="rd">'+t(x.d)+'</div></div></div>'+(i<r.length-1?'<div class="rl"></div>':'')).join('');}
 
-function startApp(){alert(D.lang==='es'?''+D.name+', tu ruta esta lista! Proximamente: Quiz y Medallas':D.name+', your path is ready! Coming: Quiz & Medals');console.log('Profile:',JSON.stringify(D,null,2));}
+function startApp(){alert(D.lang==='es'?'¡'+D.name+', tu ruta está lista! Próximamente: Quiz y Medallas 🏅':D.name+', your path is ready! Coming: Quiz & Medals 🏅');console.log('Profile:',JSON.stringify(D,null,2));}
 document.getElementById('nm').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.value.trim().length>=2)sName();});
 </script>
 </body>
