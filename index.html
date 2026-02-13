@@ -21,10 +21,102 @@
         .s{display:none;flex-direction:column;align-items:center;flex:1;animation:si .55s cubic-bezier(.16,1,.3,1)}
         .s.on{display:flex}
         @keyframes si{from{opacity:0;transform:translateY(36px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+        
+        /* ===== VIDEO AVATAR OVERLAY ===== */
+        .video-overlay{
+            position:fixed;
+            inset:0;
+            z-index:1000;
+            background:rgba(10,22,40,0.95);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            flex-direction:column;
+            opacity:0;
+            visibility:hidden;
+            transition:opacity 0.5s ease, visibility 0.5s ease;
+        }
+        .video-overlay.active{
+            opacity:1;
+            visibility:visible;
+        }
+        .video-overlay.fade-out{
+            opacity:0;
+        }
+        .video-container{
+            position:relative;
+            width:90%;
+            max-width:360px;
+            border-radius:24px;
+            overflow:hidden;
+            box-shadow:0 20px 60px rgba(255,107,43,0.3), 0 0 0 3px rgba(0,212,255,0.3);
+            animation:videoEnter 0.6s cubic-bezier(.16,1,.3,1);
+        }
+        @keyframes videoEnter{
+            from{opacity:0;transform:scale(0.8) translateY(30px)}
+            to{opacity:1;transform:scale(1) translateY(0)}
+        }
+        .video-container video{
+            width:100%;
+            display:block;
+            background:#000;
+        }
+        .video-glow{
+            position:absolute;
+            inset:-4px;
+            border-radius:28px;
+            background:conic-gradient(var(--accent),var(--electric),var(--accent));
+            z-index:-1;
+            animation:sp 4s linear infinite;
+            opacity:0.6;
+        }
+        @keyframes sp{to{transform:rotate(360deg)}}
+        .video-label{
+            margin-top:20px;
+            display:flex;
+            align-items:center;
+            gap:10px;
+            background:linear-gradient(135deg,rgba(255,107,43,.2),rgba(0,212,255,.1));
+            border:1px solid rgba(0,212,255,.3);
+            border-radius:30px;
+            padding:10px 24px;
+            font-family:'Fredoka',sans-serif;
+            font-size:16px;
+            font-weight:600;
+            color:var(--electric);
+            animation:pulse 2s ease-in-out infinite;
+        }
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.7}}
+        .video-label::before{
+            content:'';
+            width:10px;
+            height:10px;
+            border-radius:50%;
+            background:var(--accent);
+            animation:blink 1s ease-in-out infinite;
+        }
+        @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+        .skip-btn{
+            margin-top:16px;
+            background:transparent;
+            border:1px solid rgba(255,255,255,0.2);
+            color:var(--muted);
+            padding:8px 20px;
+            border-radius:20px;
+            font-family:'Nunito',sans-serif;
+            font-size:13px;
+            cursor:pointer;
+            transition:all 0.3s;
+        }
+        .skip-btn:hover{
+            border-color:var(--accent);
+            color:var(--txt);
+        }
+        /* ===== END VIDEO AVATAR ===== */
+        
         .aw{position:relative;margin:16px auto 12px}
         .aw.lg{width:190px;height:190px}.aw.md{width:140px;height:140px}.aw.sm{width:120px;height:120px}
         .ar{position:absolute;inset:-6px;border-radius:50%;background:conic-gradient(var(--accent),var(--electric),var(--accent));animation:sp 4s linear infinite}
-        @keyframes sp{to{transform:rotate(360deg)}}
         .ag{position:absolute;inset:-20px;border-radius:50%;background:radial-gradient(circle,var(--accent) 0%,transparent 70%);opacity:.25;animation:pu 3s ease-in-out infinite}
         @keyframes pu{0%,100%{transform:scale(1);opacity:.25}50%{transform:scale(1.12);opacity:.4}}
         .ai{position:relative;width:100%;height:100%;border-radius:50%;overflow:hidden;border:4px solid var(--dark);animation:fl 4.5s ease-in-out infinite}
@@ -71,10 +163,10 @@
         .cw{position:fixed;inset:0;pointer-events:none;z-index:100}.cf{position:absolute;top:-16px;animation:cff 2.8s ease-out forwards}
         @keyframes cff{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
         .typing{display:inline-flex;gap:4px;align-items:center;padding:4px 0}
-        .typing .dot{width:8px;height:8px;border-radius:50%;background:var(--electric);animation:blink 1.4s infinite both}
+        .typing .dot{width:8px;height:8px;border-radius:50%;background:var(--electric);animation:tblink 1.4s infinite both}
         .typing .dot:nth-child(2){animation-delay:.2s}
         .typing .dot:nth-child(3){animation-delay:.4s}
-        @keyframes blink{0%,80%,100%{opacity:.3;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+        @keyframes tblink{0%,80%,100%{opacity:.3;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
         .bb.ai-active{border-color:rgba(255,107,43,.35);box-shadow:0 6px 28px rgba(255,107,43,.15)}
         .ai-badge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,rgba(255,107,43,.15),rgba(0,212,255,.1));border:1px solid rgba(0,212,255,.2);border-radius:20px;padding:2px 10px 2px 6px;font-size:10px;color:var(--electric);font-weight:700;letter-spacing:.5px;margin-bottom:8px;font-family:'Fredoka',sans-serif}
         .ai-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--electric);animation:pu 2s ease-in-out infinite}
@@ -83,18 +175,34 @@
 <body>
 <div class="bg"><div class="o"></div><div class="o"></div><div class="o"></div></div>
 <div class="gr"></div>
+
+<!-- ===== VIDEO AVATAR OVERLAY ===== -->
+<div class="video-overlay" id="videoOverlay">
+    <div class="video-container">
+        <div class="video-glow"></div>
+        <video id="marioVideo" playsinline webkit-playsinline>
+            <source src="https://raw.githubusercontent.com/AcvoltTech/maestroac-app/main/assets/videos/bienvenida.mp4" type="video/mp4">
+        </video>
+    </div>
+    <div class="video-label">
+        <span>MAESTRO MARIO EN VIVO</span>
+    </div>
+    <button class="skip-btn" onclick="skipVideo()">Saltar ▸</button>
+</div>
+<!-- ===== END VIDEO AVATAR ===== -->
+
 <div class="app">
 
 <div class="s on" id="s0"><div class="sp">
-    <div class="aw lg"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="Maestro Mario"></div></div>
+    <div class="aw lg"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-app/main/mario.jpg" alt="Maestro Mario"></div></div>
     <div><div class="sp-t">MAESTRO<br>MARIO</div><div class="badge">&#9889; NIVEL 33</div></div>
     <div class="sp-s">Si no mides, est&#225;s adivinando</div>
-    <button class="bt" onclick="go('s1')" style="max-width:260px">Comenzar / Start</button>
+    <button class="bt" onclick="startWithVideo()" style="max-width:260px">Comenzar / Start</button>
 </div></div>
 
 <div class="s" id="s1">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div><div class="lo-s">HVAC &#8226; ELECTRICAL &#8226; TRAINING</div></div>
-    <div class="aw md"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
+    <div class="aw md"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-app/main/mario.jpg" alt="M"></div></div>
     <div class="bb">&#161;Hola! Choose your language<br>Elige tu idioma</div>
     <div class="fl"><div class="fc" onclick="setLang('es')"><span class="fe">MX</span><span class="fn">Espa&#241;ol</span></div><div class="fc" onclick="setLang('en')"><span class="fe">US</span><span class="fn">English</span></div></div>
 </div>
@@ -102,7 +210,7 @@
 <div class="s" id="s2">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:20%"></div></div><div class="ps"><b data-t="step_1"></b></div>
-    <div class="aw md" id="a2"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
+    <div class="aw md" id="a2"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-app/main/mario.jpg" alt="M"></div></div>
     <div class="bb" id="bb2"><span data-t="welcome_speech"></span></div>
     <div style="width:100%"><input class="ip" id="nm" data-tp="name_ph" oninput="document.getElementById('b2').disabled=this.value.trim().length<2"><button class="bt" id="b2" disabled onclick="sName()" data-t="continue"></button></div>
 </div>
@@ -110,7 +218,7 @@
 <div class="s" id="s3">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:40%"></div></div><div class="ps"><b data-t="step_2"></b></div>
-    <div class="aw sm" id="a3"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
+    <div class="aw sm" id="a3"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-app/main/mario.jpg" alt="M"></div></div>
     <div class="bb" id="bb3"><span data-t="level_speech"></span></div>
     <div class="os" id="lo"></div>
     <button class="bt" id="b3" disabled onclick="sLvl()" data-t="continue"></button>
@@ -119,7 +227,7 @@
 <div class="s" id="s4">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:60%"></div></div><div class="ps"><b data-t="step_3"></b></div>
-    <div class="aw sm" id="a4"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
+    <div class="aw sm" id="a4"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-app/main/mario.jpg" alt="M"></div></div>
     <div class="bb" id="bb4"><span data-t="spec_speech"></span></div>
     <p class="mh" data-t="multi_hint"></p>
     <div class="os" id="so"></div>
@@ -129,7 +237,7 @@
 <div class="s" id="s5">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:80%"></div></div><div class="ps"><b data-t="step_4"></b></div>
-    <div class="aw sm" id="a5"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
+    <div class="aw sm" id="a5"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-app/main/mario.jpg" alt="M"></div></div>
     <div class="bb" id="bb5"><span data-t="school_speech"></span></div>
     <div class="os" id="sco"></div>
     <button class="bt" id="b5" disabled onclick="sSch()" data-t="continue"></button>
@@ -138,7 +246,7 @@
 <div class="s" id="s6">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:90%"></div></div><div class="ps"><b data-t="step_5"></b></div>
-    <div class="aw sm" id="a6"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
+    <div class="aw sm" id="a6"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-app/main/mario.jpg" alt="M"></div></div>
     <div class="bb" id="bb6"><span data-t="goals_speech"></span></div>
     <p class="mh" data-t="multi_hint"></p>
     <div class="os" id="go2"></div>
@@ -148,7 +256,7 @@
 <div class="s" id="s7">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
     <div class="pb"><div class="pbf" style="width:100%"></div></div>
-    <div class="aw md" id="a7"><div class="ag" style="background:radial-gradient(circle,var(--gold) 0%,transparent 70%)"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div></div>
+    <div class="aw md" id="a7"><div class="ag" style="background:radial-gradient(circle,var(--gold) 0%,transparent 70%)"></div><div class="ar"></div><div class="ai"><img src="https://raw.githubusercontent.com/AcvoltTech/maestroac-app/main/mario.jpg" alt="M"></div></div>
     <div class="bb" id="bb7"><span data-t="route_speech"></span></div>
     <div id="rl" style="width:100%"></div>
     <button class="bt" onclick="startApp()" data-t="start_btn"></button>
@@ -159,6 +267,90 @@
 
 <script>
 const D={lang:'es',name:'',level:null,specs:[],school:null,goals:[]};
+
+/* ===== VIDEO AVATAR SYSTEM ===== */
+const VIDEO_URLS = {
+    bienvenida: 'https://raw.githubusercontent.com/AcvoltTech/maestroac-app/main/assets/videos/bienvenida.mp4',
+    correcto: 'https://raw.githubusercontent.com/AcvoltTech/maestroac-app/main/assets/videos/correcto.mp4',
+    incorrecto: 'https://raw.githubusercontent.com/AcvoltTech/maestroac-app/main/assets/videos/incorrecto.mp4',
+    felicitacion: 'https://raw.githubusercontent.com/AcvoltTech/maestroac-app/main/assets/videos/felicitacion.mp4'
+};
+
+let videoPlaying = false;
+
+function showMarioVideo(videoKey, callback) {
+    if (videoPlaying) return;
+    videoPlaying = true;
+    
+    const overlay = document.getElementById('videoOverlay');
+    const video = document.getElementById('marioVideo');
+    
+    // Set video source
+    const videoUrl = VIDEO_URLS[videoKey] || VIDEO_URLS.bienvenida;
+    video.src = videoUrl;
+    
+    // Show overlay with animation
+    overlay.classList.add('active');
+    overlay.classList.remove('fade-out');
+    
+    // Play video
+    video.play().catch(e => {
+        console.log('Video autoplay blocked, user interaction needed:', e);
+    });
+    
+    // When video ends, fade out and call callback
+    video.onended = function() {
+        hideVideoOverlay(callback);
+    };
+    
+    // Also handle errors
+    video.onerror = function() {
+        console.log('Video error, closing overlay');
+        hideVideoOverlay(callback);
+    };
+}
+
+function hideVideoOverlay(callback) {
+    const overlay = document.getElementById('videoOverlay');
+    const video = document.getElementById('marioVideo');
+    
+    // Fade out
+    overlay.classList.add('fade-out');
+    
+    // After fade animation, hide completely
+    setTimeout(() => {
+        overlay.classList.remove('active');
+        overlay.classList.remove('fade-out');
+        video.pause();
+        video.currentTime = 0;
+        videoPlaying = false;
+        
+        // Execute callback if provided
+        if (callback && typeof callback === 'function') {
+            callback();
+        }
+    }, 500);
+}
+
+function skipVideo() {
+    const video = document.getElementById('marioVideo');
+    video.pause();
+    hideVideoOverlay();
+}
+
+// Start app with welcome video
+function startWithVideo() {
+    showMarioVideo('bienvenida', function() {
+        go('s1');
+    });
+}
+
+// Show Mario after user makes a selection (for feedback)
+function showMarioFeedback(type, callback) {
+    showMarioVideo(type, callback);
+}
+/* ===== END VIDEO AVATAR SYSTEM ===== */
+
 const T={
 es:{step_1:'Paso 1 de 5',step_2:'Paso 2 de 5',step_3:'Paso 3 de 5',step_4:'Paso 4 de 5',step_5:'Paso 5 de 5',welcome_speech:'\u00a1Bienvenido t\u00e9cnico! Soy el Maestro Mario y voy a ser tu gu\u00eda. \u00bfC\u00f3mo te llamas?',name_ph:'Escribe tu nombre aqu\u00ed...',continue:'Continuar \u2192',level_speech:'\u00a1Mucho gusto, {name}! \u00bfEn qu\u00e9 nivel t\u00e9cnico te encuentras?',spec_speech:'\u00a1Excelente, {name}! \u00bfEn qu\u00e9 \u00e1reas te sientes m\u00e1s fuerte?',multi_hint:'Selecciona una o m\u00e1s opciones',school_speech:'\u00a1Vas muy bien, {name}! \u00bfD\u00f3nde est\u00e1s estudiando?',goals_speech:'\u00a1\u00daltima pregunta, {name}! \u00bfQu\u00e9 quieres lograr?',route_speech:'\u00a1Perfecto, {name}! He creado tu ruta personalizada. \u00a1Vamos con todo!',start_btn:'\ud83d\ude80 \u00a1Empezar a Aprender!',lv1:'Estudiante',lv1d:'Estoy aprendiendo lo b\u00e1sico',lv2:'Ayudante',lv2d:'Ya ando en el campo con un t\u00e9cnico',lv3:'T\u00e9cnico',lv3d:'Ya trabajo solo pero quiero mejorar',lv4:'Avanzado',lv4d:'Quiero dominar el oficio',lv5:'Maestro',lv5d:'Quiero ser l\u00edder / abrir mi empresa',sp_e:'Electricidad',sp_ed:'Circuitos, controles, cableado',sp_a:'Aire Acondicionado',sp_ad:'Splits, centrales, mini splits',sp_r:'Refrigeraci\u00f3n',sp_rd:'C\u00e1maras fr\u00edas, refrigeradores comerciales',sp_h:'Calefacci\u00f3n',sp_hd:'Furnaces, bombas de calor',sp_x:'Estoy empezando en todo',sp_xd:'Quiero aprender de todo',sc_ac:'ACVOLT Tech School',sc_acd:'Estudiante actual de ACVOLT',sc_ot:'Otra escuela',sc_otd:'Estoy en otra instituci\u00f3n',sc_sf:'Aprendo por mi cuenta',sc_sfd:'YouTube, libros, campo',sc_dn:'Ya termin\u00e9 mis estudios',sc_dnd:'Tengo certificaci\u00f3n/diploma',gl_c:'Pasar mis certificaciones',gl_cd:'EPA, NATE, OSHA, NCCER',gl_d:'Mejorar mis diagn\u00f3sticos',gl_dd:'Ser m\u00e1s preciso en el campo',gl_b:'Abrir mi propio negocio',gl_bd:'De t\u00e9cnico a empresario',gl_m:'Ganar m\u00e1s dinero',gl_md:'Subir mi valor como t\u00e9cnico',r_elec:'Fundamentos El\u00e9ctricos',r_elecd:'Circuitos, Ley de Ohm, diagramas',r_ac:'Aire Acondicionado',r_acd:'Presiones, carga de refrigerante',r_ref:'Refrigeraci\u00f3n Comercial',r_refd:'C\u00e1maras fr\u00edas, controles, defrost',r_heat:'Calefacci\u00f3n',r_heatd:'Furnaces, bombas de calor, gas',r_cert:'Preparaci\u00f3n para Certificaciones',r_certd:'EPA 608 \u2022 NATE \u2022 OSHA \u2022 NCCER',r_biz:'De T\u00e9cnico a Empresario',r_bizd:'Licencias, estimados, clientes'},
 en:{step_1:'Step 1 of 5',step_2:'Step 2 of 5',step_3:'Step 3 of 5',step_4:'Step 4 of 5',step_5:'Step 5 of 5',welcome_speech:"Welcome technician! I'm Maestro Mario and I'll be your guide. What's your name?",name_ph:'Type your name here...',continue:'Continue \u2192',level_speech:"Nice to meet you, {name}! What's your technical level?",spec_speech:'Excellent, {name}! What areas are you strongest in?',multi_hint:'Select one or more options',school_speech:'Great progress, {name}! Where are you studying?',goals_speech:'Last question, {name}! What do you want to achieve?',route_speech:"Perfect, {name}! I've created your personalized path. Let's go!",start_btn:'\ud83d\ude80 Start Learning!',lv1:'Student',lv1d:"I'm learning the basics",lv2:'Helper',lv2d:"I'm in the field with a technician",lv3:'Technician',lv3d:'I work solo but want to improve',lv4:'Advanced',lv4d:'I want to master the trade',lv5:'Master',lv5d:'I want to lead / start my business',sp_e:'Electrical',sp_ed:'Circuits, controls, wiring',sp_a:'Air Conditioning',sp_ad:'Splits, central, mini splits',sp_r:'Refrigeration',sp_rd:'Walk-in coolers, commercial',sp_h:'Heating',sp_hd:'Furnaces, heat pumps',sp_x:'Starting in everything',sp_xd:'I want to learn it all',sc_ac:'ACVOLT Tech School',sc_acd:'Current ACVOLT student',sc_ot:'Another school',sc_otd:"I'm at another institution",sc_sf:'Self-taught',sc_sfd:'YouTube, books, field',sc_dn:'Completed studies',sc_dnd:'I have certification/diploma',gl_c:'Pass certifications',gl_cd:'EPA, NATE, OSHA, NCCER',gl_d:'Improve diagnostics',gl_dd:'Be more precise in the field',gl_b:'Start my business',gl_bd:'From tech to owner',gl_m:'Earn more money',gl_md:'Increase my value',r_elec:'Electrical Fundamentals',r_elecd:"Circuits, Ohm's law, diagrams",r_ac:'Air Conditioning',r_acd:'Pressure diagnostics, charging',r_ref:'Commercial Refrigeration',r_refd:'Walk-in coolers, controls, defrost',r_heat:'Heating Systems',r_heatd:'Furnaces, heat pumps, gas',r_cert:'Certification Prep',r_certd:'EPA 608 \u2022 NATE \u2022 OSHA \u2022 NCCER',r_biz:'Tech to Business Owner',r_bizd:'Licensing, estimates, clients'}
@@ -265,8 +457,11 @@ function sSch(){
 function tGol(e,k){e.classList.toggle('sel');if(e.classList.contains('sel'))D.goals.push(k);else D.goals=D.goals.filter(g=>g!==k);document.getElementById('b6').disabled=D.goals.length===0;rx('a6','nod');}
 
 function sGol(){
-    u();bRt();go('s7');cft();rx('a7','cel');
-    marioSay('bb7', 'Idioma: '+D.lang+'. RESUMEN del estudiante: Nombre: '+D.name+', Nivel: '+D.level+'/5, Especialidades: '+D.specs.join(', ')+', Escuela: '+D.school+', Metas: '+D.goals.join(', ')+'. Acabas de crear su ruta personalizada. Dale un mensaje final motivador y personalizado basado en TODO su perfil. Dile que su ruta esta lista y que vamos con todo. Responde en '+(D.lang==='es'?'espanol':'ingles')+'.', t('route_speech'));
+    // Show celebration video before final screen
+    showMarioVideo('felicitacion', function() {
+        u();bRt();go('s7');cft();rx('a7','cel');
+        marioSay('bb7', 'Idioma: '+D.lang+'. RESUMEN del estudiante: Nombre: '+D.name+', Nivel: '+D.level+'/5, Especialidades: '+D.specs.join(', ')+', Escuela: '+D.school+', Metas: '+D.goals.join(', ')+'. Acabas de crear su ruta personalizada. Dale un mensaje final motivador y personalizado basado en TODO su perfil. Dile que su ruta esta lista y que vamos con todo. Responde en '+(D.lang==='es'?'espanol':'ingles')+'.', t('route_speech'));
+    });
 }
 
 function bLvl(){var d=[{k:1,i:'\ud83d\udcda',t:'lv1',d:'lv1d'},{k:2,i:'\ud83d\udd27',t:'lv2',d:'lv2d'},{k:3,i:'\u2699\ufe0f',t:'lv3',d:'lv3d'},{k:4,i:'\ud83c\udfaf',t:'lv4',d:'lv4d'},{k:5,i:'\ud83d\udc51',t:'lv5',d:'lv5d'}];document.getElementById('lo').innerHTML=d.map(function(x){return '<div class="oc" onclick="pLvl(this,'+x.k+')"><div class="oi">'+x.i+'</div><div><div class="ot">'+t(x.t)+'</div><div class="od">'+t(x.d)+'</div></div></div>';}).join('');}
