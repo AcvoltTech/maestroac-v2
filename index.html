@@ -210,6 +210,18 @@
         .medal-slot.earned .medal-icon{opacity:1}
         .medal-slot .medal-name{font-size:11px;margin-top:6px;color:var(--muted);font-weight:600}
         .medal-slot.earned .medal-name{color:var(--gold)}
+        
+        /* AVATAR PICKER */
+        .prof-avatar{font-size:64px;cursor:pointer;transition:transform 0.3s;position:relative}
+        .prof-avatar:hover{transform:scale(1.1)}
+        .prof-avatar-edit{position:absolute;bottom:-4px;right:-4px;background:var(--accent);color:white;border-radius:50%;width:24px;height:24px;font-size:12px;display:flex;align-items:center;justify-content:center}
+        .avatar-picker{display:none;background:var(--card);border:2px solid rgba(0,212,255,0.2);border-radius:16px;padding:16px;margin-top:12px;width:100%}
+        .avatar-picker.open{display:block}
+        .avatar-picker-title{font-family:'Fredoka',sans-serif;font-size:14px;font-weight:700;color:var(--electric);margin-bottom:12px;text-align:center}
+        .avatar-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+        .avatar-option{font-size:36px;padding:10px;text-align:center;border-radius:12px;cursor:pointer;transition:all 0.2s;border:2px solid transparent;background:rgba(255,255,255,0.03)}
+        .avatar-option:hover{background:rgba(0,212,255,0.1);transform:scale(1.15)}
+        .avatar-option.selected{border-color:var(--gold);background:rgba(255,215,0,0.1)}
     </style>
 </head>
 <body>
@@ -370,7 +382,11 @@
 <!-- PROFILE -->
 <div class="s" id="s10">
     <div class="prof-card">
-        <div style="font-size:64px">👤</div>
+        <div class="prof-avatar" id="profAvatar" onclick="toggleAvatarPicker()">👤<div class="prof-avatar-edit">✏️</div></div>
+        <div class="avatar-picker" id="avatarPicker">
+            <div class="avatar-picker-title">Elige tu avatar</div>
+            <div class="avatar-grid" id="avatarGrid"></div>
+        </div>
         <div class="prof-name" id="profName"></div>
         <div class="prof-title" id="profTitle"></div>
         <div class="prof-level">
@@ -965,8 +981,26 @@ const CHEERS_EN=[
     ['Spectacular!','You\'re on fire!','Incredible, '+'{name}'+'!','Crushing it!'],
     ['🔥 UNSTOPPABLE! 🔥','⚡ NOBODY STOPS YOU! ⚡','💪 YOU\'RE A BEAST! 💪','🏆 ALL THE WAY! 🏆']
 ];
-const MISS_ES=['No te preocupes, así se aprende.','Casi, pero no. ¡Tú puedes!','Échale ojo a esto.','No pasa nada, sigue adelante.','A estudiar este tema un poco más.'];
-const MISS_EN=['Don\'t worry, that\'s how we learn.','Almost! You got this.','Take a closer look at this one.','No worries, keep going.','Review this topic a bit more.'];
+const MISS_ES=[
+    '¡No te preocupes, {name}! Todos fallamos al principio. Así se aprende, echándole ganas.',
+    '¡Ey {name}, tranquilo! Los mejores técnicos también empezaron equivocándose. ¡Tú puedes!',
+    '¡{name}, ya eres ganador solo por intentarlo! No te desanimes, vamos campeón.',
+    '¡Órale {name}, casi le atinas! Eres una estrella en entrenamiento. Mira la explicación.',
+    '¡{name}, no pasa nada! Hasta Mario se equivocaba al principio. Lo importante es aprender.',
+    '¡Ánimo {name}! Cada error te acerca más a ser un crack del HVAC. ¡Tú puedes con esto!',
+    '¡Hey {name}! Esta estaba difícil. Pero tú eres chingón, vas a dominar este tema.',
+    '¡{name}, respira! Los grandes se hacen a base de práctica. Mira la explicación y vas a ver qué fácil es.'
+];
+const MISS_EN=[
+    'Don\'t worry {name}! Everyone struggles at first. That\'s how you learn!',
+    'Hey {name}, take it easy! The best techs started by making mistakes too. You got this!',
+    '{name}, you\'re already a winner just for trying! Don\'t give up, champ.',
+    'Almost {name}! You\'re a star in training. Check out the explanation.',
+    '{name}, no big deal! Even Mario made mistakes starting out. What matters is learning.',
+    'Keep going {name}! Every mistake brings you closer to being an HVAC pro!',
+    'Hey {name}! That was a tough one. But you\'re awesome, you\'ll master this.',
+    '{name}, take a breath! Greatness comes from practice. Check the explanation and you\'ll get it.'
+];
 
 function pickCheer(streak){
     const cheers=D.lang==='es'?CHEERS_ES:CHEERS_EN;
@@ -980,7 +1014,9 @@ function pickCheer(streak){
 
 function pickMiss(){
     const list=D.lang==='es'?MISS_ES:MISS_EN;
-    return list[Math.floor(Math.random()*list.length)]+' '+(D.lang==='es'?'La correcta es la ':'Correct answer is ')+['A','B','C','D'][quizData[quizIdx].c]+'.';
+    const msg=list[Math.floor(Math.random()*list.length)].replace(/\{name\}/g,D.name);
+    const letter=' '+(D.lang==='es'?'La correcta es la ':'Correct answer is ')+['A','B','C','D'][quizData[quizIdx].c]+'.';
+    return msg+letter;
 }
 
 function celebrate(streak){
@@ -1059,11 +1095,18 @@ function answerQuiz(idx,el){
         quizWrong++;
         quizStreak=0;
         document.getElementById('qWrong').textContent=quizWrong;
-        document.getElementById('qBubble').textContent=pickMiss();
+        const motivation=pickMiss();
+        const bubble=document.getElementById('qBubble');
+        bubble.textContent=motivation;
+        // After 3 seconds, update bubble with the simple analogy
+        setTimeout(()=>{
+            bubble.innerHTML='<span style="color:#ff6b2b">📖</span> '+q.a;
+        },3500);
         // Show deep explanation with analogy
         let explain='<b style="color:#ff6b2b">'+(D.lang==='es'?'📖 Te lo explico con peras y manzanas:':'📖 Let me break it down simply:')+'</b><br>'+q.a+'<br><br><b>'+(D.lang==='es'?'Explicación técnica:':'Technical explanation:')+'</b> '+q.e;
         document.getElementById('qExplain').innerHTML=explain;
-        speakText((D.lang==='es'?'Incorrecto. Te lo explico fácil: ':'Incorrect. Let me explain simply: ')+q.a);
+        // Mario speaks motivation FIRST, then simple explanation
+        speakText(motivation+' ... '+q.a);
     }
     
     document.getElementById('qExplain').classList.add('show');
@@ -1168,8 +1211,36 @@ const LEVEL_TITLES={
     11:'Leyenda HVAC',12:'Maestro Supremo',15:'Dios del HVAC'
 };
 
-let profile={level:1,xp:0,xpNeeded:100,totalCorrect:0,totalAnswered:0,quizzesTaken:0,bestStreak:0,medals:[],perfectStreakCount:0};
+let profile={level:1,xp:0,xpNeeded:100,totalCorrect:0,totalAnswered:0,quizzesTaken:0,bestStreak:0,medals:[],perfectStreakCount:0,avatar:'👤'};
 let bestStreak=0;
+
+const AVATARS=[
+    '👤','🧑‍🔧','👷','🦸‍♂️','🦸‍♀️','🧑‍🏫',
+    '🐺','🦅','🐆','🦁','🐻','🦊',
+    '🔥','⚡','❄️','🌟','💎','🏆',
+    '🤖','👾','🎮','🕹️','🛡️','⚔️',
+    '🧊','🔧','⚙️','🌀','💪','👑'
+];
+
+function toggleAvatarPicker(){
+    const picker=document.getElementById('avatarPicker');
+    picker.classList.toggle('open');
+    if(picker.classList.contains('open')){
+        document.getElementById('avatarGrid').innerHTML=AVATARS.map(a=>'<div class="avatar-option'+(a===profile.avatar?' selected':'')+'" onclick="selectAvatar(\''+a+'\')">'+a+'</div>').join('');
+    }
+}
+
+function selectAvatar(emoji){
+    profile.avatar=emoji;
+    saveProfile();
+    document.getElementById('profAvatar').innerHTML=emoji+'<div class="prof-avatar-edit">✏️</div>';
+    document.getElementById('profileBtn').textContent=emoji;
+    document.getElementById('avatarPicker').classList.remove('open');
+    // Update selected state
+    document.querySelectorAll('.avatar-option').forEach(el=>{
+        el.classList.toggle('selected',el.textContent===emoji);
+    });
+}
 
 function getTitle(lvl){
     let title='Aprendiz';
@@ -1203,11 +1274,14 @@ function loadProfile(){
             const p=JSON.parse(saved);
             Object.assign(profile,p);
             document.getElementById('profileBtn').classList.add('active');
+            document.getElementById('profileBtn').textContent=profile.avatar||'👤';
         }
     }catch(e){}
 }
 
 function renderProfile(){
+    document.getElementById('profAvatar').innerHTML=profile.avatar+'<div class="prof-avatar-edit">✏️</div>';
+    document.getElementById('profileBtn').textContent=profile.avatar;
     document.getElementById('profName').textContent=D.name||'Técnico';
     document.getElementById('profTitle').textContent=getTitle(profile.level);
     document.getElementById('profLevel').textContent=profile.level;
