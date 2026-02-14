@@ -718,6 +718,7 @@
 </div>
 <button class="profile-btn" id="profileBtn" onclick="go('s10');renderProfile()">👤</button>
 
+<script src="quiz-refrigeracion-200.js"></script>
 <script>
 const D={lang:'es',name:'',level:null,specs:[],school:null,goals:[]};
 let videoPlaying=false;
@@ -1378,7 +1379,8 @@ function startApp(){
 
 const QUIZ_LIST=[
     {id:'principiante',icon:'📚',title:'Principiante HVAC',desc:'50 preguntas de electricidad básica, refrigeración, AC, herramientas y seguridad',count:50,data:'QUIZ_PRINCIPIANTE',color:'#00d4ff'},
-    {id:'electricidad',icon:'⚡',title:'Electricidad Avanzada',desc:'117 preguntas: Ley de Ohm, NEC, motores, VFD, GFCI, AFCI, circuitos, contactores',count:117,data:'QUIZ_ELECTRICIDAD',color:'#ffd700'}
+    {id:'electricidad',icon:'⚡',title:'Electricidad Avanzada',desc:'117 preguntas: Ley de Ohm, NEC, motores, VFD, GFCI, AFCI, circuitos, contactores',count:117,data:'QUIZ_ELECTRICIDAD',color:'#ffd700'},
+    {id:'refrigeracion',icon:'❄️',title:'Refrigeración Completa',desc:'200 preguntas: Doméstica, Comercial, Walk-in, EPA 608, Troubleshooting, Refrigerantes, Seguridad',count:200,data:'QUIZ_REFRIGERACION',color:'#00e5ff'}
 ];
 
 function renderQuizSelector(){
@@ -1654,6 +1656,7 @@ function startQuiz(id){
     const qId=id||currentQuizId||'principiante';
     currentQuizId=qId;
     if(qId==='electricidad')quizData=shuffleArray(QUIZ_ELECTRICIDAD);
+    else if(qId==='refrigeracion')quizData=shuffleArray(QUIZ_REFRIGERACION);
     else quizData=shuffleArray(QUIZ_PRINCIPIANTE);
     quizIdx=0;quizRight=0;quizWrong=0;quizStreak=0;
     quizAnswers=new Array(quizData.length).fill(-1);
