@@ -319,6 +319,15 @@
         .video-card-dur{font-size:11px;color:#9b59b6;font-weight:600;margin-top:4px}
         .video-section-title{font-family:'Fredoka',sans-serif;font-size:16px;font-weight:700;color:var(--txt);margin:16px 0 10px;display:flex;align-items:center;gap:8px}
         
+        /* FLOATING NAV FOR LIBRARY */
+        .lib-float-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:460px;display:flex;gap:8px;padding:12px 18px;background:linear-gradient(to top,var(--dark) 70%,transparent);z-index:50;pointer-events:none}
+        .lib-float-nav .bt{pointer-events:auto;box-shadow:0 -4px 20px rgba(0,0,0,0.5)}
+        
+        /* STUDY LIBRARY STYLES */
+        .zone-card.library-zone{border-color:rgba(46,204,113,0.2);--zone-color:#2ecc71}
+        .zone-card.library-zone .zone-icon{background:rgba(46,204,113,0.12);color:#2ecc71}
+        .zone-card.library-zone .zone-name{color:#2ecc71}
+        
         /* STUDY REDIRECT BANNER */
         .study-redirect{background:linear-gradient(135deg,rgba(255,107,43,0.15),rgba(231,76,60,0.1));border:2px solid rgba(255,107,43,0.3);border-radius:16px;padding:18px;margin-top:14px;text-align:center;animation:pulse-border 2s infinite}
         @keyframes pulse-border{0%,100%{border-color:rgba(255,107,43,0.3)}50%{border-color:rgba(255,107,43,0.7)}}
@@ -490,17 +499,30 @@
             <div class="zone-badge" style="background:rgba(0,212,255,0.15);color:#00d4ff" id="hubQuizBadge">¡Vamos!</div>
         </div>
         
-        <!-- STUDY ZONE -->
+        <!-- ZONA DE REPASO (failed questions) -->
         <div class="zone-card study-zone" onclick="goStudyZone()">
-            <div class="zone-icon">📚</div>
+            <div class="zone-icon">🔄</div>
             <div class="zone-info">
-                <div class="zone-name">Study Zone</div>
-                <div class="zone-desc">Repasa las preguntas que más se te dificultan</div>
+                <div class="zone-name">Zona de Repaso</div>
+                <div class="zone-desc">Repasa solo las preguntas que fallaste en los quizzes</div>
                 <div class="zone-stat">
                     <span class="zone-stat-item" id="hubStudyCount">🔄 0 por repasar</span>
                 </div>
             </div>
             <div class="zone-badge" style="background:rgba(255,107,43,0.15);color:#ff6b2b;display:none" id="hubStudyBadge">⚠️ Repasa</div>
+        </div>
+        
+        <!-- ZONA DE ESTUDIO (all questions with explanations) -->
+        <div class="zone-card" style="border-color:rgba(46,204,113,0.2)" onclick="goStudyLibrary()">
+            <div class="zone-icon" style="background:rgba(46,204,113,0.12);color:#2ecc71">📖</div>
+            <div class="zone-info">
+                <div class="zone-name" style="color:#2ecc71">Zona de Estudio</div>
+                <div class="zone-desc">Todas las preguntas con explicaciones detalladas, fórmulas y ejemplos de campo</div>
+                <div class="zone-stat">
+                    <span class="zone-stat-item" id="hubLibraryCount">📖 0 temas disponibles</span>
+                </div>
+            </div>
+            <div class="zone-badge" style="background:rgba(46,204,113,0.15);color:#2ecc71">📖 Estudia</div>
         </div>
         
         <!-- VIDEO ZONE -->
@@ -532,7 +554,7 @@
 
 <!-- STUDY ZONE -->
 <div class="s" id="s-study">
-    <div class="lo"><div class="lo-t">📚 STUDY ZONE</div></div>
+    <div class="lo"><div class="lo-t">🔄 ZONA DE REPASO</div></div>
     <div class="aw sm" onclick="openAIChat()"><div class="ag" style="background:radial-gradient(circle,var(--accent) 0%,transparent 70%)"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div><span class="ai-badge">AI</span></div>
     <div class="bb" id="studyBubble">Aquí repasamos lo que necesitas reforzar.</div>
     <div id="studyContent" style="width:100%;margin-top:16px"></div>
@@ -568,8 +590,31 @@
         <div class="bb quiz-result-msg" id="srMsg"></div>
     </div>
     <button class="bt" onclick="startStudyQuiz(lastStudyCat)">🔄 Repasar de Nuevo</button>
-    <button class="bt" onclick="go('s-study');renderStudyZone()" style="background:var(--card);border:2px solid var(--accent);margin-top:10px">📚 Study Zone</button>
+    <button class="bt" onclick="go('s-study');renderStudyZone()" style="background:var(--card);border:2px solid var(--accent);margin-top:10px">🔄 Zona de Repaso</button>
     <button class="bt" onclick="go('s-hub');updateHub()" style="background:var(--card);border:2px solid var(--electric);margin-top:10px">← Volver al Hub</button>
+</div>
+
+<!-- ZONA DE ESTUDIO - ALL QUESTIONS WITH EXPLANATIONS -->
+<div class="s" id="s-library">
+    <div class="lo"><div class="lo-t">📖 ZONA DE ESTUDIO</div></div>
+    <div class="aw sm" onclick="openAIChat()"><div class="ag" style="background:radial-gradient(circle,#2ecc71 0%,transparent 70%)"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div><span class="ai-badge">AI</span></div>
+    <div class="bb" id="libraryBubble">Aquí puedes estudiar TODAS las preguntas con explicaciones detalladas y ejemplos de campo.</div>
+    <div id="libraryContent" style="width:100%;margin-top:16px;padding-bottom:80px"></div>
+    <!-- FLOATING NAV -->
+    <div class="lib-float-nav">
+        <button class="bt" onclick="go('s-hub');updateHub()" style="background:var(--card);border:2px solid var(--accent);flex:1;margin:0;font-size:14px;padding:12px">← Volver al Hub</button>
+    </div>
+</div>
+
+<!-- STUDY LIBRARY DETAIL VIEW -->
+<div class="s" id="s-library-detail">
+    <div class="lo"><div class="lo-t" id="libDetailTitle">📖 TEMA</div></div>
+    <div id="libDetailContent" style="width:100%;margin-top:12px;padding-bottom:120px"></div>
+    <!-- FLOATING NAV BUTTONS -->
+    <div class="lib-float-nav">
+        <button class="bt" onclick="go('s-library');renderStudyLibrary()" style="background:linear-gradient(135deg,#2ecc71,#1a9955);flex:1;margin:0;font-size:13px;padding:12px 8px">📖 Zona de Estudio</button>
+        <button class="bt" onclick="go('s-hub');updateHub()" style="background:var(--card);border:2px solid var(--accent);flex:1;margin:0;font-size:13px;padding:12px 8px">← Hub</button>
+    </div>
 </div>
 
 <!-- VIDEO ZONE -->
@@ -600,37 +645,45 @@
         </div>
         <div class="power-wheel" id="qPowerWheel">
             <div class="pw-container">
-                <svg class="pw-svg" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+                <svg class="pw-svg" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
                     <!-- Outer circle -->
-                    <circle cx="120" cy="120" r="115" fill="none" stroke="rgba(0,212,255,0.3)" stroke-width="2"/>
+                    <circle cx="150" cy="150" r="145" fill="none" stroke="rgba(0,212,255,0.25)" stroke-width="2"/>
+                    <!-- Inner circle (center) -->
+                    <circle cx="150" cy="150" r="42" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
                     <!-- Cross dividers -->
-                    <line x1="120" y1="5" x2="120" y2="235" stroke="rgba(0,212,255,0.15)" stroke-width="1.5"/>
-                    <line x1="5" y1="120" x2="235" y2="120" stroke="rgba(0,212,255,0.15)" stroke-width="1.5"/>
-                    <!-- Inner circle for W/P -->
-                    <circle cx="120" cy="55" r="42" fill="rgba(241,196,15,0.1)" stroke="rgba(241,196,15,0.4)" stroke-width="2"/>
-                    <!-- W label -->
-                    <text x="120" y="48" text-anchor="middle" fill="#f1c40f" font-family="Fredoka" font-size="18" font-weight="700">W (P)</text>
-                    <text x="120" y="68" text-anchor="middle" fill="#7a93b8" font-size="10">Watts</text>
-                    <!-- V section (bottom left) -->
-                    <circle cx="68" cy="168" r="42" fill="rgba(0,212,255,0.08)" stroke="rgba(0,212,255,0.3)" stroke-width="2"/>
-                    <text x="68" y="162" text-anchor="middle" fill="#00d4ff" font-family="Fredoka" font-size="18" font-weight="700">V (E)</text>
-                    <text x="68" y="182" text-anchor="middle" fill="#7a93b8" font-size="10">Voltios</text>
-                    <!-- A section (bottom right) -->
-                    <circle cx="172" cy="168" r="42" fill="rgba(255,107,43,0.08)" stroke="rgba(255,107,43,0.3)" stroke-width="2"/>
-                    <text x="172" y="162" text-anchor="middle" fill="#ff6b2b" font-family="Fredoka" font-size="18" font-weight="700">I (A)</text>
-                    <text x="172" y="182" text-anchor="middle" fill="#7a93b8" font-size="10">Amperios</text>
-                    <!-- R in center -->
-                    <circle cx="120" cy="125" r="28" fill="rgba(46,204,113,0.08)" stroke="rgba(46,204,113,0.3)" stroke-width="2"/>
-                    <text x="120" y="120" text-anchor="middle" fill="#2ecc71" font-family="Fredoka" font-size="16" font-weight="700">R (Ω)</text>
-                    <text x="120" y="137" text-anchor="middle" fill="#7a93b8" font-size="9">Ohms</text>
-                    <!-- Formula labels around -->
-                    <text x="120" y="16" text-anchor="middle" fill="#7a93b8" font-size="9">P = V × I</text>
-                    <text x="22" y="120" text-anchor="middle" fill="#7a93b8" font-size="8" transform="rotate(-90,22,120)">V = I × R</text>
-                    <text x="232" y="120" text-anchor="middle" fill="#7a93b8" font-size="8" transform="rotate(90,232,120)">I = V / R</text>
-                    <text x="120" y="236" text-anchor="middle" fill="#7a93b8" font-size="9">R = V / I</text>
+                    <line x1="150" y1="5" x2="150" y2="295" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                    <line x1="5" y1="150" x2="295" y2="150" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                    
+                    <!-- TOP QUADRANT: POWER (P/W) — yellow -->
+                    <text x="150" y="32" text-anchor="middle" fill="#f1c40f" font-family="Fredoka" font-size="20" font-weight="700">P (Watts)</text>
+                    <text x="150" y="58" text-anchor="middle" fill="#f1c40f" font-size="11" font-weight="600">V × I</text>
+                    <text x="150" y="74" text-anchor="middle" fill="#daa520" font-size="10">I² × R</text>
+                    <text x="150" y="89" text-anchor="middle" fill="#daa520" font-size="10">V² ÷ R</text>
+                    
+                    <!-- LEFT QUADRANT: VOLTAGE (V/E) — cyan -->
+                    <text x="54" y="140" text-anchor="middle" fill="#00d4ff" font-family="Fredoka" font-size="20" font-weight="700">V (Volts)</text>
+                    <text x="54" y="162" text-anchor="middle" fill="#00d4ff" font-size="11" font-weight="600">I × R</text>
+                    <text x="54" y="178" text-anchor="middle" fill="#0099bb" font-size="10">P ÷ I</text>
+                    <text x="54" y="193" text-anchor="middle" fill="#0099bb" font-size="10">√(P × R)</text>
+                    
+                    <!-- RIGHT QUADRANT: CURRENT (I/A) — orange -->
+                    <text x="246" y="140" text-anchor="middle" fill="#ff6b2b" font-family="Fredoka" font-size="20" font-weight="700">I (Amps)</text>
+                    <text x="246" y="162" text-anchor="middle" fill="#ff6b2b" font-size="11" font-weight="600">V ÷ R</text>
+                    <text x="246" y="178" text-anchor="middle" fill="#cc4400" font-size="10">P ÷ V</text>
+                    <text x="246" y="193" text-anchor="middle" fill="#cc4400" font-size="10">√(P ÷ R)</text>
+                    
+                    <!-- BOTTOM QUADRANT: RESISTANCE (R/Ω) — green -->
+                    <text x="150" y="222" text-anchor="middle" fill="#2ecc71" font-family="Fredoka" font-size="20" font-weight="700">R (Ohms)</text>
+                    <text x="150" y="244" text-anchor="middle" fill="#2ecc71" font-size="11" font-weight="600">V ÷ I</text>
+                    <text x="150" y="260" text-anchor="middle" fill="#1a9955" font-size="10">V² ÷ P</text>
+                    <text x="150" y="275" text-anchor="middle" fill="#1a9955" font-size="10">P ÷ I²</text>
+                    
+                    <!-- Center labels -->
+                    <text x="150" y="145" text-anchor="middle" fill="white" font-family="Fredoka" font-size="13" font-weight="700">OHM</text>
+                    <text x="150" y="161" text-anchor="middle" fill="var(--muted)" font-size="10">+ WATT</text>
                 </svg>
             </div>
-            <div class="pw-label">⚡ Power Wheel — Ley de Ohm + Ley de Watt</div>
+            <div class="pw-label">⚡ Power Wheel — 12 Fórmulas: Ley de Ohm + Ley de Watt</div>
         </div>
     </div>
     <div class="quiz-q" id="qText"></div>
@@ -658,9 +711,9 @@
         <!-- STUDY ZONE REDIRECT (shown when score < 70%) -->
         <div class="study-redirect" id="rStudyRedirect" style="display:none">
             <div class="study-redirect-icon">📚</div>
-            <div class="study-redirect-title">¡Maestro Mario te recomienda repasar!</div>
+            <div class="study-redirect-title">¡El Maestro Mario te recomienda repasar!</div>
             <div class="study-redirect-desc" id="rStudyDesc">Tienes preguntas que necesitas reforzar. Ve a la Study Zone para dominarlas.</div>
-            <button class="bt" onclick="go('s-study');renderStudyZone()" style="background:var(--accent);margin-top:8px;padding:12px">📚 Ir a Study Zone →</button>
+            <button class="bt" onclick="go('s-study');renderStudyZone()" style="background:var(--accent);margin-top:8px;padding:12px">🔄 Ir a Zona de Repaso →</button>
         </div>
     </div>
     <button class="bt" onclick="retryQuiz()">🔄 Intentar de Nuevo</button>
@@ -1166,6 +1219,82 @@ async function getAIResponse(msg){
 
 let speechAbort=null;
 
+// ========== SPEECH TEXT PREPROCESSOR ==========
+// Converts symbols and abbreviations to spoken Spanish words
+function prepareForSpeech(text){
+    if(!text)return text;
+    let t=text;
+    // === FIRST: Refrigerant names (before unit conversions to avoid R-404A → "404 amperios") ===
+    t=t.replace(/R-(\d+)([A-Za-z]*)/g,function(m,num,suffix){
+        if(!suffix)return 'refrigerante R '+num;
+        // Spell out suffix to avoid conflicts: A→"a", B→"be", C→"ce"
+        const spelled=suffix.split('').map(c=>({A:'a',B:'be',C:'ce',D:'de'}[c.toUpperCase()]||c)).join(' ');
+        return 'refrigerante R '+num+' '+spelled;
+    });
+    // Temperature symbols
+    t=t.replace(/(\d+)\s*°F/g,'$1 grados Fahrenheit');
+    t=t.replace(/(\d+)\s*°C/g,'$1 grados Celsius');
+    t=t.replace(/(\d+)\s*°/g,'$1 grados');
+    // Pressure (before generic units)
+    t=t.replace(/(\d+)\s*psi/gi,'$1 P S I');
+    t=t.replace(/(\d+)\s*PSI/g,'$1 P S I');
+    t=t.replace(/(\d+)\s*kPa/gi,'$1 kilopascales');
+    // Multi-char units first
+    t=t.replace(/(\d+)\s*kW\b/g,'$1 kilowatts');
+    t=t.replace(/(\d+)\s*HP\b/gi,'$1 caballos de fuerza');
+    t=t.replace(/BTU\/h/gi,'B T U por hora');
+    t=t.replace(/BTU/gi,'B T U');
+    // Electrical units (single char - must come AFTER multi-char and refrigerant names)
+    t=t.replace(/(\d+)\s*V\b(?!olt)/g,'$1 voltios');
+    t=t.replace(/(\d+)\s*W\b(?!att)/g,'$1 watts');
+    t=t.replace(/(\d+)\s*Ω/g,'$1 ohms');
+    // Amps: only match standalone A after number, not inside words
+    t=t.replace(/(\d+)\s*A\b(?![\w])/g,'$1 amperios');
+    // Refrigeration abbreviations
+    t=t.replace(/CFM/g,'C F M');
+    t=t.replace(/TXV/g,'válvula de expansión termostática');
+    t=t.replace(/EPR/g,'regulador de presión del evaporador');
+    t=t.replace(/GWP/g,'potencial de calentamiento global');
+    t=t.replace(/ODP/g,'potencial de destrucción de ozono');
+    // Refrigerant names
+    t=t.replace(/R-(\d+[A-Za-z]*)/g,'refrigerante R $1');
+    // Math operators
+    t=t.replace(/\s*×\s*/g,' multiplicado por ');
+    t=t.replace(/\s*÷\s*/g,' dividido entre ');
+    t=t.replace(/\s*=\s*/g,' igual a ');
+    t=t.replace(/\s*\+\s*/g,' más ');
+    t=t.replace(/\s*−\s*/g,' menos ');
+    t=t.replace(/\s*-\s+/g,' menos ');
+    t=t.replace(/√/g,'raíz cuadrada de ');
+    t=t.replace(/²/g,' al cuadrado');
+    t=t.replace(/\//g,' entre ');
+    // Common abbreviations
+    t=t.replace(/HVAC/g,'H V A C');
+    t=t.replace(/NEC/g,'Código Eléctrico Nacional');
+    t=t.replace(/NFPA/g,'N F P A');
+    t=t.replace(/OSHA/g,'O S H A');
+    t=t.replace(/EPA/g,'E P A');
+    t=t.replace(/LOTO/g,'bloqueo y etiquetado');
+    t=t.replace(/AC\b/g,'aire acondicionado');
+    t=t.replace(/GFCI/g,'G F C I');
+    t=t.replace(/AFCI/g,'A F C I');
+    t=t.replace(/VFD/g,'variador de frecuencia');
+    t=t.replace(/POE/g,'aceite polioléster');
+    t=t.replace(/PAG/g,'aceite P A G');
+    t=t.replace(/CW\b/g,'en sentido de las manecillas del reloj');
+    t=t.replace(/CCW\b/g,'en contra de las manecillas del reloj');
+    t=t.replace(/UV\b/g,'ultravioleta');
+    // Other symbols
+    t=t.replace(/&/g,' y ');
+    t=t.replace(/%/g,' por ciento');
+    t=t.replace(/#/g,'número ');
+    // Clean up emojis for speech
+    t=t.replace(/[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu,'');
+    // Clean double spaces
+    t=t.replace(/\s{2,}/g,' ').trim();
+    return t;
+}
+
 async function speakText(text){
     // Cancel any ongoing speech
     if(speechAbort)speechAbort.cancelled=true;
@@ -1177,8 +1306,11 @@ async function speakText(text){
         lowerMusicForSpeech();
         document.getElementById('speakingIndicator').classList.add('active');
         
+        // Preprocess text for natural speech
+        const spokenText=prepareForSpeech(text);
+        
         // Split into chunks at sentence boundaries
-        const chunks=splitTextChunks(text,500);
+        const chunks=splitTextChunks(spokenText,500);
         
         // Pre-fetch first chunk
         let nextBlob=await fetchVoiceChunk(chunks[0]);
@@ -1667,9 +1799,28 @@ function startQuiz(id){
 }
 
 function retryQuiz(){
-    startQuiz(currentQuizId);
+    // Only retry the questions the user got WRONG (not the entire quiz)
+    const failedQuestions=[];
+    for(let i=0;i<quizData.length;i++){
+        if(quizAnswers[i]>=0 && quizAnswers[i]!==quizData[i].c){
+            failedQuestions.push(quizData[i]);
+        }
+    }
+    if(failedQuestions.length===0){
+        // Perfect score - just restart full quiz
+        startQuiz(currentQuizId);
+        return;
+    }
+    // Start quiz with ONLY failed questions
+    quizData=shuffleArray(failedQuestions);
+    quizIdx=0;quizRight=0;quizWrong=0;quizStreak=0;
+    quizAnswers=new Array(quizData.length).fill(-1);
+    document.getElementById('qRight').textContent='0';
+    document.getElementById('qWrong').textContent='0';
+    go('s8');
+    showQuestion();
     const q=QUIZ_LIST.find(x=>x.id===currentQuizId);
-    speakText(D.lang==='es'?'¡Otra vez '+q.title+'! Vamos con todo.':'Let\'s try '+q.title+' again!');
+    speakText(D.lang==='es'?'¡Vamos a repasar las '+failedQuestions.length+' que fallaste, '+D.name+'! ¡Tú puedes, campeón!':'Let\'s review the '+failedQuestions.length+' you missed, '+D.name+'! You got this!');
 }
 
 // ========== FORMULA DETECTION SYSTEM ==========
@@ -1988,16 +2139,16 @@ function showQuestion(){
 let quizStreak=0;
 
 const CHEERS_ES=[
-    ['¡Correcto!','¡Bien hecho!','¡Así se hace!','¡Muy bien, '+'{name}'+'!','¡Buena elección!'],
-    ['¡Divino!','¡Perfecto!','¡Excelente!','¡Maravilloso!','¡Órale, '+'{name}'+'!'],
-    ['¡Espectacular!','¡Eres crack!','¡Increíble, '+'{name}'+'!','¡Qué máquina!'],
-    ['🔥 ¡IMPARABLE! 🔥','⚡ ¡NO TE PARA NADIE! ⚡','💪 ¡ERES UNA BESTIA! 💪','🏆 ¡VAS CON TODO! 🏆']
+    ['¡Correcto!','¡Bien hecho!','¡Así se hace!','¡Muy bien, '+'{name}'+'!','¡Buena elección!','¡Exacto!','¡Le atinaste!'],
+    ['¡Chaka, '+'{name}'+'!','¡Excelente!','¡Wow, qué bárbaro!','¡Perrísimo!','¡Bravo, '+'{name}'+'!','¡Me sorprendes!','¡Órale, así mero!'],
+    ['¡Ufff qué bárbaro, '+'{name}'+'!','¡Espectacular!','¡Estás que ardes!','¡Qué máquina eres!','¡Nadie te para!','¡Crack total!'],
+    ['🔥 ¡ESTÁS IMPARABLE, '+'{name}'+'! 🔥','⚡ ¡WOW, NO TE PARA NADIE! ⚡','💪 ¡PERRÍSIMO, ERES UNA BESTIA! 💪','🏆 ¡VAS CON TODO, CAMPEÓN! 🏆','🌟 ¡ME SORPRENDES, QUÉ NIVEL! 🌟','💥 ¡CHAKA! ¡ERES IMPARABLE! 💥']
 ];
 const CHEERS_EN=[
-    ['Correct!','Well done!','Nice job!','Good pick, '+'{name}'+'!','That\'s right!'],
-    ['Perfect!','Excellent!','Brilliant!','Amazing!','Great work, '+'{name}'+'!'],
-    ['Spectacular!','You\'re on fire!','Incredible, '+'{name}'+'!','Crushing it!'],
-    ['🔥 UNSTOPPABLE! 🔥','⚡ NOBODY STOPS YOU! ⚡','💪 YOU\'RE A BEAST! 💪','🏆 ALL THE WAY! 🏆']
+    ['Correct!','Well done!','Nice job!','Good pick, '+'{name}'+'!','That\'s right!','Nailed it!','Spot on!'],
+    ['Perfect!','Excellent!','Brilliant!','Amazing!','Great work, '+'{name}'+'!','Killing it!','Impressive!'],
+    ['Spectacular!','You\'re on fire!','Incredible, '+'{name}'+'!','Crushing it!','Nobody stops you!','Total beast mode!'],
+    ['🔥 UNSTOPPABLE, '+'{name}'+'! 🔥','⚡ NOBODY STOPS YOU! ⚡','💪 YOU ARE A BEAST! 💪','🏆 ALL THE WAY, CHAMP! 🏆','🌟 WHAT A LEVEL! 🌟','💥 INCREDIBLE RUN! 💥']
 ];
 const MISS_ES=[
     '¡No te preocupes, {name}! Todos fallamos al principio. Así se aprende, echándole ganas.',
@@ -2106,7 +2257,16 @@ function answerQuiz(idx,el){
         quizStreak++;
         if(quizStreak>bestStreak)bestStreak=quizStreak;
         document.getElementById('qRight').textContent=quizRight;
-        const cheer=pickCheer(quizStreak);
+        let cheer=pickCheer(quizStreak);
+        // === MILESTONE MESSAGES based on progress ===
+        const progressPct=Math.round(((quizIdx+1)/quizData.length)*100);
+        if(progressPct>=90&&progressPct<95){
+            cheer='🎯 ¡Concentración total, '+D.name+'! ¡Ya lo tienes, campeón!';
+        }else if(progressPct>=70&&progressPct<75){
+            cheer='👑 ¡Ya puedes saborear la victoria, '+D.name+'! ¡No aflojes!';
+        }else if(progressPct>=48&&progressPct<52){
+            cheer='🏅 ¡Ya casi llegas a la mitad! ¡Esa medalla se acerca, '+D.name+'!';
+        }
         document.getElementById('qBubble').textContent=cheer;
         celebrate(quizStreak);
         document.getElementById('qExplain').innerHTML='<b>'+(D.lang==='es'?'Explicación:':'Explanation:')+'</b> '+q.e;
@@ -2224,18 +2384,50 @@ function showResult(){
         document.getElementById('rMedalName').textContent='¡MEDALLA ELÉCTRICA DESBLOQUEADA!\nMaestro de Electricidad';
         saveProfile();
     }
+    // Refrigeration medal
+    if(currentQuizId==='refrigeracion'&&pct===100&&!profile.medals.includes('bronze_refrigeracion')){
+        profile.medals.push('bronze_refrigeracion');
+        medalEarned.style.display='block';
+        document.getElementById('rNewMedal').textContent='❄️';
+        document.getElementById('rMedalName').textContent='¡MEDALLA DE REFRIGERACIÓN DESBLOQUEADA!\nMaestro de Refrigeración';
+        saveProfile();
+    }
     
-    cft();
+    // Enhanced celebration based on score
+    if(pct>=90){
+        // EPIC celebration - confetti + video + fanfare
+        cft();
+        setTimeout(()=>cft(),800);
+        setTimeout(()=>cft(),1600);
+        showVideo('medalla',()=>{});
+    }else if(pct>=70){
+        cft();
+        setTimeout(()=>cft(),1000);
+    }else{
+        cft();
+    }
     speakText(msg);
     
-    // Show study zone redirect if score < 70%
+    // Update retry button to show failed count
+    const failedCount=quizData.length-quizRight;
+    const retryBtn=document.querySelector('#s9 .bt[onclick="retryQuiz()"]');
+    if(retryBtn){
+        if(failedCount>0&&pct<100){
+            retryBtn.textContent='🔄 Repasar las '+failedCount+' que fallé';
+            retryBtn.style.display='block';
+        }else{
+            retryBtn.textContent='🔄 ¡Perfecto! Intentar de Nuevo';
+        }
+    }
+    
+    // Show study zone redirect if score < 100%
     const studyRedirect=document.getElementById('rStudyRedirect');
     const wrongCount=getStudyQuestions().length;
-    if(pct<70&&wrongCount>0){
+    if(pct<100&&wrongCount>0){
         studyRedirect.style.display='block';
         document.getElementById('rStudyDesc').textContent=D.lang==='es'?
-            'Tienes '+wrongCount+' preguntas que necesitas reforzar. El Maestro Mario te recomienda ir a la Study Zone para dominarlas.':
-            'You have '+wrongCount+' questions to review. Maestro Mario recommends the Study Zone to master them.';
+            'Tienes '+wrongCount+' preguntas que necesitas reforzar. Ve a la Zona de Repaso para dominarlas.':
+            'You have '+wrongCount+' questions to review. Go to the Review Zone to master them.';
     }else{
         studyRedirect.style.display='none';
     }
@@ -2247,6 +2439,7 @@ const MEDALS_DEF=[
     {id:'silver_principiante',icon:'🥈',name:'Plata Principiante',desc:'100% dos veces seguidas'},
     {id:'gold_principiante',icon:'🥇',name:'Oro Principiante',desc:'100% tres veces seguidas'},
     {id:'bronze_electricidad',icon:'⚡',name:'Maestro Eléctrico',desc:'100% en quiz de electricidad'},
+    {id:'bronze_refrigeracion',icon:'❄️',name:'Maestro Refrigeración',desc:'100% en quiz de refrigeración'},
     {id:'streak_5',icon:'🔥',name:'En Llamas',desc:'Racha de 5 correctas'},
     {id:'streak_10',icon:'⚡',name:'Imparable',desc:'Racha de 10 correctas'},
     {id:'streak_20',icon:'💥',name:'Leyenda',desc:'Racha de 20 correctas'},
@@ -2578,12 +2771,15 @@ function updateHub(){
     // Hub bubble message
     const bubble=document.getElementById('hubBubble');
     if(studyQs.length>=10){
-        bubble.textContent=D.lang==='es'?'¡'+D.name+'! Tienes '+studyQs.length+' preguntas por repasar. ¡Ve a la Study Zone!':''+D.name+'! You have '+studyQs.length+' questions to review. Hit the Study Zone!';
+        bubble.textContent=D.lang==='es'?'¡'+D.name+'! Tienes '+studyQs.length+' preguntas por repasar. ¡Ve a la Zona de Repaso!':''+D.name+'! You have '+studyQs.length+' questions to review. Hit the Review Zone!';
     }else if(studyQs.length>0){
         bubble.textContent=D.lang==='es'?'¿Qué quieres hacer hoy, '+D.name+'? Tienes '+studyQs.length+' preguntas pendientes de repaso.':'What do you want to do, '+D.name+'? You have '+studyQs.length+' questions to review.';
     }else{
         bubble.textContent=D.lang==='es'?'¡'+D.name+'! ¿Listo para aprender? Elige tu zona.':''+D.name+'! Ready to learn? Pick your zone.';
     }
+    
+    // Library zone stats
+    updateHubLibraryCount();
 }
 
 function goQuizZone(){
@@ -2850,6 +3046,165 @@ function renderVideoZone(){
     
     container.innerHTML=html;
 }
+
+// ========== ZONA DE ESTUDIO (STUDY LIBRARY) ==========
+function goStudyLibrary(){
+    renderStudyLibrary();
+    go('s-library');
+    speakText(D.lang==='es'?'Bienvenido a la Zona de Estudio, '+D.name+'. Aquí puedes estudiar todas las preguntas con explicaciones detalladas.':'Welcome to the Study Library, '+D.name+'. Study all questions with detailed explanations here.');
+}
+
+function getAllQuizQuestions(){
+    const all=[];
+    if(typeof QUIZ_PRINCIPIANTE!=='undefined')all.push(...QUIZ_PRINCIPIANTE.map(q=>({...q,_source:'principiante'})));
+    if(typeof QUIZ_ELECTRICIDAD!=='undefined')all.push(...QUIZ_ELECTRICIDAD.map(q=>({...q,_source:'electricidad'})));
+    if(typeof QUIZ_REFRIGERACION!=='undefined')all.push(...QUIZ_REFRIGERACION.map(q=>({...q,_source:'refrigeracion'})));
+    return all;
+}
+
+function getLibraryCategories(){
+    const all=getAllQuizQuestions();
+    const cats={};
+    all.forEach(q=>{
+        if(!cats[q.cat])cats[q.cat]={count:0,icon:q.cat.split(' ')[0],questions:[]};
+        cats[q.cat].count++;
+        cats[q.cat].questions.push(q);
+    });
+    return cats;
+}
+
+function renderStudyLibrary(){
+    const container=document.getElementById('libraryContent');
+    const cats=getLibraryCategories();
+    const allQ=getAllQuizQuestions();
+    const bubble=document.getElementById('libraryBubble');
+    bubble.textContent=D.name+', aquí tienes '+allQ.length+' preguntas organizadas por tema. Estudia con calma, cada una tiene explicación completa y ejemplos de campo.';
+    
+    let html='<div style="text-align:center;margin-bottom:16px;font-size:14px;color:var(--electric);font-weight:700">📖 '+allQ.length+' preguntas disponibles en '+Object.keys(cats).length+' temas</div>';
+    
+    const sortedCats=Object.keys(cats).sort((a,b)=>cats[b].count-cats[a].count);
+    
+    for(const cat of sortedCats){
+        const c=cats[cat];
+        html+='<div class="quiz-sel-card" onclick="showLibraryCategory(\''+cat.replace(/'/g,"\\'")+'\')" style="border-color:rgba(46,204,113,0.15);margin-bottom:10px">';
+        html+='<div class="qs-icon" style="background:rgba(46,204,113,0.1);font-size:32px">'+c.icon+'</div>';
+        html+='<div class="qs-info"><div class="qs-title" style="color:#2ecc71">'+cat+'</div>';
+        html+='<div class="qs-count" style="color:var(--muted)">📖 '+c.count+' preguntas con explicación</div>';
+        html+='</div></div>';
+    }
+    
+    container.innerHTML=html;
+}
+
+function detectFormulas(text){
+    // Detect formula patterns in question or explanation text
+    const formulas=[];
+    const patterns=[
+        {rx:/R\s*=\s*V\s*[÷\/]\s*I/i,f:'R = V ÷ I',name:'Ley de Ohm (Resistencia)',ex:'Si V=240V y I=20A → R = 240÷20 = 12Ω'},
+        {rx:/V\s*=\s*I\s*[×x\*]\s*R/i,f:'V = I × R',name:'Ley de Ohm (Voltaje)',ex:'Si I=10A y R=12Ω → V = 10×12 = 120V'},
+        {rx:/I\s*=\s*V\s*[÷\/]\s*R/i,f:'I = V ÷ R',name:'Ley de Ohm (Corriente)',ex:'Si V=240V y R=20Ω → I = 240÷20 = 12A'},
+        {rx:/P\s*=\s*V\s*[×x\*]\s*I|[Ww]att/i,f:'P = V × I',name:'Ley de Watt (Potencia)',ex:'Si V=120V y I=10A → P = 120×10 = 1,200W'},
+        {rx:/superheat/i,f:'Superheat = T línea succión − T saturación (según presión)',name:'Superheat',ex:'Si presión=70psi (40°F sat.) y T línea=50°F → SH = 50−40 = 10°F'},
+        {rx:/subcooling/i,f:'Subcooling = T saturación (según presión) − T línea líquido',name:'Subcooling',ex:'Si presión=280psi (120°F sat.) y T línea=110°F → SC = 120−110 = 10°F'},
+        {rx:/[Oo]hm|resistencia.*voltaje|voltaje.*corriente/i,f:'V = I × R  |  I = V ÷ R  |  R = V ÷ I',name:'Ley de Ohm',ex:'Con 2 valores conocidos, siempre puedes calcular el tercero'},
+        {rx:/BTU|capacidad.*enfriamiento|tonelada/i,f:'1 Ton = 12,000 BTU/h  |  CFM = BTU ÷ (1.08 × ΔT)',name:'Capacidad de Enfriamiento',ex:'3 Ton = 36,000 BTU/h. Para ΔT=20°F → CFM = 36000÷(1.08×20) = 1,667 CFM'},
+        {rx:/[Aa]mperaje|amperios|overload/i,f:'I = P ÷ V  |  P = V × I  |  I = V ÷ R',name:'Cálculo de Corriente',ex:'Motor de 1HP(746W) a 240V → I = 746÷240 = 3.1A'},
+    ];
+    const combined=text;
+    patterns.forEach(p=>{
+        if(p.rx.test(combined))formulas.push(p);
+    });
+    return formulas;
+}
+
+function showLibraryCategory(catName){
+    const cats=getLibraryCategories();
+    const cat=cats[catName];
+    if(!cat)return;
+    
+    document.getElementById('libDetailTitle').textContent=catName;
+    const container=document.getElementById('libDetailContent');
+    
+    let html='<div style="text-align:center;margin-bottom:14px;font-size:13px;color:var(--muted)">'+cat.count+' preguntas — toca cada una para estudiar a fondo</div>';
+    cat.questions.forEach((q,i)=>{
+        const letters=['A','B','C','D'];
+        html+='<div style="background:var(--card);border:1.5px solid rgba(46,204,113,0.15);border-radius:16px;padding:18px;margin-bottom:14px">';
+        html+='<div style="font-size:11px;color:var(--electric);font-weight:700;margin-bottom:6px;letter-spacing:1px">📖 PREGUNTA '+(i+1)+' DE '+cat.count+'</div>';
+        html+='<div style="font-size:15px;font-weight:700;line-height:1.5;margin-bottom:12px">'+q.q+'</div>';
+        
+        // Options - all shown with correct highlighted
+        q.o.forEach((opt,j)=>{
+            const isCorrect=j===q.c;
+            const bg=isCorrect?'rgba(46,204,113,0.15)':'rgba(255,255,255,0.03)';
+            const border=isCorrect?'rgba(46,204,113,0.4)':'rgba(255,255,255,0.06)';
+            const color=isCorrect?'#2ecc71':'var(--txt)';
+            html+='<div style="background:'+bg+';border:1.5px solid '+border+';border-radius:12px;padding:10px 14px;margin-bottom:6px;display:flex;align-items:center;gap:10px;font-size:14px">';
+            html+='<span style="width:28px;height:28px;border-radius:8px;background:'+(isCorrect?'#2ecc71':'rgba(255,255,255,0.08)')+';display:flex;align-items:center;justify-content:center;font-family:Fredoka;font-size:14px;font-weight:700;color:'+(isCorrect?'white':'var(--txt)')+';flex-shrink:0">'+letters[j]+'</span>';
+            html+='<span style="color:'+color+';font-weight:'+(isCorrect?'700':'400')+'">'+opt+(isCorrect?' ✅':'')+'</span></div>';
+        });
+        
+        // === TECHNICAL EXPLANATION (primary, bigger) ===
+        html+='<div style="background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.2);border-radius:12px;padding:16px;margin-top:14px">';
+        html+='<div style="font-size:14px;font-weight:700;color:var(--electric);margin-bottom:8px">📘 Explicación Técnica Detallada</div>';
+        html+='<div style="font-size:14px;line-height:1.7;color:var(--txt)">'+q.e+'</div>';
+        
+        // === WHY CORRECT ANSWER (detailed reasoning) ===
+        html+='<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(0,212,255,0.15)">';
+        html+='<div style="font-size:12px;font-weight:700;color:#2ecc71;margin-bottom:4px">✅ ¿Por qué la respuesta '+letters[q.c]+' es correcta?</div>';
+        html+='<div style="font-size:13px;line-height:1.6;color:var(--muted)">La opción correcta es <b style="color:#2ecc71">'+q.o[q.c]+'</b>. '+q.e+'</div>';
+        html+='</div>';
+        
+        // === WHY OTHERS ARE WRONG ===
+        let wrongExplain='';
+        q.o.forEach((opt,j)=>{
+            if(j!==q.c) wrongExplain+='<span style="color:#e74c3c">'+letters[j]+')</span> '+opt+' — Incorrecto. ';
+        });
+        html+='<div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(0,212,255,0.1)">';
+        html+='<div style="font-size:12px;font-weight:700;color:#e74c3c;margin-bottom:4px">❌ ¿Por qué las otras están mal?</div>';
+        html+='<div style="font-size:12px;line-height:1.6;color:var(--muted)">'+wrongExplain+'</div>';
+        html+='</div>';
+        html+='</div>';
+        
+        // === FORMULA BREAKDOWN (if applicable) ===
+        const formulas=detectFormulas(q.q+' '+q.e);
+        if(formulas.length>0){
+            html+='<div style="background:rgba(241,196,15,0.08);border:1px solid rgba(241,196,15,0.25);border-radius:12px;padding:16px;margin-top:8px">';
+            html+='<div style="font-size:14px;font-weight:700;color:var(--gold);margin-bottom:10px">📐 Fórmulas Aplicables</div>';
+            formulas.forEach(f=>{
+                html+='<div style="background:rgba(0,0,0,0.2);border-radius:10px;padding:12px;margin-bottom:8px">';
+                html+='<div style="font-family:Fredoka;font-size:16px;color:var(--gold);font-weight:700;text-align:center;margin-bottom:6px">'+f.f+'</div>';
+                html+='<div style="font-size:12px;color:var(--electric);font-weight:600;margin-bottom:4px">'+f.name+'</div>';
+                html+='<div style="font-size:12px;color:var(--muted);line-height:1.5">📊 Ejemplo: '+f.ex+'</div>';
+                html+='</div>';
+            });
+            html+='</div>';
+        }
+        
+        // === FIELD TIP (analogy - secondary, collapsible feel) ===
+        if(q.a){
+            html+='<div style="background:rgba(255,107,43,0.06);border:1px solid rgba(255,107,43,0.15);border-radius:12px;padding:14px;margin-top:8px">';
+            html+='<div style="font-size:12px;font-weight:700;color:var(--accent);margin-bottom:6px">💡 Tip de Campo (Analogía):</div>';
+            html+='<div style="font-size:13px;line-height:1.6;color:var(--muted)">'+q.a+'</div>';
+            html+='</div>';
+        }
+        
+        html+='</div>';
+    });
+    
+    container.innerHTML=html;
+    go('s-library-detail');
+    window.scrollTo(0,0);
+}
+
+function updateHubLibraryCount(){
+    const el=document.getElementById('hubLibraryCount');
+    if(el){
+        const all=getAllQuizQuestions();
+        const cats=getLibraryCategories();
+        el.textContent='📖 '+all.length+' preguntas en '+Object.keys(cats).length+' temas';
+    }
+}
+
 </script>
 </body>
 </html>
