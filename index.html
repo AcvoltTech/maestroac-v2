@@ -222,6 +222,23 @@
         .avatar-option{font-size:36px;padding:10px;text-align:center;border-radius:12px;cursor:pointer;transition:all 0.2s;border:2px solid transparent;background:rgba(255,255,255,0.03)}
         .avatar-option:hover{background:rgba(0,212,255,0.1);transform:scale(1.15)}
         .avatar-option.selected{border-color:var(--gold);background:rgba(255,215,0,0.1)}
+        
+        /* MUSIC PICKER */
+        .music-panel{position:fixed;bottom:70px;left:12px;z-index:810;background:var(--card);border:2px solid rgba(0,212,255,0.2);border-radius:16px;padding:16px;width:280px;display:none;box-shadow:0 8px 32px rgba(0,0,0,0.5)}
+        .music-panel.open{display:block;animation:fadeIn 0.3s ease}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+        .music-panel-title{font-family:'Fredoka',sans-serif;font-size:14px;font-weight:700;color:var(--electric);margin-bottom:12px;text-align:center}
+        .music-option{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;transition:all 0.2s;border:2px solid transparent;margin-bottom:6px;background:rgba(255,255,255,0.03)}
+        .music-option:hover{background:rgba(0,212,255,0.08)}
+        .music-option.selected{border-color:var(--electric);background:rgba(0,212,255,0.1)}
+        .music-option-icon{font-size:24px;width:36px;text-align:center}
+        .music-option-info{flex:1}
+        .music-option-name{font-family:'Fredoka',sans-serif;font-size:14px;font-weight:600}
+        .music-option-desc{font-size:11px;color:var(--muted)}
+        .music-upload{margin-top:8px;padding:10px;border:2px dashed rgba(255,255,255,0.15);border-radius:10px;text-align:center;cursor:pointer;transition:all 0.2s}
+        .music-upload:hover{border-color:var(--electric);background:rgba(0,212,255,0.05)}
+        .music-upload-label{font-size:12px;color:var(--muted)}
+        .music-upload-name{font-size:12px;color:var(--electric);margin-top:4px;font-weight:600;display:none}
     </style>
 </head>
 <body>
@@ -412,7 +429,17 @@
 </div>
 </div>
 <div class="cw" id="conf"></div>
-<button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵</button>
+<button class="music-btn" id="musicBtn" onclick="toggleMusic()" ondblclick="toggleMusicPanel(event)">🎵</button>
+<div class="music-panel" id="musicPanel">
+    <div class="music-panel-title">🎶 Elige tu música</div>
+    <div id="musicOptions"></div>
+    <div class="music-upload" onclick="document.getElementById('musicFile').click()">
+        <div>📁 <b>Mi Música</b></div>
+        <div class="music-upload-label">Sube tu MP3, WAV o audio favorito</div>
+        <div class="music-upload-name" id="musicFileName"></div>
+    </div>
+    <input type="file" id="musicFile" accept="audio/*" style="display:none" onchange="loadCustomMusic(this)">
+</div>
 <button class="profile-btn" id="profileBtn" onclick="go('s10');renderProfile()">👤</button>
 
 <script>
@@ -437,6 +464,17 @@ let musicGain=null;
 let musicTimers=[];
 let musicVolume=0.5;
 let musicMode='onboarding';
+let currentMusicStyle='pokemon';
+let customAudio=null;
+let musicPanelOpen=false;
+
+const MUSIC_STYLES=[
+    {id:'pokemon',icon:'🎮',name:'Pokémon Adventure',desc:'8-bit clásico'},
+    {id:'lofi',icon:'🎧',name:'Lo-Fi Chill',desc:'Relajado para estudiar'},
+    {id:'battle',icon:'⚔️',name:'Boss Battle',desc:'Épico e intenso'},
+    {id:'reggaeton',icon:'🎺',name:'Reggaetón Study',desc:'Ritmo latino'},
+    {id:'silent',icon:'🔇',name:'Sin Música',desc:'Solo silencio'}
+];
 
 function noteFreq(note,octave){
     const notes={C:261.63,D:293.66,E:329.63,F:349.23,G:392.00,A:440.00,B:493.88};
@@ -460,68 +498,146 @@ function playNote(type,freq,start,dur,vol){
 }
 
 function playMusicLoop(){
-    if(!musicCtx||!musicPlaying)return;
-    const bpm=130;
+    if(!musicCtx||!musicPlaying||currentMusicStyle==='custom'||currentMusicStyle==='silent')return;
+    const style=currentMusicStyle;
+    const bpm=style==='battle'?160:style==='reggaeton'?95:style==='lofi'?75:130;
     const beat=60/bpm;
     const half=beat/2;
     const now=musicCtx.currentTime+0.05;
     
-    // Melody (square wave) - Pokemon adventure style
-    const melody=[
-        ['E',5],['G',5],['A',5],['B',5],
-        ['A',5],['G',5],['E',5],['D',5],
-        ['C',5],['D',5],['E',5],['G',5],
-        ['A',5],['G',5],['E',5],['G',5],
-        ['A',5],['B',5],['C',6],['B',5],
-        ['A',5],['G',5],['A',5],['B',5],
-        ['G',5],['E',5],['D',5],['E',5],
-        ['C',5],['D',5],['E',5],['E',5]
-    ];
-    
-    // Bass (triangle wave)
-    const bass=[
-        ['C',3],['C',3],['G',3],['G',3],
-        ['A',3],['A',3],['E',3],['E',3],
-        ['F',3],['F',3],['C',3],['C',3],
-        ['G',3],['G',3],['G',3],['G',3],
-        ['A',3],['A',3],['F',3],['F',3],
-        ['C',3],['C',3],['G',3],['G',3],
-        ['F',3],['F',3],['G',3],['G',3],
-        ['C',3],['C',3],['C',3],['C',3]
-    ];
-    
-    // Arpeggio layer (square wave, quiet)
-    const arp=[
-        ['C',4],['E',4],['G',4],['E',4],
-        ['A',4],['C',5],['E',5],['C',5],
-        ['F',4],['A',4],['C',5],['A',4],
-        ['G',4],['B',4],['D',5],['B',4],
-        ['A',4],['C',5],['E',5],['C',5],
-        ['F',4],['A',4],['C',5],['A',4],
-        ['G',4],['B',4],['D',5],['B',4],
-        ['C',4],['E',4],['G',4],['E',4]
-    ];
-    
-    for(let i=0;i<melody.length;i++){
-        const t=now+i*half;
-        playNote('square',noteFreq(melody[i][0],melody[i][1]),t,half*0.85,0.08);
+    if(style==='pokemon'){
+        const melody=[['E',5],['G',5],['A',5],['B',5],['A',5],['G',5],['E',5],['D',5],['C',5],['D',5],['E',5],['G',5],['A',5],['G',5],['E',5],['G',5],['A',5],['B',5],['C',6],['B',5],['A',5],['G',5],['A',5],['B',5],['G',5],['E',5],['D',5],['E',5],['C',5],['D',5],['E',5],['E',5]];
+        const bass=[['C',3],['C',3],['G',3],['G',3],['A',3],['A',3],['E',3],['E',3],['F',3],['F',3],['C',3],['C',3],['G',3],['G',3],['G',3],['G',3],['A',3],['A',3],['F',3],['F',3],['C',3],['C',3],['G',3],['G',3],['F',3],['F',3],['G',3],['G',3],['C',3],['C',3],['C',3],['C',3]];
+        const arp=[['C',4],['E',4],['G',4],['E',4],['A',4],['C',5],['E',5],['C',5],['F',4],['A',4],['C',5],['A',4],['G',4],['B',4],['D',5],['B',4],['A',4],['C',5],['E',5],['C',5],['F',4],['A',4],['C',5],['A',4],['G',4],['B',4],['D',5],['B',4],['C',4],['E',4],['G',4],['E',4]];
+        for(let i=0;i<melody.length;i++){playNote('square',noteFreq(melody[i][0],melody[i][1]),now+i*half,half*0.85,0.08);}
+        for(let i=0;i<bass.length;i++){playNote('triangle',noteFreq(bass[i][0],bass[i][1]),now+i*half,half*0.9,0.12);}
+        for(let i=0;i<arp.length;i++){playNote('square',noteFreq(arp[i][0],arp[i][1]),now+i*half,half*0.4,0.03);}
+        const loopDur=melody.length*half;
+        musicTimers.push(setTimeout(()=>playMusicLoop(),loopDur*1000-100));
     }
-    for(let i=0;i<bass.length;i++){
-        const t=now+i*half;
-        playNote('triangle',noteFreq(bass[i][0],bass[i][1]),t,half*0.9,0.12);
+    else if(style==='lofi'){
+        // Lo-fi chill beats - sine waves, slow, jazzy
+        const melody=[['E',4],['G',4],['A',4],['G',4],['E',4],['D',4],['C',4],['D',4],['E',4],['A',4],['G',4],['E',4],['D',4],['E',4],['G',4],['A',4]];
+        const bass=[['C',3],['C',3],['A',2],['A',2],['F',2],['F',2],['G',2],['G',2],['C',3],['C',3],['A',2],['A',2],['F',2],['F',2],['G',2],['G',2]];
+        const pad=[['E',4],['E',4],['C',4],['C',4],['A',3],['A',3],['B',3],['B',3],['E',4],['E',4],['C',4],['C',4],['A',3],['A',3],['B',3],['B',3]];
+        for(let i=0;i<melody.length;i++){playNote('sine',noteFreq(melody[i][0],melody[i][1]),now+i*beat,beat*0.7,0.1);}
+        for(let i=0;i<bass.length;i++){playNote('triangle',noteFreq(bass[i][0],bass[i][1]),now+i*beat,beat*0.9,0.1);}
+        for(let i=0;i<pad.length;i++){playNote('sine',noteFreq(pad[i][0],pad[i][1]),now+i*beat,beat*1.2,0.04);}
+        musicTimers.push(setTimeout(()=>playMusicLoop(),melody.length*beat*1000-100));
     }
-    for(let i=0;i<arp.length;i++){
-        const t=now+i*half;
-        playNote('square',noteFreq(arp[i][0],arp[i][1]),t,half*0.4,0.03);
+    else if(style==='battle'){
+        // Epic boss battle - fast, intense, sawtooth
+        const melody=[['E',5],['E',5],['F',5],['G',5],['G',5],['F',5],['E',5],['D',5],['C',5],['C',5],['D',5],['E',5],['E',5],['D',5],['D',5],['D',5],['E',5],['E',5],['F',5],['G',5],['G',5],['F',5],['E',5],['D',5],['C',5],['C',5],['D',5],['E',5],['D',5],['C',5],['C',5],['C',5]];
+        const bass=[['C',2],['C',2],['C',2],['C',2],['A',2],['A',2],['A',2],['A',2],['F',2],['F',2],['F',2],['F',2],['G',2],['G',2],['G',2],['G',2],['C',2],['C',2],['C',2],['C',2],['A',2],['A',2],['A',2],['A',2],['F',2],['F',2],['F',2],['F',2],['G',2],['G',2],['G',2],['G',2]];
+        for(let i=0;i<melody.length;i++){playNote('sawtooth',noteFreq(melody[i][0],melody[i][1]),now+i*half,half*0.8,0.06);}
+        for(let i=0;i<bass.length;i++){playNote('square',noteFreq(bass[i][0],bass[i][1]),now+i*half,half*0.9,0.1);}
+        // Drum-like percussion with noise
+        for(let i=0;i<32;i+=2){playNote('square',noteFreq('C',1),now+i*half,half*0.15,0.15);}
+        musicTimers.push(setTimeout(()=>playMusicLoop(),melody.length*half*1000-100));
+    }
+    else if(style==='reggaeton'){
+        // Reggaetón dembow rhythm
+        const melody=[['A',4],['C',5],['D',5],['E',5],['D',5],['C',5],['A',4],['G',4],['A',4],['C',5],['D',5],['E',5],['G',5],['E',5],['D',5],['C',5]];
+        const bass=[['A',2],['A',2],['A',2],['A',2],['D',3],['D',3],['D',3],['D',3],['F',2],['F',2],['G',2],['G',2],['A',2],['A',2],['A',2],['A',2]];
+        for(let i=0;i<melody.length;i++){playNote('triangle',noteFreq(melody[i][0],melody[i][1]),now+i*beat,beat*0.6,0.09);}
+        for(let i=0;i<bass.length;i++){playNote('sine',noteFreq(bass[i][0],bass[i][1]),now+i*beat,beat*0.8,0.14);}
+        // Dembow kick pattern
+        for(let i=0;i<16;i++){
+            const isKick=(i%4===0||i%4===3);
+            if(isKick)playNote('sine',noteFreq('C',2),now+i*beat,beat*0.2,0.18);
+            else playNote('square',noteFreq('C',1),now+i*beat,beat*0.08,0.06);
+        }
+        musicTimers.push(setTimeout(()=>playMusicLoop(),melody.length*beat*1000-100));
+    }
+}
+
+function toggleMusicPanel(e){
+    if(e)e.preventDefault();
+    musicPanelOpen=!musicPanelOpen;
+    const panel=document.getElementById('musicPanel');
+    panel.classList.toggle('open',musicPanelOpen);
+    if(musicPanelOpen)renderMusicOptions();
+}
+
+function renderMusicOptions(){
+    document.getElementById('musicOptions').innerHTML=MUSIC_STYLES.map(s=>
+        '<div class="music-option'+(currentMusicStyle===s.id?' selected':'')+'" onclick="switchMusic(\''+s.id+'\')">'+
+        '<div class="music-option-icon">'+s.icon+'</div>'+
+        '<div class="music-option-info"><div class="music-option-name">'+s.name+'</div><div class="music-option-desc">'+s.desc+'</div></div>'+
+        '</div>'
+    ).join('');
+    // Show custom music option if loaded
+    if(customAudio){
+        const el=document.querySelector('.music-upload');
+        if(el)el.querySelector('.music-option')?.classList.toggle('selected',currentMusicStyle==='custom');
+    }
+}
+
+function switchMusic(styleId){
+    // Stop current
+    if(customAudio){customAudio.pause();customAudio.currentTime=0;}
+    stopMusicOsc();
+    
+    currentMusicStyle=styleId;
+    
+    if(styleId==='silent'){
+        musicPlaying=false;
+        document.getElementById('musicBtn').textContent='🔇';
+    }else if(styleId==='custom'&&customAudio){
+        musicPlaying=true;
+        customAudio.volume=musicMuted?0:Math.min(musicVolume*2,1);
+        customAudio.loop=true;
+        customAudio.play().catch(()=>{});
+        document.getElementById('musicBtn').textContent='🎵';
+    }else{
+        if(!musicCtx||musicCtx.state==='closed'){
+            musicCtx=new(window.AudioContext||window.webkitAudioContext)();
+            musicGain=musicCtx.createGain();
+            musicGain.gain.setValueAtTime(musicMuted?0:musicVolume,musicCtx.currentTime);
+            musicGain.connect(musicCtx.destination);
+        }
+        musicPlaying=true;
+        document.getElementById('musicBtn').textContent='🎵';
+        playMusicLoop();
     }
     
-    const loopDur=melody.length*half;
-    const timer=setTimeout(()=>playMusicLoop(),loopDur*1000-100);
-    musicTimers.push(timer);
+    renderMusicOptions();
+    try{localStorage.setItem('maestro_music_style',styleId);}catch(e){}
+}
+
+function stopMusicOsc(){
+    musicTimers.forEach(t=>clearTimeout(t));
+    musicTimers=[];
+    if(musicCtx&&musicCtx.state!=='closed'){musicCtx.close();musicCtx=null;}
+}
+
+function loadCustomMusic(input){
+    if(!input.files||!input.files[0])return;
+    const file=input.files[0];
+    const url=URL.createObjectURL(file);
+    customAudio=new Audio(url);
+    customAudio.loop=true;
+    document.getElementById('musicFileName').textContent='♫ '+file.name;
+    document.getElementById('musicFileName').style.display='block';
+    switchMusic('custom');
+    toggleMusicPanel();
 }
 
 function startMusic(){
     if(musicPlaying)return;
+    // Load saved style
+    try{const saved=localStorage.getItem('maestro_music_style');if(saved)currentMusicStyle=saved;}catch(e){}
+    
+    if(currentMusicStyle==='silent')return;
+    if(currentMusicStyle==='custom'&&customAudio){
+        musicPlaying=true;
+        customAudio.volume=0.5;
+        customAudio.loop=true;
+        customAudio.play().catch(()=>{});
+        document.getElementById('musicBtn').classList.add('active');
+        document.getElementById('musicBtn').textContent='🎵';
+        return;
+    }
     musicCtx=new(window.AudioContext||window.webkitAudioContext)();
     musicGain=musicCtx.createGain();
     musicGain.gain.setValueAtTime(0.5,musicCtx.currentTime);
@@ -535,9 +651,8 @@ function startMusic(){
 
 function stopMusic(){
     musicPlaying=false;
-    musicTimers.forEach(t=>clearTimeout(t));
-    musicTimers=[];
-    if(musicCtx){musicCtx.close();musicCtx=null;}
+    if(customAudio){customAudio.pause();}
+    stopMusicOsc();
 }
 
 function toggleMusic(){
@@ -546,20 +661,24 @@ function toggleMusic(){
         musicMuted=false;
         musicVolume=musicMode==='studying'?0.25:0.5;
         if(musicGain&&musicCtx)musicGain.gain.setValueAtTime(musicVolume,musicCtx.currentTime);
+        if(customAudio&&currentMusicStyle==='custom')customAudio.volume=Math.min(musicVolume*2,1);
         btn.textContent='🎵';
         btn.classList.remove('muted');
     }else if(musicVolume>=0.4){
         musicVolume=musicMode==='studying'?0.15:0.25;
         if(musicGain&&musicCtx)musicGain.gain.setValueAtTime(musicVolume,musicCtx.currentTime);
+        if(customAudio&&currentMusicStyle==='custom')customAudio.volume=Math.min(musicVolume*2,1);
         btn.textContent='🔉';
     }else if(musicVolume>=0.15){
         musicVolume=musicMode==='studying'?0.06:0.1;
         if(musicGain&&musicCtx)musicGain.gain.setValueAtTime(musicVolume,musicCtx.currentTime);
+        if(customAudio&&currentMusicStyle==='custom')customAudio.volume=Math.min(musicVolume*2,1);
         btn.textContent='🔈';
     }else{
         musicMuted=true;
         musicVolume=0;
         if(musicGain&&musicCtx)musicGain.gain.setValueAtTime(0,musicCtx.currentTime);
+        if(customAudio&&currentMusicStyle==='custom')customAudio.volume=0;
         btn.textContent='🔇';
         btn.classList.add('muted');
     }
@@ -568,22 +687,27 @@ function toggleMusic(){
 function setMusicVolume(vol){
     musicVolume=vol;
     if(musicGain&&musicCtx&&!musicMuted)musicGain.gain.linearRampToValueAtTime(vol,musicCtx.currentTime+0.3);
+    if(customAudio&&currentMusicStyle==='custom'&&!musicMuted)customAudio.volume=Math.min(vol*2,1);
 }
 
 function lowerMusicForSpeech(){
     if(musicGain&&!musicMuted&&musicCtx)musicGain.gain.linearRampToValueAtTime(Math.min(musicVolume*0.2,0.05),musicCtx.currentTime+0.3);
+    if(customAudio&&currentMusicStyle==='custom'&&!musicMuted)customAudio.volume=Math.min(musicVolume*0.4,0.15);
 }
 
 function restoreMusicAfterSpeech(){
     if(musicGain&&!musicMuted&&musicCtx)musicGain.gain.linearRampToValueAtTime(musicVolume,musicCtx.currentTime+0.3);
+    if(customAudio&&currentMusicStyle==='custom'&&!musicMuted)customAudio.volume=Math.min(musicVolume*2,1);
 }
 
 function lowerMusicForVideo(){
     if(musicGain&&!musicMuted&&musicCtx)musicGain.gain.linearRampToValueAtTime(Math.min(musicVolume*0.3,0.08),musicCtx.currentTime+0.5);
+    if(customAudio&&currentMusicStyle==='custom'&&!musicMuted)customAudio.volume=Math.min(musicVolume*0.5,0.2);
 }
 
 function restoreMusicAfterVideo(){
     if(musicGain&&!musicMuted&&musicCtx)musicGain.gain.linearRampToValueAtTime(musicVolume,musicCtx.currentTime+0.5);
+    if(customAudio&&currentMusicStyle==='custom'&&!musicMuted)customAudio.volume=Math.min(musicVolume*2,1);
 }
 
 function enterStudyMode(){
@@ -1302,6 +1426,16 @@ function renderProfile(){
 
 // Load profile on start
 loadProfile();
+
+// Close music panel on outside click
+document.addEventListener('click',e=>{
+    const panel=document.getElementById('musicPanel');
+    const btn=document.getElementById('musicBtn');
+    if(musicPanelOpen&&!panel.contains(e.target)&&e.target!==btn){
+        musicPanelOpen=false;
+        panel.classList.remove('open');
+    }
+});
 
 document.getElementById('nm').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.value.trim().length>=2)sName();});
 </script>
