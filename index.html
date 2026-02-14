@@ -133,6 +133,39 @@
         .music-btn:hover{background:var(--card2);border-color:var(--electric);transform:scale(1.1)}
         .music-btn.active{display:flex}
         .music-btn.muted{color:var(--muted);border-color:rgba(255,255,255,0.1)}
+        
+        /* QUIZ STYLES */
+        .quiz-header{width:100%;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+        .quiz-cat{font-size:11px;color:var(--electric);text-transform:uppercase;letter-spacing:1.5px;font-weight:700}
+        .quiz-score{display:flex;align-items:center;gap:8px;font-family:'Fredoka',sans-serif;font-size:14px}
+        .quiz-score .correct{color:#2ecc71}.quiz-score .wrong{color:#e74c3c}
+        .quiz-num{font-family:'Fredoka',sans-serif;font-size:15px;color:var(--txt);text-align:center;margin:4px 0}
+        .quiz-q{background:var(--card);border:1.5px solid rgba(0,212,255,.15);border-radius:var(--r);padding:20px;margin:12px 0;text-align:center;font-size:17px;font-weight:700;line-height:1.5}
+        .quiz-opts{width:100%;display:flex;flex-direction:column;gap:10px}
+        .quiz-opt{background:var(--card);border:2px solid rgba(255,255,255,.08);border-radius:var(--r);padding:16px 18px;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:14px;font-size:15px;font-weight:600}
+        .quiz-opt:hover{border-color:rgba(255,107,43,.4);background:var(--card2);transform:translateY(-1px)}
+        .quiz-opt.correct{border-color:#2ecc71;background:rgba(46,204,113,0.15)}
+        .quiz-opt.correct .quiz-letter{background:#2ecc71}
+        .quiz-opt.wrong{border-color:#e74c3c;background:rgba(231,76,60,0.15)}
+        .quiz-opt.wrong .quiz-letter{background:#e74c3c}
+        .quiz-opt.disabled{pointer-events:none;opacity:0.6}
+        .quiz-opt.disabled.correct{opacity:1}
+        .quiz-letter{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-size:16px;font-weight:700;flex-shrink:0;transition:all .3s}
+        .quiz-explain{background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.2);border-radius:var(--r);padding:14px 18px;margin-top:12px;font-size:14px;line-height:1.5;display:none}
+        .quiz-explain.show{display:block}
+        .quiz-explain b{color:var(--electric)}
+        .quiz-next{width:100%;padding:14px;border:none;border-radius:var(--r);background:linear-gradient(135deg,var(--accent),#e84500);color:white;font-family:'Fredoka',sans-serif;font-size:16px;font-weight:700;cursor:pointer;margin-top:14px;display:none;transition:all .25s;box-shadow:0 4px 18px rgba(255,107,43,.25)}
+        .quiz-next:hover{transform:translateY(-2px)}
+        .quiz-next.show{display:block}
+        .quiz-result{text-align:center;width:100%}
+        .quiz-result-score{font-family:'Fredoka',sans-serif;font-size:64px;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--electric));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .quiz-result-label{font-size:18px;color:var(--muted);margin-top:4px}
+        .quiz-result-msg{font-size:16px;margin-top:16px;line-height:1.5}
+        .quiz-medal{font-size:80px;margin:16px 0}
+        .quiz-stars{display:flex;justify-content:center;gap:6px;margin:12px 0}
+        .quiz-stars span{font-size:32px;opacity:0.2;transition:all 0.5s}
+        .quiz-stars span.lit{opacity:1;animation:starPop 0.5s ease-out}
+        @keyframes starPop{0%{transform:scale(0)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
     </style>
 </head>
 <body>
@@ -250,6 +283,36 @@
     <div class="bb" id="bb7"><span data-t="route_speech"></span></div>
     <div id="rl" style="width:100%"></div>
     <button class="bt" onclick="startApp()" data-t="start_btn"></button>
+</div>
+
+<!-- QUIZ -->
+<div class="s" id="s8">
+    <div class="quiz-header">
+        <div class="quiz-cat" id="qCat"></div>
+        <div class="quiz-score">✅ <span class="correct" id="qRight">0</span> | ❌ <span class="wrong" id="qWrong">0</span></div>
+    </div>
+    <div class="pb"><div class="pbf" id="qBar" style="width:0%"></div></div>
+    <div class="quiz-num" id="qNum"></div>
+    <div class="aw sm" onclick="openAIChat()"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div><span class="ai-badge">AI</span></div>
+    <div class="bb" id="qBubble"></div>
+    <div class="quiz-q" id="qText"></div>
+    <div class="quiz-opts" id="qOpts"></div>
+    <div class="quiz-explain" id="qExplain"></div>
+    <button class="quiz-next" id="qNext" onclick="nextQuestion()">Siguiente →</button>
+</div>
+
+<!-- QUIZ RESULT -->
+<div class="s" id="s9">
+    <div class="aw md" onclick="openAIChat()"><div class="ag" style="background:radial-gradient(circle,var(--gold) 0%,transparent 70%)"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div><span class="ai-badge">AI</span></div>
+    <div class="quiz-result">
+        <div class="quiz-medal" id="rMedal"></div>
+        <div class="quiz-result-score" id="rScore"></div>
+        <div class="quiz-result-label" id="rLabel"></div>
+        <div class="quiz-stars" id="rStars"><span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span></div>
+        <div class="bb quiz-result-msg" id="rMsg"></div>
+    </div>
+    <button class="bt" onclick="retryQuiz()">🔄 Intentar de Nuevo</button>
+    <button class="bt" onclick="go('s7')" style="background:var(--card);border:2px solid var(--accent);margin-top:10px">← Volver a Mi Ruta</button>
 </div>
 </div>
 <div class="cw" id="conf"></div>
@@ -442,15 +505,23 @@ const VIDEOS={
 };
 
 // ========== VIDEO FUNCTIONS ==========
+let videoClosing=false;
+
 function showVideo(type,cb){
-    if(videoPlaying)return;
+    if(videoPlaying||videoClosing)return;
     videoPlaying=true;
+    videoClosing=false;
     lowerMusicForVideo();
     currentVideoCallback=cb;
     const vf=document.getElementById('videoFloat');
     const v=document.getElementById('marioVideo');
     const videoSrc=VIDEOS[type]||VIDEOS.bienvenida;
     console.log('Loading video:',videoSrc);
+    
+    // Limpiar handlers anteriores
+    v.onended=null;
+    v.onerror=null;
+    
     v.src=videoSrc;
     v.load();
     vf.classList.remove('hiding');
@@ -467,20 +538,29 @@ function showVideo(type,cb){
     };
     v.onerror=function(e){
         console.log('Video error:',e);
-        closeVideo();
+        if(videoPlaying&&!videoClosing)closeVideo();
     };
 }
 
 function closeVideo(){
+    if(videoClosing)return;
+    videoClosing=true;
     const vf=document.getElementById('videoFloat');
     const v=document.getElementById('marioVideo');
+    
+    // Limpiar handlers ANTES de tocar el src
+    v.onended=null;
+    v.onerror=null;
+    
     vf.classList.add('hiding');
     vf.classList.remove('active');
     restoreMusicAfterVideo();
     setTimeout(()=>{
         v.pause();
-        v.src='';
+        v.removeAttribute('src');
+        v.load();
         videoPlaying=false;
+        videoClosing=false;
         if(currentVideoCallback){
             const cb=currentVideoCallback;
             currentVideoCallback=null;
@@ -653,7 +733,175 @@ function bSch(){document.getElementById('sco').innerHTML=[{k:'acvolt',i:'🎓',t
 function bGol(){document.getElementById('go2').innerHTML=[{k:'certs',i:'📋',t:'gl_c',d:'gl_cd'},{k:'diag',i:'🔍',t:'gl_d',d:'gl_dd'},{k:'biz',i:'🏢',t:'gl_b',d:'gl_bd'},{k:'money',i:'💰',t:'gl_m',d:'gl_md'}].map(x=>'<div class="oc" onclick="tGol(this,\''+x.k+'\')"><div class="oi">'+x.i+'</div><div><div class="ot">'+t(x.t)+'</div><div class="od">'+t(x.d)+'</div></div><div class="ck"></div></div>').join('');}
 function bRt(){var r=[];if(D.specs.includes('all')||D.specs.includes('electrical'))r.push({i:'⚡',t:'r_elec',d:'r_elecd'});if(D.specs.includes('all')||D.specs.includes('ac'))r.push({i:'❄️',t:'r_ac',d:'r_acd'});if(D.specs.includes('all')||D.specs.includes('refrigeration'))r.push({i:'🧊',t:'r_ref',d:'r_refd'});if(D.specs.includes('all')||D.specs.includes('heating'))r.push({i:'🔥',t:'r_heat',d:'r_heatd'});if(D.goals.includes('certs'))r.push({i:'📋',t:'r_cert',d:'r_certd'});if(D.goals.includes('biz'))r.push({i:'🏢',t:'r_biz',d:'r_bizd'});document.getElementById('rl').innerHTML=r.map((x,i)=>'<div class="rt"><div class="rn">'+(i+1)+'</div><div><div class="rtt">'+x.i+' '+t(x.t)+'</div><div class="rd">'+t(x.d)+'</div></div></div>'+(i<r.length-1?'<div class="rl"></div>':'')).join('');}
 
-function startApp(){enterStudyMode();alert(D.lang==='es'?'¡'+D.name+', tu ruta está lista! Próximamente: Quiz y Medallas 🏅':D.name+', your path is ready! Coming: Quiz & Medals 🏅');console.log('Profile:',JSON.stringify(D,null,2));}
+function startApp(){enterStudyMode();startQuiz();console.log('Profile:',JSON.stringify(D,null,2));}
+
+// ========== QUIZ SYSTEM ==========
+const QUIZ_PRINCIPIANTE=[
+// ELECTRICIDAD BÁSICA (13 preguntas)
+{cat:'⚡ Electricidad Básica',q:'¿Qué mide el voltaje?',o:['Resistencia del cable','Diferencia de potencial eléctrico','Cantidad de electrones','Temperatura del circuito'],c:1,e:'El voltaje mide la diferencia de potencial, o sea la presión que empuja los electrones a través del circuito.'},
+{cat:'⚡ Electricidad Básica',q:'Según la Ley de Ohm, ¿cuál es la fórmula correcta?',o:['V = I × R','V = I ÷ R','V = R ÷ I','V = I + R'],c:0,e:'Voltaje = Corriente × Resistencia. Si sabes dos valores, puedes calcular el tercero.'},
+{cat:'⚡ Electricidad Básica',q:'¿Qué instrumento usas para medir voltaje?',o:['Amperímetro','Megóhmetro','Multímetro','Termómetro'],c:2,e:'El multímetro es la herramienta más versátil del técnico. Mide voltaje, corriente y resistencia.'},
+{cat:'⚡ Electricidad Básica',q:'¿Qué es un circuito en serie?',o:['Componentes conectados en un solo camino','Componentes en caminos separados','Un circuito sin resistencia','Un circuito sin voltaje'],c:0,e:'En serie, la corriente tiene un solo camino. Si un componente falla, todo el circuito se abre.'},
+{cat:'⚡ Electricidad Básica',q:'¿Qué pasa si un fusible se quema?',o:['Nada','Se abre el circuito y corta la corriente','Aumenta el voltaje','El motor gira más rápido'],c:1,e:'El fusible protege el circuito. Cuando se quema, abre el circuito para prevenir daños.'},
+{cat:'⚡ Electricidad Básica',q:'¿Cuántos voltios tiene un tomacorriente residencial estándar en USA?',o:['110V','240V','12V','440V'],c:0,e:'El estándar residencial en USA es 120V (comúnmente dicho 110V). Para estufas y secadoras se usa 240V.'},
+{cat:'⚡ Electricidad Básica',q:'¿Qué color de cable es el ground (tierra)?',o:['Rojo','Negro','Verde o verde con franja amarilla','Blanco'],c:2,e:'El verde o verde/amarillo es siempre tierra. Nunca lo uses para otra cosa.'},
+{cat:'⚡ Electricidad Básica',q:'¿Qué es un amperio?',o:['Unidad de resistencia','Unidad de voltaje','Unidad de corriente eléctrica','Unidad de potencia'],c:2,e:'El amperio mide la cantidad de corriente que fluye por un circuito. Como el Maestro Mario dice: si no mides, estás adivinando.'},
+{cat:'⚡ Electricidad Básica',q:'¿Para qué sirve un capacitor en un motor?',o:['Enfriar el motor','Ayudar a arrancar o mantener el motor girando','Medir la temperatura','Aumentar el voltaje'],c:1,e:'El capacitor almacena energía y la libera para arrancar (start) o mantener (run) el motor.'},
+{cat:'⚡ Electricidad Básica',q:'¿Qué es un cortocircuito?',o:['Un circuito muy corto','Corriente tomando un camino no deseado de baja resistencia','Un circuito sin voltaje','Una conexión perfecta'],c:1,e:'Un cortocircuito es cuando la corriente toma un camino no deseado, causando exceso de corriente y calor.'},
+{cat:'⚡ Electricidad Básica',q:'¿Qué tipo de corriente sale del tomacorriente de tu casa?',o:['DC (corriente directa)','AC (corriente alterna)','Pulsante','Estática'],c:1,e:'La corriente alterna (AC) cambia de dirección 60 veces por segundo (60Hz) en USA.'},
+{cat:'⚡ Electricidad Básica',q:'¿Cuántos watts son 10 amperios a 120 voltios?',o:['130 watts','1200 watts','12 watts','120 watts'],c:1,e:'Watts = Voltios × Amperios. Entonces 120V × 10A = 1200W.'},
+{cat:'⚡ Electricidad Básica',q:'¿Qué hace un contactor?',o:['Mide voltaje','Es un interruptor controlado eléctricamente','Enfría el compresor','Almacena refrigerante'],c:1,e:'El contactor es como un interruptor grande que se activa con una señal del termostato para encender el equipo.'},
+
+// REFRIGERACIÓN BÁSICA (13 preguntas)
+{cat:'🧊 Refrigeración Básica',q:'¿Cuáles son los 4 componentes principales del ciclo de refrigeración?',o:['Compresor, condensador, válvula de expansión, evaporador','Motor, fan, filtro, ducto','Termostato, cable, fusible, breaker','Bomba, tanque, válvula, medidor'],c:0,e:'El ciclo básico: compresor comprime, condensador enfría, válvula expande, evaporador absorbe calor.'},
+{cat:'🧊 Refrigeración Básica',q:'¿Qué hace el compresor?',o:['Enfría el aire','Comprime el gas refrigerante y lo mueve por el sistema','Mide la temperatura','Filtra el aire'],c:1,e:'El compresor es el corazón del sistema. Comprime el gas de baja a alta presión.'},
+{cat:'🧊 Refrigeración Básica',q:'¿Dónde se absorbe el calor del espacio a enfriar?',o:['En el condensador','En el compresor','En el evaporador','En la válvula de expansión'],c:2,e:'El evaporador absorbe el calor del aire. El refrigerante se evapora al absorber calor.'},
+{cat:'🧊 Refrigeración Básica',q:'¿Qué tipo de refrigerante es el R-410A?',o:['Un refrigerante obsoleto','Un HFC usado en equipos nuevos','Solo para autos','Solo para refrigeración comercial'],c:1,e:'El R-410A es un HFC común en sistemas residenciales nuevos. Opera a presiones más altas que el R-22.'},
+{cat:'🧊 Refrigeración Básica',q:'¿Qué pasa cuando el refrigerante cambia de líquido a gas?',o:['Libera calor','Absorbe calor','Nada cambia','Se destruye'],c:1,e:'Cuando el refrigerante se evapora, absorbe calor del ambiente. Así es como enfría.'},
+{cat:'🧊 Refrigeración Básica',q:'¿Qué miden los manifold gauges?',o:['Voltaje','Presiones del sistema de refrigeración','Temperatura del motor','Velocidad del fan'],c:1,e:'Los gauges miden presión del lado bajo (azul) y lado alto (rojo) del sistema.'},
+{cat:'🧊 Refrigeración Básica',q:'¿Qué significa superheat (sobrecalentamiento)?',o:['El sistema está en llamas','Temperatura del gas por encima de su punto de ebullición','El compresor está caliente','El condensador está tapado'],c:1,e:'Superheat es cuánto más caliente está el gas refrigerante comparado con su temperatura de ebullición.'},
+{cat:'🧊 Refrigeración Básica',q:'¿Qué pasa si hay muy poco refrigerante en el sistema?',o:['Enfría más','El superheat sube y puede dañar el compresor','Nada','El equipo se apaga solo'],c:1,e:'Poco refrigerante = superheat alto = el compresor puede sobrecalentarse y dañarse.'},
+{cat:'🧊 Refrigeración Básica',q:'¿De qué color es la manguera del lado de baja presión?',o:['Roja','Verde','Azul','Amarilla'],c:2,e:'Azul = baja presión (succión). Roja = alta presión (descarga). Amarilla = al tanque.'},
+{cat:'🧊 Refrigeración Básica',q:'¿Qué hace la válvula de expansión (TXV)?',o:['Comprime el refrigerante','Reduce la presión del refrigerante antes del evaporador','Filtra el aire','Mide la temperatura'],c:1,e:'La TXV reduce la presión, permitiendo que el refrigerante se expanda y baje de temperatura antes del evaporador.'},
+{cat:'🧊 Refrigeración Básica',q:'¿Qué función tiene el filter drier?',o:['Filtrar el aire','Remover humedad y partículas del refrigerante','Enfriar el compresor','Medir presión'],c:1,e:'El filter drier protege el sistema removiendo humedad y contaminantes del refrigerante.'},
+{cat:'🧊 Refrigeración Básica',q:'¿Qué certificación necesitas para manejar refrigerantes en USA?',o:['NATE','OSHA 30','EPA 608','CPR'],c:2,e:'La certificación EPA 608 es obligatoria por ley federal para comprar y manejar refrigerantes.'},
+{cat:'🧊 Refrigeración Básica',q:'¿Qué es subcooling (subenfriamiento)?',o:['El sistema está muy frío','Temperatura del líquido por debajo de su punto de condensación','El evaporador está congelado','El motor está frío'],c:1,e:'Subcooling mide cuánto más frío está el líquido refrigerante comparado con su temperatura de condensación.'},
+
+// HERRAMIENTAS Y SEGURIDAD (12 preguntas)
+{cat:'🛡️ Herramientas y Seguridad',q:'¿Qué significa PPE?',o:['Presión Por Equipo','Personal Protective Equipment','Prueba Para Electricidad','Plan Para Emergencias'],c:1,e:'PPE = Personal Protective Equipment. Guantes, lentes, zapatos de seguridad son lo mínimo.'},
+{cat:'🛡️ Herramientas y Seguridad',q:'Antes de trabajar en un equipo eléctrico, ¿qué debes hacer PRIMERO?',o:['Empezar a trabajar rápido','Lockout/Tagout - desconectar y asegurar la energía','Llamar al jefe','Tomar foto'],c:1,e:'SIEMPRE desconecta y verifica que no hay voltaje antes de tocar cualquier componente eléctrico.'},
+{cat:'🛡️ Herramientas y Seguridad',q:'¿Qué herramienta usas para detectar fugas de refrigerante?',o:['Multímetro','Detector de fugas electrónico','Nivel','Cinta métrica'],c:1,e:'El detector electrónico de fugas sensa los gases de refrigerante y alerta cuando encuentra una fuga.'},
+{cat:'🛡️ Herramientas y Seguridad',q:'¿Para qué sirve una bomba de vacío?',o:['Inflar llantas','Remover aire y humedad del sistema antes de cargar refrigerante','Limpiar ductos','Medir presión'],c:1,e:'La bomba de vacío remueve aire y humedad del sistema. Sin vacío, el sistema no funciona bien.'},
+{cat:'🛡️ Herramientas y Seguridad',q:'¿Cuántos micrones es un buen vacío?',o:['5000 micrones','500 micrones o menos','50,000 micrones','No importa'],c:1,e:'Un vacío de 500 micrones o menos indica que el sistema está limpio de aire y humedad.'},
+{cat:'🛡️ Herramientas y Seguridad',q:'¿Qué tipo de lentes debes usar al soldar?',o:['Lentes de sol','Lentes de seguridad con protección lateral','No necesitas lentes','Lentes de lectura'],c:1,e:'Los lentes de seguridad protegen tus ojos de chispas, metal caliente y radiación UV al soldar.'},
+{cat:'🛡️ Herramientas y Seguridad',q:'¿Qué haces si hueles gas refrigerante en un cuarto cerrado?',o:['Seguir trabajando','Ventilar el área inmediatamente y salir si es necesario','Ignorarlo','Prender un cerillo'],c:1,e:'Los refrigerantes pueden desplazar el oxígeno en espacios cerrados. Ventila primero, seguridad siempre.'},
+{cat:'🛡️ Herramientas y Seguridad',q:'¿Para qué sirve el torque wrench?',o:['Cualquier tuerca','Apretar conexiones con la fuerza exacta especificada','Cortar tubería','Medir voltaje'],c:1,e:'El torque wrench asegura que las conexiones se aprieten con la fuerza correcta. Ni de más ni de menos.'},
+{cat:'🛡️ Herramientas y Seguridad',q:'¿Cada cuánto debes calibrar tu multímetro?',o:['Nunca','Una vez al año o según el fabricante','Cada 10 años','Solo cuando se rompe'],c:1,e:'Un multímetro descalibrado te da lecturas falsas. Calibración regular es parte de ser profesional.'},
+{cat:'🛡️ Herramientas y Seguridad',q:'¿Qué es OSHA?',o:['Una marca de herramientas','Occupational Safety and Health Administration','Un tipo de refrigerante','Una certificación de soldadura'],c:1,e:'OSHA establece y hace cumplir las normas de seguridad en el trabajo en USA.'},
+{cat:'🛡️ Herramientas y Seguridad',q:'¿Por qué nunca debes usar oxígeno para presurizar un sistema?',o:['Es muy caro','Puede causar una explosión al mezclarse con aceite','No tiene suficiente presión','Es ilegal en algunos estados'],c:1,e:'Oxígeno + aceite del compresor = EXPLOSIÓN. Usa nitrógeno seco para presurizar. Nunca oxígeno.'},
+{cat:'🛡️ Herramientas y Seguridad',q:'¿Qué haces si un capacitor tiene carga después de desconectar?',o:['Tocarlo con las manos','Descargarlo con una resistencia antes de tocarlo','Dejarlo así','Mojarlo con agua'],c:1,e:'Un capacitor cargado puede darte un shock peligroso. Siempre descárgalo con una resistencia de descarga.'},
+
+// AIRE ACONDICIONADO BÁSICO (12 preguntas)
+{cat:'❄️ Aire Acondicionado Básico',q:'¿Qué es un mini split?',o:['Un compresor pequeño','Sistema de AC con unidad interior y exterior sin ductos','Un tipo de fusible','Una herramienta'],c:1,e:'El mini split tiene una unidad adentro (evaporador) y una afuera (condensador) conectadas por tubería de cobre.'},
+{cat:'❄️ Aire Acondicionado Básico',q:'¿Qué mide el SEER?',o:['La temperatura','La eficiencia energética del equipo','El tamaño del ducto','La presión del gas'],c:1,e:'SEER = Seasonal Energy Efficiency Ratio. Entre más alto el SEER, más eficiente y menos electricidad gasta.'},
+{cat:'❄️ Aire Acondicionado Básico',q:'¿Qué significa 1 tonelada de refrigeración?',o:['El peso del equipo','12,000 BTU/hora de capacidad de enfriamiento','1,000 libras de hielo','La presión del sistema'],c:1,e:'1 tonelada = 12,000 BTU/h. Una casa promedio usa 2-5 toneladas dependiendo del tamaño.'},
+{cat:'❄️ Aire Acondicionado Básico',q:'¿Para qué sirve el filtro de aire?',o:['Decoración','Atrapar polvo y partículas antes del evaporador','Enfriar el aire','Medir la presión'],c:1,e:'El filtro protege el evaporador y mejora la calidad del aire. Hay que cambiarlo cada 1-3 meses.'},
+{cat:'❄️ Aire Acondicionado Básico',q:'¿Qué causa que el evaporador se congele?',o:['Mucho refrigerante','Flujo de aire bajo, poco refrigerante, o filtro sucio','Temperatura muy alta afuera','El condensador está limpio'],c:1,e:'Evaporador congelado = algo anda mal. Revisa filtro, flujo de aire, y niveles de refrigerante.'},
+{cat:'❄️ Aire Acondicionado Básico',q:'¿Dónde está el condensador en un split system residencial?',o:['En el ático','Afuera de la casa','En el closet','En el baño'],c:1,e:'El condensador (unidad exterior) libera el calor al ambiente. Necesita buena ventilación afuera.'},
+{cat:'❄️ Aire Acondicionado Básico',q:'¿Cada cuánto se recomienda un mantenimiento de AC?',o:['Cada 10 años','2 veces al año (primavera y otoño)','Solo cuando falla','Cada mes'],c:1,e:'Mantenimiento preventivo 2 veces al año mantiene el equipo eficiente y previene fallas costosas.'},
+{cat:'❄️ Aire Acondicionado Básico',q:'¿Qué es el return air?',o:['Aire que sale de los registros','Aire que regresa al equipo para ser acondicionado','Aire del exterior','Aire del baño'],c:1,e:'El return air es el aire que regresa al sistema por el ducto de retorno para ser enfriado o calentado de nuevo.'},
+{cat:'❄️ Aire Acondicionado Básico',q:'¿Qué componente controla cuándo enciende y apaga el AC?',o:['El capacitor','El termostato','El filtro','El fusible'],c:1,e:'El termostato sensa la temperatura y manda señal para encender o apagar el equipo.'},
+{cat:'❄️ Aire Acondicionado Básico',q:'¿Qué pasa si el condensador está sucio?',o:['Enfría mejor','Las presiones suben y el equipo trabaja más duro','Nada','Baja el voltaje'],c:1,e:'Condensador sucio = no libera calor bien = presiones altas = más consumo de energía y posible daño al compresor.'},
+{cat:'❄️ Aire Acondicionado Básico',q:'¿Qué es BTU?',o:['Un tipo de gas','British Thermal Unit, unidad de medida de calor','Una marca de equipo','Un código de seguridad'],c:1,e:'BTU = British Thermal Unit. Es la cantidad de calor necesaria para subir 1°F a 1 libra de agua.'},
+{cat:'❄️ Aire Acondicionado Básico',q:'¿Cuál es la temperatura ideal del aire que sale del registro de un AC funcionando bien?',o:['50-55°F','55-65°F (15-20 grados menos que el return)','Igual que el return','80°F'],c:1,e:'El diferencial entre supply y return debe ser 15-20°F. Si no, algo anda mal con el sistema.'}
+];
+
+let quizData=[];
+let quizIdx=0;
+let quizRight=0;
+let quizWrong=0;
+let quizAnswered=false;
+
+function shuffleArray(arr){
+    const a=[...arr];
+    for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+    return a;
+}
+
+function startQuiz(){
+    quizData=shuffleArray(QUIZ_PRINCIPIANTE);
+    quizIdx=0;quizRight=0;quizWrong=0;
+    document.getElementById('qRight').textContent='0';
+    document.getElementById('qWrong').textContent='0';
+    go('s8');
+    showQuestion();
+    const intro=D.lang==='es'?'¡Vamos con el quiz, '+D.name+'! Demuestra lo que sabes.':'Let\'s go '+D.name+'! Show what you know.';
+    speakText(intro);
+}
+
+function retryQuiz(){
+    startQuiz();
+}
+
+function showQuestion(){
+    if(quizIdx>=quizData.length){showResult();return;}
+    quizAnswered=false;
+    const q=quizData[quizIdx];
+    const pct=Math.round((quizIdx/quizData.length)*100);
+    document.getElementById('qBar').style.width=pct+'%';
+    document.getElementById('qNum').textContent=(D.lang==='es'?'Pregunta ':'Question ')+(quizIdx+1)+' / '+quizData.length;
+    document.getElementById('qCat').textContent=q.cat;
+    document.getElementById('qBubble').textContent=quizIdx===0?(D.lang==='es'?'¡Dale, tú puedes!':'You got this!'):(D.lang==='es'?'¿Qué piensas, '+D.name+'?':'What do you think, '+D.name+'?');
+    document.getElementById('qText').textContent=q.q;
+    document.getElementById('qExplain').classList.remove('show');
+    document.getElementById('qNext').classList.remove('show');
+    const letters=['A','B','C','D'];
+    document.getElementById('qOpts').innerHTML=q.o.map((o,i)=>'<div class="quiz-opt" onclick="answerQuiz('+i+',this)"><div class="quiz-letter">'+letters[i]+'</div><div>'+o+'</div></div>').join('');
+    window.scrollTo(0,0);
+}
+
+function answerQuiz(idx,el){
+    if(quizAnswered)return;
+    quizAnswered=true;
+    const q=quizData[quizIdx];
+    const correct=idx===q.c;
+    const opts=document.querySelectorAll('.quiz-opt');
+    
+    opts.forEach((o,i)=>{
+        if(i===q.c)o.classList.add('correct');
+        if(i===idx&&!correct)o.classList.add('wrong');
+        if(i!==q.c&&i!==idx)o.classList.add('disabled');
+    });
+    
+    if(correct){
+        quizRight++;
+        document.getElementById('qRight').textContent=quizRight;
+        document.getElementById('qBubble').textContent=D.lang==='es'?['¡Así se hace!','¡Correcto, '+D.name+'!','¡Órale, muy bien!','¡Excelente!'][Math.floor(Math.random()*4)]:['Correct!','Great job!','Excellent!','You got it!'][Math.floor(Math.random()*4)];
+        showVideo('correcto',null);
+    }else{
+        quizWrong++;
+        document.getElementById('qWrong').textContent=quizWrong;
+        document.getElementById('qBubble').textContent=D.lang==='es'?'No te preocupes, así se aprende. La respuesta correcta es la '+['A','B','C','D'][q.c]+'.':'Don\'t worry, that\'s how we learn. Correct answer is '+['A','B','C','D'][q.c]+'.';
+        showVideo('incorrecto',null);
+    }
+    
+    document.getElementById('qExplain').innerHTML='<b>'+(D.lang==='es'?'Explicación:':'Explanation:')+'</b> '+q.e;
+    document.getElementById('qExplain').classList.add('show');
+    document.getElementById('qNext').textContent=(quizIdx<quizData.length-1)?(D.lang==='es'?'Siguiente →':'Next →'):(D.lang==='es'?'Ver Resultado 🏆':'See Result 🏆');
+    document.getElementById('qNext').classList.add('show');
+    
+    speakText(correct?(D.lang==='es'?'Correcto. ':'Correct. '):(D.lang==='es'?'Incorrecto. ':'Incorrect. ')+q.e);
+}
+
+function nextQuestion(){
+    quizIdx++;
+    showQuestion();
+}
+
+function showResult(){
+    go('s9');
+    const pct=Math.round((quizRight/quizData.length)*100);
+    document.getElementById('rScore').textContent=pct+'%';
+    document.getElementById('rLabel').textContent=quizRight+' / '+quizData.length+(D.lang==='es'?' correctas':' correct');
+    
+    let medal,msg,stars;
+    if(pct>=90){medal='🏆';stars=5;msg=D.lang==='es'?'¡Increíble, '+D.name+'! Eres una máquina del HVAC. El Maestro Mario está orgulloso.':'Incredible, '+D.name+'! You\'re an HVAC machine!';}
+    else if(pct>=80){medal='🥇';stars=4;msg=D.lang==='es'?'¡Excelente, '+D.name+'! Tienes muy buena base. Sigue así.':'Excellent, '+D.name+'! Great foundation!';}
+    else if(pct>=70){medal='🥈';stars=3;msg=D.lang==='es'?'¡Bien, '+D.name+'! Vas por buen camino. Repasa los temas que fallaste.':'Good job, '+D.name+'! Review what you missed.';}
+    else if(pct>=60){medal='🥉';stars=2;msg=D.lang==='es'?'¡No está mal, '+D.name+'! Pero hay que estudiar más. Tú puedes.':'Not bad, '+D.name+'! But keep studying.';}
+    else{medal='📚';stars=1;msg=D.lang==='es'?'¡'+D.name+', hay que echarle más ganas! Repasa y vuelve a intentar. Vamos con todo.':D.name+', keep studying and try again!';}
+    
+    document.getElementById('rMedal').textContent=medal;
+    document.getElementById('rMsg').textContent=msg;
+    
+    const starEls=document.querySelectorAll('#rStars span');
+    starEls.forEach((s,i)=>{
+        setTimeout(()=>{if(i<stars)s.classList.add('lit');},i*300);
+    });
+    
+    cft();
+    speakText(msg);
+}
 document.getElementById('nm').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.value.trim().length>=2)sName();});
 </script>
 </body>
