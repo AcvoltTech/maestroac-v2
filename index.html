@@ -225,17 +225,27 @@
         .medal-slot .medal-name{font-size:11px;margin-top:6px;color:var(--muted);font-weight:600}
         .medal-slot.earned .medal-name{color:var(--gold)}
         
-        /* AVATAR PICKER */
-        .prof-avatar{font-size:64px;cursor:pointer;transition:transform 0.3s;position:relative}
+        /* AVATAR PICKER - INDUSTRY THEMED */
+        .prof-avatar{font-size:64px;cursor:pointer;transition:transform 0.3s;position:relative;display:flex;align-items:center;justify-content:center}
         .prof-avatar:hover{transform:scale(1.1)}
         .prof-avatar-edit{position:absolute;bottom:-4px;right:-4px;background:var(--accent);color:white;border-radius:50%;width:24px;height:24px;font-size:12px;display:flex;align-items:center;justify-content:center}
-        .avatar-picker{display:none;background:var(--card);border:2px solid rgba(0,212,255,0.2);border-radius:16px;padding:16px;margin-top:12px;width:100%}
+        .avatar-picker{display:none;background:var(--card);border:2px solid rgba(0,212,255,0.2);border-radius:16px;padding:16px;margin:12px auto 0;width:100%;max-width:400px}
         .avatar-picker.open{display:block}
-        .avatar-picker-title{font-family:'Fredoka',sans-serif;font-size:14px;font-weight:700;color:var(--electric);margin-bottom:12px;text-align:center}
-        .avatar-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-        .avatar-option{font-size:36px;padding:10px;text-align:center;border-radius:12px;cursor:pointer;transition:all 0.2s;border:2px solid transparent;background:rgba(255,255,255,0.03)}
-        .avatar-option:hover{background:rgba(0,212,255,0.1);transform:scale(1.15)}
+        .avatar-picker-title{font-family:'Fredoka',sans-serif;font-size:15px;font-weight:700;color:var(--electric);margin-bottom:6px;text-align:center}
+        .avatar-picker-sub{font-size:11px;color:var(--muted);text-align:center;margin-bottom:12px}
+        .avatar-section{margin-bottom:14px}
+        .avatar-section-title{font-family:'Fredoka',sans-serif;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;padding-left:4px;display:flex;align-items:center;gap:6px}
+        .avatar-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+        .avatar-option{padding:8px 4px;text-align:center;border-radius:12px;cursor:pointer;transition:all 0.2s;border:2px solid transparent;background:rgba(255,255,255,0.03);display:flex;flex-direction:column;align-items:center;gap:4px}
+        .avatar-option:hover{background:rgba(0,212,255,0.1);transform:scale(1.05)}
         .avatar-option.selected{border-color:var(--gold);background:rgba(255,215,0,0.1)}
+        .avatar-option .av-icon{font-size:32px;line-height:1.2}
+        .avatar-option .av-name{font-size:9px;color:var(--muted);font-weight:600;line-height:1.2;max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .avatar-option.selected .av-name{color:var(--gold)}
+        .avatar-option.locked{opacity:0.35;cursor:not-allowed;position:relative}
+        .avatar-option.locked:hover{transform:none;background:rgba(255,255,255,0.03)}
+        .avatar-option.locked .av-icon{filter:grayscale(1)}
+        .avatar-option .av-lock{font-size:10px;color:var(--accent);font-weight:700;line-height:1}
         
         /* MUSIC PICKER */
         .music-panel{position:fixed;top:72px;right:12px;z-index:810;background:var(--card);border:2px solid rgba(0,212,255,0.2);border-radius:16px;padding:16px;width:290px;display:none;box-shadow:0 8px 32px rgba(0,0,0,0.5);max-height:80vh;overflow-y:auto}
@@ -315,6 +325,31 @@
         .study-redirect-icon{font-size:40px;margin-bottom:8px}
         .study-redirect-title{font-family:'Fredoka',sans-serif;font-size:16px;font-weight:700;color:var(--accent)}
         .study-redirect-desc{font-size:13px;color:var(--muted);margin:6px 0 12px;line-height:1.4}
+        
+        /* ========== FORMULA HELPER ========== */
+        .formula-helper{display:none;width:100%;margin:8px 0;animation:si .4s ease}
+        .formula-helper.show{display:block}
+        .formula-hint{background:linear-gradient(135deg,rgba(0,212,255,0.08),rgba(99,102,241,0.06));border:1.5px solid rgba(0,212,255,0.2);border-radius:14px;padding:12px 16px;margin-bottom:8px}
+        .formula-hint-title{font-family:'Fredoka',sans-serif;font-size:13px;font-weight:700;color:var(--electric);display:flex;align-items:center;gap:8px;margin-bottom:6px}
+        .formula-hint-text{font-size:14px;color:var(--txt);line-height:1.4}
+        .formula-hint-text .formula-big{font-family:'Fredoka',sans-serif;font-size:22px;font-weight:700;color:var(--gold);display:block;text-align:center;margin:8px 0;letter-spacing:1px}
+        .formula-hint-text .formula-vars{font-size:12px;color:var(--muted);text-align:center;display:block;margin-top:2px}
+        .formula-toggle{background:var(--card);border:2px solid rgba(0,212,255,0.2);border-radius:12px;padding:10px 16px;cursor:pointer;transition:all 0.25s;display:flex;align-items:center;justify-content:center;gap:8px;font-family:'Fredoka',sans-serif;font-size:14px;font-weight:600;color:var(--electric);margin-bottom:8px}
+        .formula-toggle:hover{border-color:var(--electric);background:rgba(0,212,255,0.05)}
+        .formula-toggle.open{border-color:var(--electric);background:rgba(0,212,255,0.08)}
+        
+        /* POWER WHEEL */
+        .power-wheel{display:none;margin:10px auto;text-align:center}
+        .power-wheel.show{display:block}
+        .pw-container{position:relative;width:220px;height:220px;margin:0 auto}
+        .pw-svg{width:100%;height:100%}
+        .pw-label{font-size:11px;color:var(--muted);text-align:center;margin-top:6px}
+        
+        /* MOTIVATIONAL QUOTE */
+        .motive-bar{display:none;width:100%;background:linear-gradient(135deg,rgba(255,107,43,0.06),rgba(241,196,15,0.04));border:1px solid rgba(241,196,15,0.15);border-radius:12px;padding:10px 14px;margin:6px 0;text-align:center}
+        .motive-bar.show{display:block}
+        .motive-text{font-size:12.5px;color:var(--gold);font-style:italic;line-height:1.4}
+        .motive-author{font-size:10px;color:var(--muted);margin-top:3px;font-weight:600}
     </style>
 </head>
 <body>
@@ -556,6 +591,48 @@
     <div class="quiz-num" id="qNum"></div>
     <div class="aw sm" onclick="openAIChat()"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div><span class="ai-badge">AI</span></div>
     <div class="bb" id="qBubble"></div>
+    <div class="motive-bar" id="qMotive"><div class="motive-text" id="qMotiveText"></div><div class="motive-author" id="qMotiveAuthor"></div></div>
+    <div class="formula-helper" id="qFormula">
+        <div class="formula-toggle" id="qFormToggle" onclick="toggleFormulaDetail()">📐 <span id="qFormToggleText">Mario te da una pista — tócame</span></div>
+        <div class="formula-hint" id="qFormDetail" style="display:none">
+            <div class="formula-hint-title" id="qFormTitle">📐 Fórmula Necesaria</div>
+            <div class="formula-hint-text" id="qFormText"></div>
+        </div>
+        <div class="power-wheel" id="qPowerWheel">
+            <div class="pw-container">
+                <svg class="pw-svg" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Outer circle -->
+                    <circle cx="120" cy="120" r="115" fill="none" stroke="rgba(0,212,255,0.3)" stroke-width="2"/>
+                    <!-- Cross dividers -->
+                    <line x1="120" y1="5" x2="120" y2="235" stroke="rgba(0,212,255,0.15)" stroke-width="1.5"/>
+                    <line x1="5" y1="120" x2="235" y2="120" stroke="rgba(0,212,255,0.15)" stroke-width="1.5"/>
+                    <!-- Inner circle for W/P -->
+                    <circle cx="120" cy="55" r="42" fill="rgba(241,196,15,0.1)" stroke="rgba(241,196,15,0.4)" stroke-width="2"/>
+                    <!-- W label -->
+                    <text x="120" y="48" text-anchor="middle" fill="#f1c40f" font-family="Fredoka" font-size="18" font-weight="700">W (P)</text>
+                    <text x="120" y="68" text-anchor="middle" fill="#7a93b8" font-size="10">Watts</text>
+                    <!-- V section (bottom left) -->
+                    <circle cx="68" cy="168" r="42" fill="rgba(0,212,255,0.08)" stroke="rgba(0,212,255,0.3)" stroke-width="2"/>
+                    <text x="68" y="162" text-anchor="middle" fill="#00d4ff" font-family="Fredoka" font-size="18" font-weight="700">V (E)</text>
+                    <text x="68" y="182" text-anchor="middle" fill="#7a93b8" font-size="10">Voltios</text>
+                    <!-- A section (bottom right) -->
+                    <circle cx="172" cy="168" r="42" fill="rgba(255,107,43,0.08)" stroke="rgba(255,107,43,0.3)" stroke-width="2"/>
+                    <text x="172" y="162" text-anchor="middle" fill="#ff6b2b" font-family="Fredoka" font-size="18" font-weight="700">I (A)</text>
+                    <text x="172" y="182" text-anchor="middle" fill="#7a93b8" font-size="10">Amperios</text>
+                    <!-- R in center -->
+                    <circle cx="120" cy="125" r="28" fill="rgba(46,204,113,0.08)" stroke="rgba(46,204,113,0.3)" stroke-width="2"/>
+                    <text x="120" y="120" text-anchor="middle" fill="#2ecc71" font-family="Fredoka" font-size="16" font-weight="700">R (Ω)</text>
+                    <text x="120" y="137" text-anchor="middle" fill="#7a93b8" font-size="9">Ohms</text>
+                    <!-- Formula labels around -->
+                    <text x="120" y="16" text-anchor="middle" fill="#7a93b8" font-size="9">P = V × I</text>
+                    <text x="22" y="120" text-anchor="middle" fill="#7a93b8" font-size="8" transform="rotate(-90,22,120)">V = I × R</text>
+                    <text x="232" y="120" text-anchor="middle" fill="#7a93b8" font-size="8" transform="rotate(90,232,120)">I = V / R</text>
+                    <text x="120" y="236" text-anchor="middle" fill="#7a93b8" font-size="9">R = V / I</text>
+                </svg>
+            </div>
+            <div class="pw-label">⚡ Power Wheel — Ley de Ohm + Ley de Watt</div>
+        </div>
+    </div>
     <div class="quiz-q" id="qText"></div>
     <div class="quiz-opts" id="qOpts"></div>
     <div class="quiz-explain" id="qExplain"></div>
@@ -597,8 +674,9 @@
     <div class="prof-card">
         <div class="prof-avatar" id="profAvatar" onclick="toggleAvatarPicker()">👤<div class="prof-avatar-edit">✏️</div></div>
         <div class="avatar-picker" id="avatarPicker">
-            <div class="avatar-picker-title">Elige tu avatar</div>
-            <div class="avatar-grid" id="avatarGrid"></div>
+            <div class="avatar-picker-title">🔧 Elige tu Avatar</div>
+            <div class="avatar-picker-sub">Desbloquea avatares dominando quizzes y subiendo de nivel</div>
+            <div id="avatarGrid"></div>
         </div>
         <div class="prof-name" id="profName"></div>
         <div class="prof-title" id="profTitle"></div>
@@ -1591,6 +1669,258 @@ function retryQuiz(){
     speakText(D.lang==='es'?'¡Otra vez '+q.title+'! Vamos con todo.':'Let\'s try '+q.title+' again!');
 }
 
+// ========== FORMULA DETECTION SYSTEM ==========
+const FORMULA_PATTERNS=[
+    {
+        id:'ohm_r',
+        keywords:['resistencia según ohm','resistencia según Ohm','cuál es la resistencia','ohms','ley de ohm','R = V'],
+        title:'⚡ Ley de Ohm — Resistencia',
+        formula:'R = V ÷ I',
+        vars:'R = Resistencia (Ω) | V = Voltaje (V) | I = Corriente (A)',
+        hint:'¡Usa la Ley de Ohm! Divide el voltaje entre la corriente.',
+        showWheel:true
+    },
+    {
+        id:'ohm_v',
+        keywords:['voltaje.*ohm','V = I','voltaje usando ohm','calcular el voltaje'],
+        title:'⚡ Ley de Ohm — Voltaje',
+        formula:'V = I × R',
+        vars:'V = Voltaje (V) | I = Corriente (A) | R = Resistencia (Ω)',
+        hint:'¡La Ley de Ohm te da el voltaje! Multiplica corriente por resistencia.',
+        showWheel:true
+    },
+    {
+        id:'ohm_i',
+        keywords:['corriente.*ohm','I = V','amperios.*ohm','calcular la corriente','cuántos amperios'],
+        title:'⚡ Ley de Ohm — Corriente',
+        formula:'I = V ÷ R',
+        vars:'I = Corriente (A) | V = Voltaje (V) | R = Resistencia (Ω)',
+        hint:'¡La Ley de Ohm! Divide el voltaje entre la resistencia para sacar amperios.',
+        showWheel:true
+    },
+    {
+        id:'watt_i',
+        keywords:['amperios consume','cuántos amperios','corriente total','1500W','watts.*amperios','I = P','I = W'],
+        title:'⚡ Ley de Watt — Corriente',
+        formula:'I = W ÷ V',
+        vars:'I = Corriente (A) | W = Potencia (Watts) | V = Voltaje (V)',
+        hint:'¡Para sacar amperios desde watts, usa I = W ÷ V!',
+        showWheel:true
+    },
+    {
+        id:'watt_p',
+        keywords:['potencia total','watts total','cuántos watts','P = V','W = V'],
+        title:'⚡ Ley de Watt — Potencia',
+        formula:'W = V × I',
+        vars:'W = Potencia (Watts) | V = Voltaje (V) | I = Corriente (A)',
+        hint:'¡La potencia es voltaje por corriente! W = V × I.',
+        showWheel:true
+    },
+    {
+        id:'vdrop',
+        keywords:['caída de voltaje','porcentaje de caída','voltage drop','Vd ='],
+        title:'📉 Caída de Voltaje',
+        formula:'Vd = 2 × K × I × D ÷ CM',
+        vars:'K = Resistividad | I = Corriente | D = Distancia | CM = Circular Mils',
+        hint:'¡Recuerda la fórmula de caída de voltaje! El 2 es por ida y vuelta.',
+        showWheel:false
+    },
+    {
+        id:'superheat',
+        keywords:['superheat','superheat se mide','temperatura de succión'],
+        title:'🌡️ Superheat',
+        formula:'SH = T.línea succión − T.saturación',
+        vars:'SH = Superheat | T.línea = Temp real | T.sat = Según tabla P-T',
+        hint:'¡Para medir superheat necesitas dos cosas: la temperatura real y la de la tabla!',
+        showWheel:false
+    },
+    {
+        id:'subcooling',
+        keywords:['subcooling','subcooling se mide','temp.*líquido'],
+        title:'🌡️ Subcooling',
+        formula:'SC = T.saturación − T.línea líquido',
+        vars:'SC = Subcooling | T.sat = Según tabla P-T | T.línea = Temp real',
+        hint:'¡Subcooling es lo opuesto al superheat! La temp de saturación MENOS la real.',
+        showWheel:false
+    },
+    {
+        id:'delta_t',
+        keywords:['delta T','supply.*return','return.*supply','temperatura del supply'],
+        title:'🌡️ Delta T',
+        formula:'ΔT = T.return − T.supply',
+        vars:'Normal: 15-20°F | Return = aire que entra | Supply = aire que sale',
+        hint:'¡Delta T es la diferencia entre el aire que entra y el que sale!',
+        showWheel:false
+    },
+    {
+        id:'desbalance',
+        keywords:['desbalance de voltaje','desbalance.*trifásico','porcentaje.*desbalance'],
+        title:'⚖️ Desbalance de Voltaje',
+        formula:'% = (Mayor desviación ÷ Promedio) × 100',
+        vars:'Máximo aceptable: 2% según NEMA',
+        hint:'¡Saca el promedio de los tres voltajes, y ve cuánto se desvía el peor!',
+        showWheel:false
+    },
+    {
+        id:'breaker_motor',
+        keywords:['breaker.*motor','NEC 430','250%','FLA.*breaker'],
+        title:'📖 NEC 430.52 — Breaker de Motor',
+        formula:'Breaker máx = FLA × 250%',
+        vars:'FLA = Full Load Amps | Sube al siguiente tamaño estándar',
+        hint:'¡Para motores, el breaker puede ser hasta 250% del FLA!',
+        showWheel:false
+    }
+];
+
+function detectFormula(q){
+    const text=(q.q+' '+q.e).toLowerCase();
+    for(const f of FORMULA_PATTERNS){
+        for(const kw of f.keywords){
+            try{
+                if(new RegExp(kw,'i').test(text))return f;
+            }catch(e){
+                if(text.includes(kw.toLowerCase()))return f;
+            }
+        }
+    }
+    return null;
+}
+
+function showFormulaHelper(q){
+    const formula=detectFormula(q);
+    const helper=document.getElementById('qFormula');
+    const wheel=document.getElementById('qPowerWheel');
+    
+    if(!formula){
+        helper.classList.remove('show');
+        return;
+    }
+    
+    helper.classList.add('show');
+    document.getElementById('qFormToggleText').textContent=D.lang==='es'?'📐 '+formula.hint:'📐 '+formula.hint;
+    document.getElementById('qFormTitle').textContent=formula.title;
+    document.getElementById('qFormText').innerHTML=
+        '<span class="formula-big">'+formula.formula+'</span>'+
+        '<span class="formula-vars">'+formula.vars+'</span>';
+    
+    if(formula.showWheel){
+        wheel.classList.add('show');
+    }else{
+        wheel.classList.remove('show');
+    }
+}
+
+function toggleFormulaDetail(){
+    const detail=document.getElementById('qFormDetail');
+    const toggle=document.getElementById('qFormToggle');
+    if(detail.style.display==='none'){
+        detail.style.display='block';
+        toggle.classList.add('open');
+    }else{
+        detail.style.display='none';
+        toggle.classList.remove('open');
+    }
+}
+
+function getFormulaHintBubble(q){
+    const formula=detectFormula(q);
+    if(!formula)return null;
+    
+    const hints_es=[
+        '¡'+D.name+'! Para esta pregunta ocupa usar una fórmula. ¿Necesitas ayuda? ¡Toca la pista! 📐',
+        '¡Ojo, '+D.name+'! Esta pregunta requiere cálculo. Te dejé la fórmula abajo. ¡Tú puedes!',
+        D.name+', recuerda que para resolver esta pregunta debes usar una fórmula. ¡Ahí te la dejé!',
+        '¡'+D.name+'! Esta es de cálculo. No te asustes — te puse la herramienta abajo. ¡Dale!',
+        'Hey '+D.name+', esta necesita matemáticas. Pero tranquilo, ahí abajo tienes todo lo que necesitas.',
+    ];
+    const hints_en=[
+        D.name+'! This one needs a formula. Need help? Tap the hint! 📐',
+        'Watch out, '+D.name+'! This requires calculation. I left the formula below!',
+        D.name+', remember you need a formula for this one. I got you covered below!',
+    ];
+    const list=D.lang==='es'?hints_es:hints_en;
+    return list[Math.floor(Math.random()*list.length)];
+}
+
+// ========== MOTIVATIONAL QUOTES SYSTEM ==========
+const MOTIVATION_QUOTES=[
+    // 48 Leyes del Poder - Robert Greene
+    {text:'"Nunca brilles más que tu maestro... hasta que lo superes."',author:'— 48 Leyes del Poder',cat:'power'},
+    {text:'"Los que más saben, más practican en silencio."',author:'— Inspirado en 48 Leyes del Poder',cat:'power'},
+    {text:'"Domina el arte de la paciencia — todo maestro fue primero estudiante."',author:'— 48 Leyes del Poder',cat:'power'},
+    {text:'"El éxito no viene de lo que haces de vez en cuando, sino de lo que haces consistentemente."',author:'— 48 Leyes del Poder',cat:'power'},
+    {text:'"Planea hasta el final: el técnico que anticipa, domina."',author:'— 48 Leyes del Poder',cat:'power'},
+    {text:'"Aprende a usar la ausencia para aumentar tu valor."',author:'— 48 Leyes del Poder',cat:'power'},
+    {text:'"Gana a través de tus acciones, nunca a través de argumentos."',author:'— 48 Leyes del Poder',cat:'power'},
+    {text:'"La reputación es la piedra angular del poder — cuida tu trabajo."',author:'— 48 Leyes del Poder',cat:'power'},
+    
+    // El Arte de la Guerra - Sun Tzu
+    {text:'"El guerrero que se prepara, no le teme a la batalla."',author:'— El Arte de la Guerra, Sun Tzu',cat:'war'},
+    {text:'"Conoce tu oficio y conoce tus herramientas, y en 100 diagnósticos no fallarás."',author:'— Adaptado de Sun Tzu',cat:'war'},
+    {text:'"La victoria pertenece al que se prepara más."',author:'— El Arte de la Guerra, Sun Tzu',cat:'war'},
+    {text:'"Un técnico preparado no necesita suerte."',author:'— Inspirado en Sun Tzu',cat:'war'},
+    {text:'"El mejor diagnóstico se hace antes de abrir la unidad."',author:'— Adaptado de Sun Tzu',cat:'war'},
+    
+    // Piense y Hágase Rico - Napoleon Hill
+    {text:'"Todo lo que la mente puede concebir y creer, lo puede lograr."',author:'— Napoleon Hill',cat:'hill'},
+    {text:'"El punto de partida de todo logro es el deseo."',author:'— Napoleon Hill',cat:'hill'},
+    {text:'"La paciencia, la persistencia y el sudor hacen una combinación imbatible."',author:'— Napoleon Hill',cat:'hill'},
+    {text:'"No esperes. El momento perfecto nunca llegará. Empieza ahora."',author:'— Napoleon Hill',cat:'hill'},
+    
+    // Los 7 Hábitos - Stephen Covey
+    {text:'"Comienza con el fin en mente — ¿quieres ser dueño o empleado?"',author:'— Stephen Covey',cat:'covey'},
+    {text:'"Afila la sierra: cada hora que estudias vale más que 10 horas de trabajo sin preparación."',author:'— Adaptado de Stephen Covey',cat:'covey'},
+    {text:'"Primero lo primero: domina las bases y todo lo demás caerá en su lugar."',author:'— Stephen Covey',cat:'covey'},
+    
+    // Padre Rico Padre Pobre - Kiyosaki
+    {text:'"Los pobres trabajan por dinero. Los ricos hacen que el dinero trabaje para ellos."',author:'— Robert Kiyosaki',cat:'kiyosaki'},
+    {text:'"La educación financiera es el puente entre ser técnico y ser empresario."',author:'— Adaptado de Kiyosaki',cat:'kiyosaki'},
+    {text:'"Tu conocimiento es tu activo más valioso — invierte en él."',author:'— Robert Kiyosaki',cat:'kiyosaki'},
+    
+    // HVAC / Maestro Mario originales
+    {text:'"Si no mides, estás adivinando." ¡Nunca adivines, mide!',author:'— Maestro Mario',cat:'mario'},
+    {text:'"El técnico que estudia hoy, cobra más mañana."',author:'— Maestro Mario',cat:'mario'},
+    {text:'"Cada pregunta que fallas es una lección que ganas."',author:'— Maestro Mario',cat:'mario'},
+    {text:'"No hay técnico malo, hay técnico que no practica."',author:'— Maestro Mario',cat:'mario'},
+    {text:'"Tu herramienta más poderosa es tu conocimiento, no tu llave."',author:'— Maestro Mario',cat:'mario'},
+    {text:'"Un técnico sin certificación es como un doctor sin título."',author:'— Maestro Mario',cat:'mario'},
+    {text:'"El que sabe diagnosticar, nunca se queda sin trabajo."',author:'— Maestro Mario',cat:'mario'},
+    {text:'"Hoy estudias, mañana cobras. Así de simple."',author:'— Maestro Mario',cat:'mario'},
+    {text:'"La diferencia entre un técnico de $20/hr y uno de $50/hr es lo que sabe, no lo que hace."',author:'— Maestro Mario',cat:'mario'},
+    {text:'"Cada circuito que entiendes, cada fórmula que dominas, te acerca a tu libertad."',author:'— Maestro Mario',cat:'mario'},
+    {text:'"Los mejores técnicos nunca dejan de aprender."',author:'— Maestro Mario',cat:'mario'},
+    {text:'"Tu competencia no estudia — tú sí. Por eso vas a ganar."',author:'— Maestro Mario',cat:'mario'},
+    
+    // Mentalidad Mamba - Kobe Bryant
+    {text:'"El trabajo duro supera al talento cuando el talento no trabaja duro."',author:'— Kobe Bryant',cat:'mamba'},
+    {text:'"Yo no le tengo miedo al fracaso. Le tengo miedo a no intentarlo."',author:'— Kobe Bryant',cat:'mamba'},
+    
+    // Otros
+    {text:'"El éxito es la suma de pequeños esfuerzos repetidos día tras día."',author:'— Robert Collier',cat:'other'},
+    {text:'"Disciplina es hacer lo que necesitas hacer, aunque no tengas ganas."',author:'— Anónimo',cat:'other'},
+    {text:'"El experto en algo fue una vez un principiante."',author:'— Helen Hayes',cat:'other'},
+    {text:'"No te compares con otros. Compárate con quien eras ayer."',author:'— Jordan Peterson',cat:'other'},
+    {text:'"La consistencia es más importante que la perfección."',author:'— Anónimo',cat:'other'},
+];
+
+let lastQuoteIdx=-1;
+
+function showMotivation(qIdx){
+    const bar=document.getElementById('qMotive');
+    // Show motivation every 3 questions
+    if(qIdx%3===0){
+        let idx=Math.floor(Math.random()*MOTIVATION_QUOTES.length);
+        while(idx===lastQuoteIdx&&MOTIVATION_QUOTES.length>1)idx=Math.floor(Math.random()*MOTIVATION_QUOTES.length);
+        lastQuoteIdx=idx;
+        const quote=MOTIVATION_QUOTES[idx];
+        document.getElementById('qMotiveText').textContent=quote.text;
+        document.getElementById('qMotiveAuthor').textContent=quote.author;
+        bar.classList.add('show');
+    }else{
+        bar.classList.remove('show');
+    }
+}
+
 function showQuestion(){
     if(quizIdx>=quizData.length){showResult();return;}
     const q=quizData[quizIdx];
@@ -1600,6 +1930,18 @@ function showQuestion(){
     document.getElementById('qBar').style.width=pct+'%';
     document.getElementById('qNum').textContent=(D.lang==='es'?'Pregunta ':'Question ')+(quizIdx+1)+' / '+quizData.length;
     document.getElementById('qCat').textContent=q.cat;
+    
+    // Show formula helper if question needs it
+    showFormulaHelper(q);
+    
+    // Show motivational quote
+    showMotivation(quizIdx);
+    
+    // Reset formula detail toggle
+    const formDetail=document.getElementById('qFormDetail');
+    if(formDetail)formDetail.style.display='none';
+    const formToggle=document.getElementById('qFormToggle');
+    if(formToggle)formToggle.classList.remove('open');
     
     // Back button
     const prevBtn=document.getElementById('qPrev');
@@ -1625,7 +1967,12 @@ function showQuestion(){
         nextBtn.classList.add('show');
     }else{
         // New unanswered question
-        document.getElementById('qBubble').textContent=quizIdx===0?(D.lang==='es'?'¡Dale, tú puedes!':'You got this!'):(D.lang==='es'?'¿Qué piensas, '+D.name+'?':'What do you think, '+D.name+'?');
+        const formulaHint=getFormulaHintBubble(q);
+        if(formulaHint){
+            document.getElementById('qBubble').textContent=formulaHint;
+        }else{
+            document.getElementById('qBubble').textContent=quizIdx===0?(D.lang==='es'?'¡Dale, tú puedes!':'You got this!'):(D.lang==='es'?'¿Qué piensas, '+D.name+'?':'What do you think, '+D.name+'?');
+        }
         document.getElementById('qText').textContent=q.q;
         document.getElementById('qExplain').classList.remove('show');
         document.getElementById('qNext').classList.remove('show');
@@ -1914,35 +2261,147 @@ const LEVEL_TITLES={
     11:'Leyenda HVAC',12:'Maestro Supremo',15:'Dios del HVAC'
 };
 
-let profile={level:1,xp:0,xpNeeded:100,totalCorrect:0,totalAnswered:0,quizzesTaken:0,bestStreak:0,medals:[],perfectStreakCount:0,avatar:'👤'};
+let profile={level:1,xp:0,xpNeeded:100,totalCorrect:0,totalAnswered:0,quizzesTaken:0,bestStreak:0,medals:[],perfectStreakCount:0,avatar:'novato'};
 let bestStreak=0;
 
 const AVATARS=[
-    '👤','🧑‍🔧','👷','🦸‍♂️','🦸‍♀️','🧑‍🏫',
-    '🐺','🦅','🐆','🦁','🐻','🦊',
-    '🔥','⚡','❄️','🌟','💎','🏆',
-    '🤖','👾','🎮','🕹️','🛡️','⚔️',
-    '🧊','🔧','⚙️','🌀','💪','👑'
+    // === STARTER (always available) ===
+    {id:'novato',icon:'👤',name:'Novato',cat:'starter',unlock:'always'},
+    {id:'aprendiz',icon:'🧑‍🔧',name:'Aprendiz',cat:'starter',unlock:'always'},
+    {id:'casco',icon:'👷',name:'Casco Duro',cat:'starter',unlock:'always'},
+    {id:'tools',icon:'🔧',name:'Herramientas',cat:'starter',unlock:'always'},
+    
+    // === ELECTRICIDAD (unlock with electricity mastery) ===
+    {id:'voltimetro',icon:'⚡',name:'Voltímetro',cat:'electric',unlock:'quiz',quizId:'electricidad',minPct:50,desc:'50% en Electricidad'},
+    {id:'multimetro',icon:'🔬',name:'Multímetro',cat:'electric',unlock:'quiz',quizId:'electricidad',minPct:70,desc:'70% en Electricidad'},
+    {id:'megger',icon:'💡',name:'Megger Pro',cat:'electric',unlock:'quiz',quizId:'electricidad',minPct:90,desc:'90% en Electricidad'},
+    {id:'maestro_elec',icon:'🗲',name:'Maestro Eléctrico',cat:'electric',unlock:'quiz',quizId:'electricidad',minPct:100,desc:'100% en Electricidad'},
+    
+    // === REFRIGERACIÓN (unlock with refrigeration mastery) ===
+    {id:'manifold',icon:'🧊',name:'Manifold Gauges',cat:'refrig',unlock:'quiz',quizId:'refrigeracion',minPct:50,desc:'50% en Refrigeración'},
+    {id:'txv',icon:'❄️',name:'Válvula TXV',cat:'refrig',unlock:'quiz',quizId:'refrigeracion',minPct:70,desc:'70% en Refrigeración'},
+    {id:'recovery',icon:'🔵',name:'Recovery Machine',cat:'refrig',unlock:'quiz',quizId:'refrigeracion',minPct:90,desc:'90% en Refrigeración'},
+    {id:'maestro_ref',icon:'☃️',name:'Maestro Refrig.',cat:'refrig',unlock:'quiz',quizId:'refrigeracion',minPct:100,desc:'100% en Refrigeración'},
+    
+    // === AIRE ACONDICIONADO (unlock with AC mastery) ===
+    {id:'anemometer',icon:'🌀',name:'Anemómetro',cat:'ac',unlock:'quiz',quizId:'ac_residencial',minPct:50,desc:'50% en AC Resid.'},
+    {id:'thermostat',icon:'🌡️',name:'Termostato',cat:'ac',unlock:'quiz',quizId:'ac_residencial',minPct:70,desc:'70% en AC Resid.'},
+    {id:'minisplit',icon:'🧊',name:'Mini Split Pro',cat:'ac',unlock:'quiz',quizId:'ac_comercial',minPct:70,desc:'70% en AC Comerc.'},
+    {id:'maestro_ac',icon:'🏔️',name:'Maestro AC',cat:'ac',unlock:'quiz',quizId:'ac_residencial',minPct:100,desc:'100% en AC'},
+    
+    // === POR NIVEL (unlock with level progression) ===
+    {id:'pinzas',icon:'🔩',name:'Pinzas',cat:'level',unlock:'level',minLevel:2,desc:'Nivel 2'},
+    {id:'desarmador',icon:'🪛',name:'Desarmador',cat:'level',unlock:'level',minLevel:3,desc:'Nivel 3'},
+    {id:'drill',icon:'🔨',name:'Taladro',cat:'level',unlock:'level',minLevel:5,desc:'Nivel 5'},
+    {id:'soldadura',icon:'🔥',name:'Soplete',cat:'level',unlock:'level',minLevel:7,desc:'Nivel 7'},
+    {id:'experto',icon:'⭐',name:'Experto',cat:'level',unlock:'level',minLevel:10,desc:'Nivel 10'},
+    {id:'birrete',icon:'🎓',name:'Graduado',cat:'level',unlock:'level',minLevel:12,desc:'Nivel 12'},
+    {id:'corona',icon:'👑',name:'Rey del HVAC',cat:'level',unlock:'level',minLevel:15,desc:'Nivel 15'},
+    
+    // === POR LOGROS (unlock with stats) ===
+    {id:'racha5',icon:'🔥',name:'En Llamas',cat:'achieve',unlock:'streak',minStreak:5,desc:'Racha de 5'},
+    {id:'racha10',icon:'💥',name:'Imparable',cat:'achieve',unlock:'streak',minStreak:10,desc:'Racha de 10'},
+    {id:'cent',icon:'💯',name:'Centenario',cat:'achieve',unlock:'correct',minCorrect:100,desc:'100 correctas'},
+    {id:'quinientos',icon:'🌟',name:'500 Club',cat:'achieve',unlock:'correct',minCorrect:500,desc:'500 correctas'},
+    {id:'triple',icon:'🏆',name:'Triple Amenaza',cat:'achieve',unlock:'triple',desc:'Dominar Elec+Refrig+AC'},
+    {id:'leyenda',icon:'💎',name:'Leyenda HVAC',cat:'achieve',unlock:'correct',minCorrect:1000,desc:'1000 correctas'}
 ];
+
+function isAvatarUnlocked(av){
+    if(av.unlock==='always')return true;
+    const scores=JSON.parse(localStorage.getItem('maestro_quiz_scores')||'{}');
+    
+    if(av.unlock==='quiz'){
+        const score=scores[av.quizId]||0;
+        return score>=av.minPct;
+    }
+    if(av.unlock==='level'){
+        return profile.level>=av.minLevel;
+    }
+    if(av.unlock==='streak'){
+        return profile.bestStreak>=av.minStreak;
+    }
+    if(av.unlock==='correct'){
+        return profile.totalCorrect>=av.minCorrect;
+    }
+    if(av.unlock==='triple'){
+        // Must have ≥80% in electricidad AND refrigeracion AND ac_residencial
+        return (scores['electricidad']||0)>=80 && (scores['refrigeracion']||0)>=80 && (scores['ac_residencial']||0)>=80;
+    }
+    return false;
+}
 
 function toggleAvatarPicker(){
     const picker=document.getElementById('avatarPicker');
     picker.classList.toggle('open');
     if(picker.classList.contains('open')){
-        document.getElementById('avatarGrid').innerHTML=AVATARS.map(a=>'<div class="avatar-option'+(a===profile.avatar?' selected':'')+'" onclick="selectAvatar(\''+a+'\')">'+a+'</div>').join('');
+        renderAvatarGrid();
     }
 }
 
-function selectAvatar(emoji){
-    profile.avatar=emoji;
-    saveProfile();
-    document.getElementById('profAvatar').innerHTML=emoji+'<div class="prof-avatar-edit">✏️</div>';
-    document.getElementById('profileBtn').textContent=emoji;
-    document.getElementById('avatarPicker').classList.remove('open');
-    // Update selected state
-    document.querySelectorAll('.avatar-option').forEach(el=>{
-        el.classList.toggle('selected',el.textContent===emoji);
+function renderAvatarGrid(){
+    const grid=document.getElementById('avatarGrid');
+    
+    const sections=[
+        {key:'starter',title:'🔧 Disponibles',avatars:AVATARS.filter(a=>a.cat==='starter')},
+        {key:'electric',title:'⚡ Electricidad',avatars:AVATARS.filter(a=>a.cat==='electric')},
+        {key:'refrig',title:'❄️ Refrigeración',avatars:AVATARS.filter(a=>a.cat==='refrig')},
+        {key:'ac',title:'🌀 Aire Acondicionado',avatars:AVATARS.filter(a=>a.cat==='ac')},
+        {key:'level',title:'📈 Por Nivel',avatars:AVATARS.filter(a=>a.cat==='level')},
+        {key:'achieve',title:'🏆 Logros',avatars:AVATARS.filter(a=>a.cat==='achieve')}
+    ];
+    
+    let html='';
+    sections.forEach(sec=>{
+        const unlockedCount=sec.avatars.filter(a=>isAvatarUnlocked(a)).length;
+        html+='<div class="avatar-section">';
+        html+='<div class="avatar-section-title">'+sec.title+' <span style="color:var(--electric);font-size:10px">('+unlockedCount+'/'+sec.avatars.length+')</span></div>';
+        html+='<div class="avatar-grid">';
+        sec.avatars.forEach(av=>{
+            const unlocked=isAvatarUnlocked(av);
+            const selected=profile.avatar===av.id;
+            const cls='avatar-option'+(selected?' selected':'')+(unlocked?'':' locked');
+            if(unlocked){
+                html+='<div class="'+cls+'" onclick="selectAvatar(\''+av.id+'\')">';
+                html+='<div class="av-icon">'+av.icon+'</div>';
+                html+='<div class="av-name">'+av.name+'</div>';
+                html+='</div>';
+            }else{
+                html+='<div class="'+cls+'" onclick="showAvatarLockMsg(\''+av.desc.replace(/'/g,"\\'")+'\')" title="'+av.desc+'">';
+                html+='<div class="av-icon">🔒</div>';
+                html+='<div class="av-name">'+av.name+'</div>';
+                html+='<div class="av-lock">'+av.desc+'</div>';
+                html+='</div>';
+            }
+        });
+        html+='</div></div>';
     });
+    
+    grid.innerHTML=html;
+}
+
+function showAvatarLockMsg(desc){
+    const bubble=document.getElementById('studyBubble')||document.getElementById('hubBubble');
+    // Simple alert for now
+    const msg=D.lang==='es'?'🔒 Para desbloquear este avatar necesitas: '+desc:'🔒 To unlock this avatar you need: '+desc;
+    alert(msg);
+}
+
+function selectAvatar(avatarId){
+    const av=AVATARS.find(a=>a.id===avatarId);
+    if(!av||!isAvatarUnlocked(av))return;
+    profile.avatar=avatarId;
+    saveProfile();
+    const icon=av.icon;
+    document.getElementById('profAvatar').innerHTML=icon+'<div class="prof-avatar-edit">✏️</div>';
+    document.getElementById('profileBtn').textContent=icon;
+    document.getElementById('avatarPicker').classList.remove('open');
+    renderAvatarGrid();
+}
+
+function getAvatarIcon(avatarId){
+    const av=AVATARS.find(a=>a.id===avatarId);
+    return av?av.icon:'👤';
 }
 
 function getTitle(lvl){
@@ -1976,15 +2435,23 @@ function loadProfile(){
         if(saved){
             const p=JSON.parse(saved);
             Object.assign(profile,p);
+            // Migrate old emoji avatars to new ID system
+            if(profile.avatar&&!AVATARS.find(a=>a.id===profile.avatar)){
+                // Old system used emojis, map to closest new ID
+                const emojiMap={'👤':'novato','🧑‍🔧':'aprendiz','👷':'casco','🔧':'tools','⚡':'voltimetro','🔥':'racha5','❄️':'txv','🧊':'manifold','🌟':'quinientos','💎':'leyenda','🏆':'triple','👑':'corona','⚙️':'desarmador','🌀':'anemometer','💪':'drill'};
+                profile.avatar=emojiMap[profile.avatar]||'novato';
+                saveProfile();
+            }
             document.getElementById('profileBtn').classList.add('active');
-            document.getElementById('profileBtn').textContent=profile.avatar||'👤';
+            document.getElementById('profileBtn').textContent=getAvatarIcon(profile.avatar);
         }
     }catch(e){}
 }
 
 function renderProfile(){
-    document.getElementById('profAvatar').innerHTML=profile.avatar+'<div class="prof-avatar-edit">✏️</div>';
-    document.getElementById('profileBtn').textContent=profile.avatar;
+    const icon=getAvatarIcon(profile.avatar);
+    document.getElementById('profAvatar').innerHTML=icon+'<div class="prof-avatar-edit">✏️</div>';
+    document.getElementById('profileBtn').textContent=icon;
     document.getElementById('profName').textContent=D.name||'Técnico';
     document.getElementById('profTitle').textContent=getTitle(profile.level);
     document.getElementById('profLevel').textContent=profile.level;
