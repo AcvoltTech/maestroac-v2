@@ -1155,7 +1155,8 @@ const VIDEOS={
     bienvenida_en:'bienvenida_en.mp4.mp4',
     correcto:'correcto.mp4.mp4',
     incorrecto:'incorrecto.mp4.mp4',
-    medalla:'medalla.mp4.mp4'
+    medalla:'medalla.mp4.mp4',
+    medalla_en:'medalla_en.mp4.mp4'
 };
 
 // ========== VIDEO FUNCTIONS ==========
@@ -1255,9 +1256,7 @@ function closeVideo(){
 
 function startWithVideo(){
     startMusic();
-    showVideo('bienvenida',()=>{
-        go('s1');
-    });
+    go('s1');
 }
 
 // ========== AI CHAT FUNCTIONS ==========
@@ -1670,7 +1669,7 @@ const u=()=>{document.querySelectorAll('[data-t]').forEach(e=>e.textContent=t(e.
 const go=id=>{document.querySelectorAll('.s').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on');window.scrollTo(0,0);};
 const rx=(id,c)=>{const e=document.getElementById(id);if(e){e.classList.add(c);setTimeout(()=>e.classList.remove(c),1500);}};
 
-function setLang(l){D.lang=l;unlockAudio();u();updateLanguageUI();go('s2');document.getElementById('nm').placeholder=t('name_ph');speakText(t('welcome_speech'));}
+function setLang(l){D.lang=l;unlockAudio();u();updateLanguageUI();showVideo('bienvenida',()=>{go('s2');document.getElementById('nm').placeholder=t('name_ph');speakText(t('welcome_speech'));});}
 function sName(){D.name=document.getElementById('nm').value.trim();u();bLvl();go('s3');rx('a3','nod');speakText(t('level_speech'));document.getElementById('profileBtn').classList.add('active');}
 function pLvl(e,v){document.querySelectorAll('#lo .oc').forEach(o=>o.classList.remove('sel'));e.classList.add('sel');D.level=v;document.getElementById('b3').disabled=false;rx('a3','nod');}
 function sLvl(){u();bSpc();go('s4');speakText(t('spec_speech'));}
