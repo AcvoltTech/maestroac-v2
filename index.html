@@ -129,10 +129,10 @@
         @keyframes tblink{0%,80%,100%{opacity:.3;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
         
         /* MUSIC BUTTON */
-        .music-btn{position:fixed;bottom:20px;left:20px;z-index:800;width:48px;height:48px;border-radius:50%;background:var(--card);border:2px solid rgba(0,212,255,0.3);color:var(--electric);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.3s;box-shadow:0 4px 15px rgba(0,0,0,0.3)}
+        .music-btn{position:fixed;top:20px;right:76px;z-index:800;width:44px;height:44px;border-radius:50%;background:var(--card);border:2px solid rgba(0,212,255,0.3);color:var(--electric);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.3s;box-shadow:0 4px 15px rgba(0,0,0,0.3)}
         .music-btn:hover{background:var(--card2);border-color:var(--electric);transform:scale(1.1)}
         .music-btn.muted{color:var(--muted);border-color:rgba(255,255,255,0.1)}
-        .music-settings{position:fixed;bottom:24px;left:76px;z-index:800;width:36px;height:36px;border-radius:50%;background:var(--card);border:2px solid rgba(0,212,255,0.15);color:var(--electric);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.3s;box-shadow:0 4px 12px rgba(0,0,0,0.3)}
+        .music-settings{position:fixed;top:20px;right:128px;z-index:800;width:44px;height:44px;border-radius:50%;background:var(--card);border:2px solid rgba(0,212,255,0.15);color:var(--electric);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.3s;box-shadow:0 4px 12px rgba(0,0,0,0.3)}
         .music-settings:hover{transform:scale(1.15);border-color:var(--electric)}
         
         /* QUIZ STYLES */
@@ -224,7 +224,7 @@
         .avatar-option.selected{border-color:var(--gold);background:rgba(255,215,0,0.1)}
         
         /* MUSIC PICKER */
-        .music-panel{position:fixed;bottom:70px;left:12px;z-index:810;background:var(--card);border:2px solid rgba(0,212,255,0.2);border-radius:16px;padding:16px;width:280px;display:none;box-shadow:0 8px 32px rgba(0,0,0,0.5)}
+        .music-panel{position:fixed;top:72px;right:12px;z-index:810;background:var(--card);border:2px solid rgba(0,212,255,0.2);border-radius:16px;padding:16px;width:290px;display:none;box-shadow:0 8px 32px rgba(0,0,0,0.5);max-height:80vh;overflow-y:auto}
         .music-panel.open{display:block;animation:fadeIn 0.3s ease}
         @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
         .music-panel-title{font-family:'Fredoka',sans-serif;font-size:14px;font-weight:700;color:var(--electric);margin-bottom:12px;text-align:center}
@@ -475,6 +475,11 @@ const MUSIC_STYLES=[
     {id:'lofi',icon:'🎧',name:'Lo-Fi Chill',desc:'Relajado para estudiar'},
     {id:'battle',icon:'⚔️',name:'Boss Battle',desc:'Épico e intenso'},
     {id:'reggaeton',icon:'🎺',name:'Reggaetón Study',desc:'Ritmo latino'},
+    {id:'jazz',icon:'🎷',name:'Jazz Smooth',desc:'Suave y elegante'},
+    {id:'tropical',icon:'🌴',name:'Tropical Vibes',desc:'Cumbia y playa'},
+    {id:'rock8bit',icon:'🎸',name:'Rock 8-Bit',desc:'Rock clásico pixelado'},
+    {id:'ambient',icon:'🌙',name:'Ambient Night',desc:'Calmado nocturno'},
+    {id:'mariachi',icon:'🇲🇽',name:'Mariachi Digital',desc:'Orgullo mexicano'},
     {id:'silent',icon:'🔇',name:'Sin Música',desc:'Solo silencio'}
 ];
 
@@ -550,6 +555,68 @@ function playMusicLoop(){
             else playNote('square',noteFreq('C',1),now+i*beat,beat*0.08,0.06);
         }
         musicTimers.push(setTimeout(()=>playMusicLoop(),melody.length*beat*1000-100));
+    }
+    else if(style==='jazz'){
+        // Smooth jazz - walking bass, cool chords
+        const melody=[['G',4],['A',4],['B',4],['D',5],['E',5],['D',5],['B',4],['A',4],['G',4],['F',4],['E',4],['D',4],['E',4],['G',4],['A',4],['B',4]];
+        const bass=[['G',2],['B',2],['D',3],['G',2],['C',3],['E',3],['G',3],['C',3],['A',2],['C',3],['E',3],['A',2],['D',3],['F',3],['A',3],['D',3]];
+        const pad=[['B',3],['D',4],['G',3],['B',3],['E',4],['G',4],['C',4],['E',4],['C',4],['E',4],['A',3],['C',4],['F',3],['A',3],['D',4],['F',3]];
+        for(let i=0;i<melody.length;i++){playNote('sine',noteFreq(melody[i][0],melody[i][1]),now+i*beat,beat*0.75,0.08);}
+        for(let i=0;i<bass.length;i++){playNote('triangle',noteFreq(bass[i][0],bass[i][1]),now+i*beat,beat*0.85,0.1);}
+        for(let i=0;i<pad.length;i++){playNote('sine',noteFreq(pad[i][0],pad[i][1]),now+i*beat,beat*1.5,0.03);}
+        musicTimers.push(setTimeout(()=>playMusicLoop(),melody.length*beat*1000-100));
+    }
+    else if(style==='tropical'){
+        // Tropical cumbia - bright, rhythmic
+        const melody=[['C',5],['E',5],['G',5],['E',5],['C',5],['D',5],['F',5],['A',5],['G',5],['F',5],['E',5],['D',5],['C',5],['E',5],['G',5],['C',6]];
+        const bass=[['C',3],['C',3],['G',2],['G',2],['F',2],['F',2],['G',2],['G',2],['C',3],['C',3],['A',2],['A',2],['F',2],['F',2],['G',2],['G',2]];
+        for(let i=0;i<melody.length;i++){playNote('triangle',noteFreq(melody[i][0],melody[i][1]),now+i*half,half*0.7,0.09);}
+        for(let i=0;i<bass.length;i++){playNote('sine',noteFreq(bass[i][0],bass[i][1]),now+i*half,half*0.85,0.12);}
+        // Guiro/shaker pattern
+        for(let i=0;i<16;i++){
+            if(i%2===0)playNote('square',noteFreq('C',7),now+i*half,half*0.05,0.04);
+            if(i%4===0)playNote('sine',noteFreq('G',2),now+i*half,half*0.15,0.15);
+        }
+        musicTimers.push(setTimeout(()=>playMusicLoop(),melody.length*half*1000-100));
+    }
+    else if(style==='rock8bit'){
+        // 8-bit rock - power chords, driving rhythm
+        const melody=[['E',5],['E',5],['G',5],['A',5],['B',5],['A',5],['G',5],['E',5],['D',5],['D',5],['E',5],['G',5],['A',5],['B',5],['A',5],['G',5],['E',5],['E',5],['G',5],['A',5],['C',6],['B',5],['A',5],['G',5],['E',5],['D',5],['E',5],['G',5],['A',5],['G',5],['E',5],['E',5]];
+        const bass=[['E',2],['E',2],['E',2],['E',2],['G',2],['G',2],['G',2],['G',2],['A',2],['A',2],['A',2],['A',2],['B',2],['B',2],['B',2],['B',2],['E',2],['E',2],['E',2],['E',2],['C',3],['C',3],['C',3],['C',3],['A',2],['A',2],['A',2],['A',2],['B',2],['B',2],['B',2],['B',2]];
+        for(let i=0;i<melody.length;i++){playNote('square',noteFreq(melody[i][0],melody[i][1]),now+i*half,half*0.8,0.07);}
+        for(let i=0;i<bass.length;i++){playNote('sawtooth',noteFreq(bass[i][0],bass[i][1]),now+i*half,half*0.9,0.09);}
+        // Power drum beat
+        for(let i=0;i<32;i++){
+            if(i%4===0)playNote('square',noteFreq('C',1),now+i*half,half*0.12,0.16);
+            if(i%4===2)playNote('square',noteFreq('G',6),now+i*half,half*0.06,0.05);
+            if(i%2===1)playNote('square',noteFreq('D',7),now+i*half,half*0.04,0.03);
+        }
+        musicTimers.push(setTimeout(()=>playMusicLoop(),melody.length*half*1000-100));
+    }
+    else if(style==='ambient'){
+        // Ambient night - slow pads, ethereal
+        const pad1=[['C',4],['E',4],['G',4],['E',4],['A',3],['C',4],['E',4],['C',4]];
+        const pad2=[['G',3],['B',3],['D',4],['B',3],['F',3],['A',3],['C',4],['A',3]];
+        const bell=[['G',5],['E',5],['C',5],['G',5],['A',5],['F',5],['D',5],['A',5]];
+        const longBeat=beat*2;
+        for(let i=0;i<pad1.length;i++){playNote('sine',noteFreq(pad1[i][0],pad1[i][1]),now+i*longBeat,longBeat*1.2,0.07);}
+        for(let i=0;i<pad2.length;i++){playNote('sine',noteFreq(pad2[i][0],pad2[i][1]),now+i*longBeat,longBeat*1.2,0.05);}
+        for(let i=0;i<bell.length;i++){playNote('sine',noteFreq(bell[i][0],bell[i][1]),now+i*longBeat,longBeat*0.4,0.04);}
+        // Deep bass drone
+        playNote('sine',noteFreq('C',2),now,pad1.length*longBeat,0.06);
+        musicTimers.push(setTimeout(()=>playMusicLoop(),pad1.length*longBeat*1000-100));
+    }
+    else if(style==='mariachi'){
+        // Mariachi digital - trumpets and strumming
+        const trumpet=[['G',5],['A',5],['B',5],['D',6],['B',5],['A',5],['G',5],['G',5],['A',5],['B',5],['G',5],['E',5],['D',5],['E',5],['G',5],['A',5],['B',5],['D',6],['E',6],['D',6],['B',5],['A',5],['G',5],['A',5],['B',5],['A',5],['G',5],['E',5],['D',5],['G',5],['G',5],['G',5]];
+        const bass=[['G',2],['G',2],['D',3],['D',3],['G',2],['G',2],['D',3],['D',3],['E',2],['E',2],['B',2],['B',2],['C',3],['C',3],['D',3],['D',3],['G',2],['G',2],['D',3],['D',3],['E',2],['E',2],['B',2],['B',2],['C',3],['C',3],['D',3],['D',3],['G',2],['G',2],['G',2],['G',2]];
+        for(let i=0;i<trumpet.length;i++){playNote('sawtooth',noteFreq(trumpet[i][0],trumpet[i][1]),now+i*half,half*0.75,0.06);}
+        for(let i=0;i<bass.length;i++){playNote('triangle',noteFreq(bass[i][0],bass[i][1]),now+i*half,half*0.85,0.1);}
+        // Guitarrón rhythm
+        for(let i=0;i<32;i++){
+            if(i%4===0||i%4===3)playNote('triangle',noteFreq('G',3),now+i*half,half*0.3,0.08);
+        }
+        musicTimers.push(setTimeout(()=>playMusicLoop(),trumpet.length*half*1000-100));
     }
 }
 
