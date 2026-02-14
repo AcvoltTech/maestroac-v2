@@ -493,6 +493,19 @@
     <div class="bb" id="hubBubble">¿Qué quieres hacer hoy?</div>
     
     <div class="zone-cards">
+        <!-- I'M NEW TO HVAC ZONE (FIRST - for beginners) -->
+        <div class="zone-card newbie-zone" onclick="goNewbieZone()">
+            <div class="zone-icon">🆕</div>
+            <div class="zone-info">
+                <div class="zone-name" style="color:#3498db" id="hubNewbieName">Soy Nuevo en HVAC</div>
+                <div class="zone-desc" id="hubNewbieDesc">Introducción a HVACR: la industria, herramientas, terminología, salarios y cómo empezar tu carrera</div>
+                <div class="zone-stat">
+                    <span class="zone-stat-item" id="hubNewbieStat">🎓 8 temas + 50 preguntas</span>
+                </div>
+            </div>
+            <div class="zone-badge" style="background:rgba(52,152,219,0.15);color:#3498db" id="hubNewbieBadge">Nivel 1</div>
+        </div>
+        
         <!-- QUIZ ZONE -->
         <div class="zone-card quiz-zone" onclick="goQuizZone()">
             <div class="zone-icon">📝</div>
@@ -533,19 +546,6 @@
             <div class="zone-badge" style="background:rgba(46,204,113,0.15);color:#2ecc71">📖 Estudia</div>
         </div>
         
-        <!-- I'M NEW TO HVAC ZONE -->
-        <div class="zone-card newbie-zone" onclick="goNewbieZone()">
-            <div class="zone-icon">🆕</div>
-            <div class="zone-info">
-                <div class="zone-name" style="color:#3498db" id="hubNewbieName">Soy Nuevo en HVAC</div>
-                <div class="zone-desc" id="hubNewbieDesc">Aprende lo básico: qué es HVAC, herramientas, terminología y cómo empezar tu carrera</div>
-                <div class="zone-stat">
-                    <span class="zone-stat-item">🎓 Guía para principiantes</span>
-                </div>
-            </div>
-            <div class="zone-badge" style="background:rgba(52,152,219,0.15);color:#3498db" id="hubNewbieBadge">Empieza</div>
-        </div>
-        
         <!-- VIDEO ZONE -->
         <div class="zone-card video-zone" onclick="goVideoZone()">
             <div class="zone-icon">🎥</div>
@@ -569,7 +569,11 @@
     <div class="lo"><div class="lo-t" id="newbieTitle">🆕 SOY NUEVO EN HVAC</div></div>
     <div class="aw sm" onclick="openAIChat()"><div class="ag" style="background:radial-gradient(circle,#3498db 0%,transparent 70%)"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div><span class="ai-badge">AI</span></div>
     <div class="bb" id="newbieBubble">¡Bienvenido al mundo HVAC! Aquí te explico todo lo que necesitas saber para empezar.</div>
-    <div id="newbieContent" style="width:100%;display:flex;flex-direction:column;gap:14px;margin-top:16px"></div>
+    
+    <!-- QUIZ BUTTON -->
+    <button class="bt" onclick="startIntroQuiz()" style="background:linear-gradient(135deg,#3498db,#2980b9);margin-bottom:16px;font-size:16px;padding:16px" id="newbieQuizBtn">📝 Tomar Quiz Intro HVACR (50 preguntas)</button>
+    
+    <div id="newbieContent" style="width:100%;display:flex;flex-direction:column;gap:14px;margin-top:8px"></div>
     <button class="bt" onclick="go('s-hub');updateHub()" style="background:var(--card);border:2px solid #3498db;margin-top:16px" data-lang="volver-hub">← Volver al Hub</button>
 </div>
 
@@ -802,6 +806,7 @@
 <button class="profile-btn" id="profileBtn" onclick="go('s10');renderProfile()">👤</button>
 
 <script src="quiz-refrigeracion-200.js"></script>
+<script src="quiz-intro.js"></script>
 <script>
 const D={lang:'es',name:'',level:null,specs:[],school:null,goals:[]};
 let videoPlaying=false;
@@ -1697,6 +1702,7 @@ function tq(q,field){
 }
 
 const QUIZ_LIST=[
+    {id:'intro',icon:'🆕',title:'Intro HVACR',title_en:'Intro to HVACR',desc:'50 preguntas: La industria, carrera, salarios, herramientas, seguridad, certificaciones y terminología',desc_en:'50 questions: The industry, career, salary, tools, safety, certifications and terminology',count:50,data:'QUIZ_INTRO',color:'#3498db'},
     {id:'principiante',icon:'📚',title:'Principiante HVAC',title_en:'HVAC Beginner',desc:'50 preguntas de electricidad básica, refrigeración, AC, herramientas y seguridad',desc_en:'50 questions on basic electrical, refrigeration, AC, tools and safety',count:50,data:'QUIZ_PRINCIPIANTE',color:'#00d4ff'},
     {id:'electricidad',icon:'⚡',title:'Electricidad Avanzada',title_en:'Advanced Electrical',desc:'117 preguntas: Ley de Ohm, NEC, motores, VFD, GFCI, AFCI, circuitos, contactores',desc_en:'117 questions: Ohm\'s Law, NEC, motors, VFD, GFCI, AFCI, circuits, contactors',count:117,data:'QUIZ_ELECTRICIDAD',color:'#ffd700'},
     {id:'refrigeracion',icon:'❄️',title:'Refrigeración Completa',title_en:'Complete Refrigeration',desc:'200 preguntas: Doméstica, Comercial, Walk-in, EPA 608, Troubleshooting, Refrigerantes, Seguridad',desc_en:'200 questions: Domestic, Commercial, Walk-in, EPA 608, Troubleshooting, Refrigerants, Safety',count:200,data:'QUIZ_REFRIGERACION',color:'#00e5ff'}
@@ -1974,7 +1980,8 @@ function shuffleArray(arr){
 function startQuiz(id){
     const qId=id||currentQuizId||'principiante';
     currentQuizId=qId;
-    if(qId==='electricidad')quizData=shuffleArray(QUIZ_ELECTRICIDAD);
+    if(qId==='intro')quizData=shuffleArray(QUIZ_INTRO);
+    else if(qId==='electricidad')quizData=shuffleArray(QUIZ_ELECTRICIDAD);
     else if(qId==='refrigeracion')quizData=shuffleArray(QUIZ_REFRIGERACION);
     else quizData=shuffleArray(QUIZ_PRINCIPIANTE);
     quizIdx=0;quizRight=0;quizWrong=0;quizStreak=0;
@@ -3015,8 +3022,9 @@ function updateLanguageUI(){
     
     // === NEWBIE ZONE ===
     tx('hubNewbieName',es?'Soy Nuevo en HVAC':'I\'m New to HVAC','I\'m New to HVAC');
-    tx('hubNewbieDesc',es?'Aprende lo básico: qué es HVAC, herramientas, terminología y cómo empezar tu carrera':'Learn the basics: what is HVAC, tools, terminology, and how to start your career','Learn the basics: what is HVAC, tools, terminology, and how to start your career');
-    tx('hubNewbieBadge',es?'Empieza':'Start','Start');
+    tx('hubNewbieDesc',es?'Introducción a HVACR: la industria, herramientas, terminología, salarios y cómo empezar tu carrera':'Intro to HVACR: the industry, tools, terminology, salary, and how to start your career','Intro to HVACR: the industry, tools, terminology, salary, and how to start your career');
+    tx('hubNewbieBadge',es?'Nivel 1':'Level 1','Level 1');
+    tx('hubNewbieStat',es?'🎓 8 temas + 50 preguntas':'🎓 8 topics + 50 questions','🎓 8 topics + 50 questions');
     
     // === PROFILE PAGE ===
     tx('profLevelLabel',es?'NIVEL':'LEVEL','LEVEL');
@@ -3098,10 +3106,15 @@ function goNewbieZone(){
     speakText(D.lang==='en'?'Welcome! Let me show you the basics of HVAC. This is where your journey begins!':'¡Bienvenido! Déjame enseñarte lo básico de HVAC. ¡Aquí empieza tu camino!');
 }
 
+function startIntroQuiz(){
+    selectQuiz('intro');
+}
+
 function renderNewbieZone(){
     const en=D.lang==='en';
     document.getElementById('newbieTitle').textContent=en?'🆕 I\'M NEW TO HVAC':'🆕 SOY NUEVO EN HVAC';
     document.getElementById('newbieBubble').textContent=en?'Welcome to the HVAC world! Here\'s everything you need to know to get started.':'¡Bienvenido al mundo HVAC! Aquí te explico todo lo que necesitas saber para empezar.';
+    document.getElementById('newbieQuizBtn').textContent=en?'📝 Take Intro HVACR Quiz (50 questions)':'📝 Tomar Quiz Intro HVACR (50 preguntas)';
     const topics=en?[
         {icon:'❄️',title:'What is HVAC?',text:'HVAC stands for <b>Heating, Ventilation, and Air Conditioning</b>. It\'s the system that keeps buildings comfortable — warm in winter, cool in summer, and with clean air year-round. As an HVAC technician, you\'ll install, maintain, and repair these systems.'},
         {icon:'🔧',title:'Basic Tools You Need',text:'Every tech needs: <b>Multimeter</b> (measures voltage, amps, ohms), <b>Manifold gauges</b> (measures refrigerant pressure), <b>Thermometer</b>, <b>Screwdrivers & wrenches</b>, <b>Vacuum pump</b> (removes moisture from systems), and <b>Refrigerant scale</b>.'},
@@ -3385,6 +3398,7 @@ function goStudyLibrary(){
 
 function getAllQuizQuestions(){
     const all=[];
+    if(typeof QUIZ_INTRO!=='undefined')all.push(...QUIZ_INTRO.map(q=>({...q,_source:'intro'})));
     if(typeof QUIZ_PRINCIPIANTE!=='undefined')all.push(...QUIZ_PRINCIPIANTE.map(q=>({...q,_source:'principiante'})));
     if(typeof QUIZ_ELECTRICIDAD!=='undefined')all.push(...QUIZ_ELECTRICIDAD.map(q=>({...q,_source:'electricidad'})));
     if(typeof QUIZ_REFRIGERACION!=='undefined')all.push(...QUIZ_REFRIGERACION.map(q=>({...q,_source:'refrigeracion'})));
