@@ -127,6 +127,12 @@
         .typing .dot{width:8px;height:8px;border-radius:50%;background:var(--electric);animation:tblink 1.4s infinite both}
         .typing .dot:nth-child(2){animation-delay:.2s}.typing .dot:nth-child(3){animation-delay:.4s}
         @keyframes tblink{0%,80%,100%{opacity:.3;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+        
+        /* MUSIC BUTTON */
+        .music-btn{position:fixed;bottom:20px;left:20px;z-index:800;width:48px;height:48px;border-radius:50%;background:var(--card);border:2px solid rgba(0,212,255,0.3);color:var(--electric);font-size:22px;cursor:pointer;display:none;align-items:center;justify-content:center;transition:all 0.3s;box-shadow:0 4px 15px rgba(0,0,0,0.3)}
+        .music-btn:hover{background:var(--card2);border-color:var(--electric);transform:scale(1.1)}
+        .music-btn.active{display:flex}
+        .music-btn.muted{color:var(--muted);border-color:rgba(255,255,255,0.1)}
     </style>
 </head>
 <body>
@@ -247,6 +253,7 @@
 </div>
 </div>
 <div class="cw" id="conf"></div>
+<button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵</button>
 
 <script>
 const D={lang:'es',name:'',level:null,specs:[],school:null,goals:[]};
@@ -262,6 +269,169 @@ function unlockAudio(){
     audio.play().then(()=>{audio.pause();audioUnlocked=true;}).catch(()=>{});
 }
 
+// ========== CHIPTUNE MUSIC ENGINE ==========
+let musicCtx=null;
+let musicPlaying=false;
+let musicMuted=false;
+let musicGain=null;
+let musicTimers=[];
+let musicVolume=0.5;
+let musicMode='onboarding';
+
+function noteFreq(note,octave){
+    const notes={C:261.63,D:293.66,E:329.63,F:349.23,G:392.00,A:440.00,B:493.88};
+    const base=notes[note]||261.63;
+    return base*Math.pow(2,octave-4);
+}
+
+function playNote(type,freq,start,dur,vol){
+    if(!musicCtx)return;
+    const osc=musicCtx.createOscillator();
+    const gain=musicCtx.createGain();
+    osc.type=type;
+    osc.frequency.setValueAtTime(freq,start);
+    gain.gain.setValueAtTime(vol,start);
+    gain.gain.setValueAtTime(vol,start+dur*0.8);
+    gain.gain.linearRampToValueAtTime(0,start+dur);
+    osc.connect(gain);
+    gain.connect(musicGain);
+    osc.start(start);
+    osc.stop(start+dur);
+}
+
+function playMusicLoop(){
+    if(!musicCtx||!musicPlaying)return;
+    const bpm=130;
+    const beat=60/bpm;
+    const half=beat/2;
+    const now=musicCtx.currentTime+0.05;
+    
+    // Melody (square wave) - Pokemon adventure style
+    const melody=[
+        ['E',5],['G',5],['A',5],['B',5],
+        ['A',5],['G',5],['E',5],['D',5],
+        ['C',5],['D',5],['E',5],['G',5],
+        ['A',5],['G',5],['E',5],['G',5],
+        ['A',5],['B',5],['C',6],['B',5],
+        ['A',5],['G',5],['A',5],['B',5],
+        ['G',5],['E',5],['D',5],['E',5],
+        ['C',5],['D',5],['E',5],['E',5]
+    ];
+    
+    // Bass (triangle wave)
+    const bass=[
+        ['C',3],['C',3],['G',3],['G',3],
+        ['A',3],['A',3],['E',3],['E',3],
+        ['F',3],['F',3],['C',3],['C',3],
+        ['G',3],['G',3],['G',3],['G',3],
+        ['A',3],['A',3],['F',3],['F',3],
+        ['C',3],['C',3],['G',3],['G',3],
+        ['F',3],['F',3],['G',3],['G',3],
+        ['C',3],['C',3],['C',3],['C',3]
+    ];
+    
+    // Arpeggio layer (square wave, quiet)
+    const arp=[
+        ['C',4],['E',4],['G',4],['E',4],
+        ['A',4],['C',5],['E',5],['C',5],
+        ['F',4],['A',4],['C',5],['A',4],
+        ['G',4],['B',4],['D',5],['B',4],
+        ['A',4],['C',5],['E',5],['C',5],
+        ['F',4],['A',4],['C',5],['A',4],
+        ['G',4],['B',4],['D',5],['B',4],
+        ['C',4],['E',4],['G',4],['E',4]
+    ];
+    
+    for(let i=0;i<melody.length;i++){
+        const t=now+i*half;
+        playNote('square',noteFreq(melody[i][0],melody[i][1]),t,half*0.85,0.08);
+    }
+    for(let i=0;i<bass.length;i++){
+        const t=now+i*half;
+        playNote('triangle',noteFreq(bass[i][0],bass[i][1]),t,half*0.9,0.12);
+    }
+    for(let i=0;i<arp.length;i++){
+        const t=now+i*half;
+        playNote('square',noteFreq(arp[i][0],arp[i][1]),t,half*0.4,0.03);
+    }
+    
+    const loopDur=melody.length*half;
+    const timer=setTimeout(()=>playMusicLoop(),loopDur*1000-100);
+    musicTimers.push(timer);
+}
+
+function startMusic(){
+    if(musicPlaying)return;
+    musicCtx=new(window.AudioContext||window.webkitAudioContext)();
+    musicGain=musicCtx.createGain();
+    musicGain.gain.setValueAtTime(0.5,musicCtx.currentTime);
+    musicGain.connect(musicCtx.destination);
+    musicPlaying=true;
+    musicMuted=false;
+    document.getElementById('musicBtn').classList.add('active');
+    document.getElementById('musicBtn').textContent='🎵';
+    playMusicLoop();
+}
+
+function stopMusic(){
+    musicPlaying=false;
+    musicTimers.forEach(t=>clearTimeout(t));
+    musicTimers=[];
+    if(musicCtx){musicCtx.close();musicCtx=null;}
+}
+
+function toggleMusic(){
+    const btn=document.getElementById('musicBtn');
+    if(musicMuted){
+        musicMuted=false;
+        musicVolume=musicMode==='studying'?0.25:0.5;
+        if(musicGain&&musicCtx)musicGain.gain.setValueAtTime(musicVolume,musicCtx.currentTime);
+        btn.textContent='🎵';
+        btn.classList.remove('muted');
+    }else if(musicVolume>=0.4){
+        musicVolume=musicMode==='studying'?0.15:0.25;
+        if(musicGain&&musicCtx)musicGain.gain.setValueAtTime(musicVolume,musicCtx.currentTime);
+        btn.textContent='🔉';
+    }else if(musicVolume>=0.15){
+        musicVolume=musicMode==='studying'?0.06:0.1;
+        if(musicGain&&musicCtx)musicGain.gain.setValueAtTime(musicVolume,musicCtx.currentTime);
+        btn.textContent='🔈';
+    }else{
+        musicMuted=true;
+        musicVolume=0;
+        if(musicGain&&musicCtx)musicGain.gain.setValueAtTime(0,musicCtx.currentTime);
+        btn.textContent='🔇';
+        btn.classList.add('muted');
+    }
+}
+
+function setMusicVolume(vol){
+    musicVolume=vol;
+    if(musicGain&&musicCtx&&!musicMuted)musicGain.gain.linearRampToValueAtTime(vol,musicCtx.currentTime+0.3);
+}
+
+function lowerMusicForSpeech(){
+    if(musicGain&&!musicMuted&&musicCtx)musicGain.gain.linearRampToValueAtTime(Math.min(musicVolume*0.2,0.05),musicCtx.currentTime+0.3);
+}
+
+function restoreMusicAfterSpeech(){
+    if(musicGain&&!musicMuted&&musicCtx)musicGain.gain.linearRampToValueAtTime(musicVolume,musicCtx.currentTime+0.3);
+}
+
+function lowerMusicForVideo(){
+    if(musicGain&&!musicMuted&&musicCtx)musicGain.gain.linearRampToValueAtTime(Math.min(musicVolume*0.3,0.08),musicCtx.currentTime+0.5);
+}
+
+function restoreMusicAfterVideo(){
+    if(musicGain&&!musicMuted&&musicCtx)musicGain.gain.linearRampToValueAtTime(musicVolume,musicCtx.currentTime+0.5);
+}
+
+function enterStudyMode(){
+    musicMode='studying';
+    setMusicVolume(0.25);
+    document.getElementById('musicBtn').textContent='🔉';
+}
+
 const SUPABASE_URL='https://htklsowiyjwsjnacnvnr.supabase.co/functions/v1';
 
 const VIDEOS={
@@ -275,6 +445,7 @@ const VIDEOS={
 function showVideo(type,cb){
     if(videoPlaying)return;
     videoPlaying=true;
+    lowerMusicForVideo();
     currentVideoCallback=cb;
     const vf=document.getElementById('videoFloat');
     const v=document.getElementById('marioVideo');
@@ -305,6 +476,7 @@ function closeVideo(){
     const v=document.getElementById('marioVideo');
     vf.classList.add('hiding');
     vf.classList.remove('active');
+    restoreMusicAfterVideo();
     setTimeout(()=>{
         v.pause();
         v.src='';
@@ -318,6 +490,7 @@ function closeVideo(){
 }
 
 function startWithVideo(){
+    startMusic();
     showVideo('bienvenida',()=>{
         go('s1');
     });
@@ -349,6 +522,7 @@ async function getAIResponse(msg){
 async function speakText(text){
     try{
         isSpeaking=true;
+        lowerMusicForSpeech();
         document.getElementById('speakingIndicator').classList.add('active');
         const r=await fetch(SUPABASE_URL+'/tutor-ia-voice',{
             method:'POST',
@@ -363,17 +537,20 @@ async function speakText(text){
         audio.onended=function(){
             isSpeaking=false;
             document.getElementById('speakingIndicator').classList.remove('active');
+            restoreMusicAfterSpeech();
             URL.revokeObjectURL(audioUrl);
         };
         audio.onerror=function(){
             isSpeaking=false;
             document.getElementById('speakingIndicator').classList.remove('active');
+            restoreMusicAfterSpeech();
         };
         await audio.play();
     }catch(e){
         console.error('Voice Error:',e);
         isSpeaking=false;
         document.getElementById('speakingIndicator').classList.remove('active');
+        restoreMusicAfterSpeech();
     }
 }
 
@@ -476,7 +653,7 @@ function bSch(){document.getElementById('sco').innerHTML=[{k:'acvolt',i:'🎓',t
 function bGol(){document.getElementById('go2').innerHTML=[{k:'certs',i:'📋',t:'gl_c',d:'gl_cd'},{k:'diag',i:'🔍',t:'gl_d',d:'gl_dd'},{k:'biz',i:'🏢',t:'gl_b',d:'gl_bd'},{k:'money',i:'💰',t:'gl_m',d:'gl_md'}].map(x=>'<div class="oc" onclick="tGol(this,\''+x.k+'\')"><div class="oi">'+x.i+'</div><div><div class="ot">'+t(x.t)+'</div><div class="od">'+t(x.d)+'</div></div><div class="ck"></div></div>').join('');}
 function bRt(){var r=[];if(D.specs.includes('all')||D.specs.includes('electrical'))r.push({i:'⚡',t:'r_elec',d:'r_elecd'});if(D.specs.includes('all')||D.specs.includes('ac'))r.push({i:'❄️',t:'r_ac',d:'r_acd'});if(D.specs.includes('all')||D.specs.includes('refrigeration'))r.push({i:'🧊',t:'r_ref',d:'r_refd'});if(D.specs.includes('all')||D.specs.includes('heating'))r.push({i:'🔥',t:'r_heat',d:'r_heatd'});if(D.goals.includes('certs'))r.push({i:'📋',t:'r_cert',d:'r_certd'});if(D.goals.includes('biz'))r.push({i:'🏢',t:'r_biz',d:'r_bizd'});document.getElementById('rl').innerHTML=r.map((x,i)=>'<div class="rt"><div class="rn">'+(i+1)+'</div><div><div class="rtt">'+x.i+' '+t(x.t)+'</div><div class="rd">'+t(x.d)+'</div></div></div>'+(i<r.length-1?'<div class="rl"></div>':'')).join('');}
 
-function startApp(){alert(D.lang==='es'?'¡'+D.name+', tu ruta está lista! Próximamente: Quiz y Medallas 🏅':D.name+', your path is ready! Coming: Quiz & Medals 🏅');console.log('Profile:',JSON.stringify(D,null,2));}
+function startApp(){enterStudyMode();alert(D.lang==='es'?'¡'+D.name+', tu ruta está lista! Próximamente: Quiz y Medallas 🏅':D.name+', your path is ready! Coming: Quiz & Medals 🏅');console.log('Profile:',JSON.stringify(D,null,2));}
 document.getElementById('nm').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.value.trim().length>=2)sName();});
 </script>
 </body>
