@@ -185,6 +185,31 @@
         .streak-badge{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:900;font-size:48px;font-family:'Fredoka',sans-serif;font-weight:700;color:white;text-shadow:0 0 30px rgba(255,107,43,0.8),0 0 60px rgba(255,107,43,0.4);animation:streakPulse 0.6s ease;pointer-events:none;white-space:nowrap}
         .lightning-flash{position:fixed;top:0;left:0;width:100%;height:100%;background:white;z-index:850;pointer-events:none;animation:lightning 0.4s ease}
         .fire-emoji{position:fixed;z-index:850;font-size:36px;pointer-events:none;animation:fireFloat 1.2s ease-out forwards}
+        
+        /* PROFILE SYSTEM */
+        .profile-btn{position:fixed;top:20px;right:20px;z-index:800;width:48px;height:48px;border-radius:50%;background:var(--card);border:2px solid rgba(255,215,0,0.4);color:var(--gold);font-size:22px;cursor:pointer;display:none;align-items:center;justify-content:center;transition:all 0.3s;box-shadow:0 4px 15px rgba(0,0,0,0.3)}
+        .profile-btn:hover{transform:scale(1.1);border-color:var(--gold)}
+        .profile-btn.active{display:flex}
+        .prof-card{background:var(--card);border:2px solid rgba(255,215,0,0.2);border-radius:16px;padding:20px;text-align:center;width:100%}
+        .prof-name{font-family:'Fredoka',sans-serif;font-size:24px;font-weight:700;margin-top:8px}
+        .prof-title{color:var(--electric);font-size:13px;text-transform:uppercase;letter-spacing:1.5px;margin-top:4px}
+        .prof-level{display:flex;align-items:center;justify-content:center;gap:12px;margin:16px 0}
+        .prof-lvl-num{font-family:'Fredoka',sans-serif;font-size:48px;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .prof-xp{width:100%;margin-top:8px}
+        .prof-xp-bar{width:100%;height:12px;background:rgba(255,255,255,0.08);border-radius:6px;overflow:hidden}
+        .prof-xp-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--accent));border-radius:6px;transition:width 0.5s}
+        .prof-xp-txt{font-size:12px;color:var(--muted);margin-top:4px}
+        .prof-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:16px}
+        .prof-stat{background:rgba(255,255,255,0.04);border-radius:12px;padding:12px 8px;text-align:center}
+        .prof-stat-num{font-family:'Fredoka',sans-serif;font-size:22px;font-weight:700;color:var(--electric)}
+        .prof-stat-label{font-size:11px;color:var(--muted);margin-top:2px}
+        .medals-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px;width:100%}
+        .medal-slot{background:var(--card);border:2px solid rgba(255,255,255,0.06);border-radius:14px;padding:16px 10px;text-align:center;transition:all 0.3s}
+        .medal-slot.earned{border-color:rgba(255,215,0,0.3);background:rgba(255,215,0,0.05)}
+        .medal-slot .medal-icon{font-size:36px;opacity:0.2}
+        .medal-slot.earned .medal-icon{opacity:1}
+        .medal-slot .medal-name{font-size:11px;margin-top:6px;color:var(--muted);font-weight:600}
+        .medal-slot.earned .medal-name{color:var(--gold)}
     </style>
 </head>
 <body>
@@ -332,13 +357,47 @@
         <div class="quiz-result-label" id="rLabel"></div>
         <div class="quiz-stars" id="rStars"><span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span></div>
         <div class="bb quiz-result-msg" id="rMsg"></div>
+        <div id="rMedalEarned" style="display:none;margin-top:16px;padding:16px;background:rgba(255,215,0,0.1);border:2px solid var(--gold);border-radius:14px;text-align:center">
+            <div style="font-size:48px" id="rNewMedal"></div>
+            <div style="font-family:'Fredoka',sans-serif;font-size:18px;font-weight:700;color:var(--gold);margin-top:8px" id="rMedalName"></div>
+        </div>
     </div>
     <button class="bt" onclick="retryQuiz()">🔄 Intentar de Nuevo</button>
+    <button class="bt" onclick="go('s10')" style="background:var(--card);border:2px solid var(--gold);margin-top:10px">👤 Ver Mi Perfil</button>
+    <button class="bt" onclick="go('s7')" style="background:var(--card);border:2px solid var(--accent);margin-top:10px">← Volver a Mi Ruta</button>
+</div>
+
+<!-- PROFILE -->
+<div class="s" id="s10">
+    <div class="prof-card">
+        <div style="font-size:64px">👤</div>
+        <div class="prof-name" id="profName"></div>
+        <div class="prof-title" id="profTitle"></div>
+        <div class="prof-level">
+            <div>
+                <div style="font-size:12px;color:var(--muted)">NIVEL</div>
+                <div class="prof-lvl-num" id="profLevel">1</div>
+            </div>
+        </div>
+        <div class="prof-xp">
+            <div class="prof-xp-bar"><div class="prof-xp-fill" id="profXpBar" style="width:0%"></div></div>
+            <div class="prof-xp-txt" id="profXpTxt">0 / 100 XP</div>
+        </div>
+    </div>
+    <div class="prof-stats">
+        <div class="prof-stat"><div class="prof-stat-num" id="profPts">0</div><div class="prof-stat-label">Puntos</div></div>
+        <div class="prof-stat"><div class="prof-stat-num" id="profAcc">0%</div><div class="prof-stat-label">Precisión</div></div>
+        <div class="prof-stat"><div class="prof-stat-num" id="profStrk">0</div><div class="prof-stat-label">Mejor Racha</div></div>
+    </div>
+    <div style="width:100%;margin-top:20px;font-family:'Fredoka',sans-serif;font-size:18px;font-weight:700;text-align:center">🏅 Medallas</div>
+    <div class="medals-grid" id="medalsGrid"></div>
+    <button class="bt" onclick="go('s8');showQuestion()" style="margin-top:20px">📝 Seguir con el Quiz</button>
     <button class="bt" onclick="go('s7')" style="background:var(--card);border:2px solid var(--accent);margin-top:10px">← Volver a Mi Ruta</button>
 </div>
 </div>
 <div class="cw" id="conf"></div>
 <button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵</button>
+<button class="profile-btn" id="profileBtn" onclick="go('s10');renderProfile()">👤</button>
 
 <script>
 const D={lang:'es',name:'',level:null,specs:[],school:null,goals:[]};
@@ -759,63 +818,64 @@ function startApp(){enterStudyMode();startQuiz();console.log('Profile:',JSON.str
 
 // ========== QUIZ SYSTEM ==========
 const QUIZ_PRINCIPIANTE=[
-// ELECTRICIDAD BÁSICA (13 preguntas)
-{cat:'⚡ Electricidad Básica',q:'¿Qué mide el voltaje?',o:['Resistencia del cable','Diferencia de potencial eléctrico','Cantidad de electrones','Temperatura del circuito'],c:1,e:'El voltaje mide la diferencia de potencial, o sea la presión que empuja los electrones a través del circuito.'},
-{cat:'⚡ Electricidad Básica',q:'Según la Ley de Ohm, ¿cuál es la fórmula correcta?',o:['V = I × R','V = I ÷ R','V = R ÷ I','V = I + R'],c:0,e:'Voltaje = Corriente × Resistencia. Si sabes dos valores, puedes calcular el tercero.'},
-{cat:'⚡ Electricidad Básica',q:'¿Qué instrumento usas para medir voltaje?',o:['Amperímetro','Megóhmetro','Multímetro','Termómetro'],c:2,e:'El multímetro es la herramienta más versátil del técnico. Mide voltaje, corriente y resistencia.'},
-{cat:'⚡ Electricidad Básica',q:'¿Qué es un circuito en serie?',o:['Componentes conectados en un solo camino','Componentes en caminos separados','Un circuito sin resistencia','Un circuito sin voltaje'],c:0,e:'En serie, la corriente tiene un solo camino. Si un componente falla, todo el circuito se abre.'},
-{cat:'⚡ Electricidad Básica',q:'¿Qué pasa si un fusible se quema?',o:['Nada','Se abre el circuito y corta la corriente','Aumenta el voltaje','El motor gira más rápido'],c:1,e:'El fusible protege el circuito. Cuando se quema, abre el circuito para prevenir daños.'},
-{cat:'⚡ Electricidad Básica',q:'¿Cuántos voltios tiene un tomacorriente residencial estándar en USA?',o:['110V','240V','12V','440V'],c:0,e:'El estándar residencial en USA es 120V (comúnmente dicho 110V). Para estufas y secadoras se usa 240V.'},
-{cat:'⚡ Electricidad Básica',q:'¿Qué color de cable es el ground (tierra)?',o:['Rojo','Negro','Verde o verde con franja amarilla','Blanco'],c:2,e:'El verde o verde/amarillo es siempre tierra. Nunca lo uses para otra cosa.'},
-{cat:'⚡ Electricidad Básica',q:'¿Qué es un amperio?',o:['Unidad de resistencia','Unidad de voltaje','Unidad de corriente eléctrica','Unidad de potencia'],c:2,e:'El amperio mide la cantidad de corriente que fluye por un circuito. Como el Maestro Mario dice: si no mides, estás adivinando.'},
-{cat:'⚡ Electricidad Básica',q:'¿Para qué sirve un capacitor en un motor?',o:['Enfriar el motor','Ayudar a arrancar o mantener el motor girando','Medir la temperatura','Aumentar el voltaje'],c:1,e:'El capacitor almacena energía y la libera para arrancar (start) o mantener (run) el motor.'},
-{cat:'⚡ Electricidad Básica',q:'¿Qué es un cortocircuito?',o:['Un circuito muy corto','Corriente tomando un camino no deseado de baja resistencia','Un circuito sin voltaje','Una conexión perfecta'],c:1,e:'Un cortocircuito es cuando la corriente toma un camino no deseado, causando exceso de corriente y calor.'},
-{cat:'⚡ Electricidad Básica',q:'¿Qué tipo de corriente sale del tomacorriente de tu casa?',o:['DC (corriente directa)','AC (corriente alterna)','Pulsante','Estática'],c:1,e:'La corriente alterna (AC) cambia de dirección 60 veces por segundo (60Hz) en USA.'},
-{cat:'⚡ Electricidad Básica',q:'¿Cuántos watts son 10 amperios a 120 voltios?',o:['130 watts','1200 watts','12 watts','120 watts'],c:1,e:'Watts = Voltios × Amperios. Entonces 120V × 10A = 1200W.'},
-{cat:'⚡ Electricidad Básica',q:'¿Qué hace un contactor?',o:['Mide voltaje','Es un interruptor controlado eléctricamente','Enfría el compresor','Almacena refrigerante'],c:1,e:'El contactor es como un interruptor grande que se activa con una señal del termostato para encender el equipo.'},
+// ELECTRICIDAD BÁSICA (13)
+{cat:'⚡ Electricidad Básica',q:'El voltaje en un circuito se puede comparar mejor con:',o:['La cantidad de agua en un tanque','La presión que empuja el agua por la tubería','El diámetro de la tubería','La velocidad del agua al salir'],c:1,e:'El voltaje es la diferencia de potencial que empuja los electrones, similar a la presión del agua.',a:'Imagina una manguera de jardín: el voltaje es como la presión del agua. Sin presión no sale nada. Los voltios son esa fuerza que empuja la electricidad por los cables.'},
+{cat:'⚡ Electricidad Básica',q:'Si un circuito tiene 240V y 20A de corriente, ¿cuál es la resistencia según Ohm?',o:['4,800 ohms','260 ohms','12 ohms','220 ohms'],c:2,e:'V = I × R, entonces R = V/I = 240/20 = 12 ohms.',a:'Es como dividir galletas entre niños. 240 galletas (voltios) entre 20 niños (amperios) = 12 galletas cada uno (ohms). R = V ÷ I.'},
+{cat:'⚡ Electricidad Básica',q:'Estás midiendo voltaje en un tomacorriente y el multímetro marca 0V. ¿Cuál es la causa MÁS probable?',o:['El tomacorriente está dañado','El breaker está apagado o disparado','El multímetro está en la escala de amperios','Las tres podrían causar la lectura de 0V'],c:3,e:'Las tres situaciones pueden dar lectura de 0V. Un buen técnico verifica cada posibilidad.',a:'Es como cuando no sale agua de la llave: puede ser que cerraron la válvula, que no hay agua en la calle, o que la llave está rota. No asumas, verifica cada cosa.'},
+{cat:'⚡ Electricidad Básica',q:'En un circuito en paralelo, si se quema una carga, las demás:',o:['Se apagan todas inmediatamente','Siguen funcionando pero con más voltaje','Siguen funcionando normalmente','Funcionan pero más lento'],c:2,e:'En paralelo cada carga tiene su propio camino. Si una falla, las demás no se afectan.',a:'Piensa en las casas de tu cuadra: si tu vecino apaga sus luces, las tuyas siguen prendidas. Cada casa tiene su propia conexión. Eso es paralelo.'},
+{cat:'⚡ Electricidad Básica',q:'Un fusible de 15A se quema repetidamente. La acción correcta es:',o:['Poner uno de 20A para que aguante más','Poner uno de 30A y resolver después','Buscar la causa del exceso de corriente','Puentear el fusible temporalmente'],c:2,e:'NUNCA pongas un fusible más grande. Hay que encontrar por qué está jalando más corriente de lo normal.',a:'El fusible es como la alarma de incendios. Si se activa, no le quitas las pilas — buscas el fuego. Poner uno más grande es como quitar la alarma: la casa se va a quemar.'},
+{cat:'⚡ Electricidad Básica',q:'Un equipo residencial de AC necesita 240V. Al medir entre las dos líneas (hot) obtienes 208V. Esto indica:',o:['El equipo está dañado','Es alimentación trifásica, no monofásica','El multímetro necesita calibración','El voltaje está bajo y hay que llamar a la compañía eléctrica'],c:1,e:'208V entre fases indica alimentación trifásica (común en comercial). Residencial monofásico da 240V.',a:'Es como pedir una pizza familiar y te traen una mediana. No está mal, pero no es lo que pediste. 208V funciona diferente que 240V y puede afectar el rendimiento del equipo.'},
+{cat:'⚡ Electricidad Básica',q:'El cable verde con franja amarilla en un circuito SIEMPRE debe ir a:',o:['La línea caliente (hot)','El neutro','El ground (tierra)','Depende del circuito'],c:2,e:'Verde o verde/amarillo es SIEMPRE tierra. Nunca se usa para otra cosa, es una regla de seguridad absoluta.',a:'Verde = pasto = tierra. Así como el pasto siempre está abajo, el cable verde siempre va a tierra. Si alguien lo usó para otra cosa, ese electricista hizo una chambonada peligrosa.'},
+{cat:'⚡ Electricidad Básica',q:'Un motor monofásico no arranca pero zumba. El componente MÁS probable que falló es:',o:['El contactor','El capacitor de arranque','El termostato','El breaker'],c:1,e:'Un motor que zumba pero no gira casi siempre indica capacitor de arranque dañado.',a:'El capacitor es como el empujón que le das a un columpio. El motor necesita ese empujón inicial. Si el capacitor falla, el motor quiere girar pero no puede, por eso zumba.'},
+{cat:'⚡ Electricidad Básica',q:'Un cortocircuito se diferencia de una sobrecarga porque:',o:['La sobrecarga es más peligrosa','El cortocircuito genera corriente muy alta instantáneamente','La sobrecarga dispara el breaker más rápido','No hay diferencia real entre ambos'],c:1,e:'El cortocircuito genera corriente masiva instantánea. La sobrecarga es un exceso gradual.',a:'Un cortocircuito es como una presa que se revienta: el agua sale toda de golpe. La sobrecarga es como dejar todas las llaves abiertas poco a poco. Ambos son problemas, pero el cortocircuito es más violento.'},
+{cat:'⚡ Electricidad Básica',q:'La corriente AC a 60Hz en USA cambia de dirección:',o:['60 veces por segundo','120 veces por segundo','60 veces por minuto','Una vez cada 60 segundos'],c:1,e:'60Hz = 60 ciclos, pero cada ciclo tiene dos cambios de dirección, entonces son 120 cambios por segundo.',a:'Un ciclo es como un columpio: va y viene, eso son DOS movimientos. Entonces 60 ciclos = 120 cambios de dirección. Esta es una pregunta capciosa que muchos técnicos fallan.'},
+{cat:'⚡ Electricidad Básica',q:'Un equipo etiquetado como 1500W a 120V, ¿cuántos amperios consume?',o:['12.5A','180,000A','15A','1,380A'],c:0,e:'I = W/V = 1500/120 = 12.5A.',a:'Watts ÷ Voltios = Amperios. Es como repartir: 1500 entre 120 = 12.5. Este cálculo lo vas a hacer TODOS los días en el campo.'},
+{cat:'⚡ Electricidad Básica',q:'El contactor del compresor se cierra pero el compresor no arranca. ¿Qué revisas PRIMERO?',o:['El termostato','El voltaje que llega al compresor','El nivel de refrigerante','La presión del sistema'],c:1,e:'Si el contactor cierra, la señal de control está bien. Hay que verificar que el voltaje llega al compresor.',a:'Es como cuando enciendes el switch de la luz pero el foco no prende. El switch funciona, entonces el problema está del switch al foco. Mide voltaje en los terminales del compresor.'},
+{cat:'⚡ Electricidad Básica',q:'¿Cuál es la diferencia principal entre un capacitor de arranque (start) y uno de marcha (run)?',o:['El de arranque tiene más microfaradios y se desconecta al arrancar','El de marcha tiene más microfaradios','Son intercambiables','El de arranque es más pequeño físicamente'],c:0,e:'El start cap tiene más MFD, da el empujón inicial y se desconecta. El run cap queda conectado siempre.',a:'El capacitor de arranque es como el turbo de un carro: te da un empujón fuerte al inicio y luego se apaga. El de marcha es como el motor regular que trabaja todo el tiempo.'},
 
-// REFRIGERACIÓN BÁSICA (13 preguntas)
-{cat:'🧊 Refrigeración Básica',q:'¿Cuáles son los 4 componentes principales del ciclo de refrigeración?',o:['Compresor, condensador, válvula de expansión, evaporador','Motor, fan, filtro, ducto','Termostato, cable, fusible, breaker','Bomba, tanque, válvula, medidor'],c:0,e:'El ciclo básico: compresor comprime, condensador enfría, válvula expande, evaporador absorbe calor.'},
-{cat:'🧊 Refrigeración Básica',q:'¿Qué hace el compresor?',o:['Enfría el aire','Comprime el gas refrigerante y lo mueve por el sistema','Mide la temperatura','Filtra el aire'],c:1,e:'El compresor es el corazón del sistema. Comprime el gas de baja a alta presión.'},
-{cat:'🧊 Refrigeración Básica',q:'¿Dónde se absorbe el calor del espacio a enfriar?',o:['En el condensador','En el compresor','En el evaporador','En la válvula de expansión'],c:2,e:'El evaporador absorbe el calor del aire. El refrigerante se evapora al absorber calor.'},
-{cat:'🧊 Refrigeración Básica',q:'¿Qué tipo de refrigerante es el R-410A?',o:['Un refrigerante obsoleto','Un HFC usado en equipos nuevos','Solo para autos','Solo para refrigeración comercial'],c:1,e:'El R-410A es un HFC común en sistemas residenciales nuevos. Opera a presiones más altas que el R-22.'},
-{cat:'🧊 Refrigeración Básica',q:'¿Qué pasa cuando el refrigerante cambia de líquido a gas?',o:['Libera calor','Absorbe calor','Nada cambia','Se destruye'],c:1,e:'Cuando el refrigerante se evapora, absorbe calor del ambiente. Así es como enfría.'},
-{cat:'🧊 Refrigeración Básica',q:'¿Qué miden los manifold gauges?',o:['Voltaje','Presiones del sistema de refrigeración','Temperatura del motor','Velocidad del fan'],c:1,e:'Los gauges miden presión del lado bajo (azul) y lado alto (rojo) del sistema.'},
-{cat:'🧊 Refrigeración Básica',q:'¿Qué significa superheat (sobrecalentamiento)?',o:['El sistema está en llamas','Temperatura del gas por encima de su punto de ebullición','El compresor está caliente','El condensador está tapado'],c:1,e:'Superheat es cuánto más caliente está el gas refrigerante comparado con su temperatura de ebullición.'},
-{cat:'🧊 Refrigeración Básica',q:'¿Qué pasa si hay muy poco refrigerante en el sistema?',o:['Enfría más','El superheat sube y puede dañar el compresor','Nada','El equipo se apaga solo'],c:1,e:'Poco refrigerante = superheat alto = el compresor puede sobrecalentarse y dañarse.'},
-{cat:'🧊 Refrigeración Básica',q:'¿De qué color es la manguera del lado de baja presión?',o:['Roja','Verde','Azul','Amarilla'],c:2,e:'Azul = baja presión (succión). Roja = alta presión (descarga). Amarilla = al tanque.'},
-{cat:'🧊 Refrigeración Básica',q:'¿Qué hace la válvula de expansión (TXV)?',o:['Comprime el refrigerante','Reduce la presión del refrigerante antes del evaporador','Filtra el aire','Mide la temperatura'],c:1,e:'La TXV reduce la presión, permitiendo que el refrigerante se expanda y baje de temperatura antes del evaporador.'},
-{cat:'🧊 Refrigeración Básica',q:'¿Qué función tiene el filter drier?',o:['Filtrar el aire','Remover humedad y partículas del refrigerante','Enfriar el compresor','Medir presión'],c:1,e:'El filter drier protege el sistema removiendo humedad y contaminantes del refrigerante.'},
-{cat:'🧊 Refrigeración Básica',q:'¿Qué certificación necesitas para manejar refrigerantes en USA?',o:['NATE','OSHA 30','EPA 608','CPR'],c:2,e:'La certificación EPA 608 es obligatoria por ley federal para comprar y manejar refrigerantes.'},
-{cat:'🧊 Refrigeración Básica',q:'¿Qué es subcooling (subenfriamiento)?',o:['El sistema está muy frío','Temperatura del líquido por debajo de su punto de condensación','El evaporador está congelado','El motor está frío'],c:1,e:'Subcooling mide cuánto más frío está el líquido refrigerante comparado con su temperatura de condensación.'},
+// REFRIGERACIÓN BÁSICA (13)
+{cat:'🧊 Refrigeración Básica',q:'En el ciclo de refrigeración, el componente que ABSORBE calor del espacio es:',o:['El condensador, porque ahí se condensa el gas','El evaporador, porque ahí se evapora el refrigerante','El compresor, porque genera presión','La válvula TXV, porque reduce la temperatura'],c:1,e:'El evaporador absorbe calor al evaporar el refrigerante. El nombre lo dice: evapora.',a:'El evaporador es como un vaso con hielo: cuando pones el vaso en la mesa, el hielo absorbe el calor del ambiente y se derrite. El refrigerante hace lo mismo, absorbe calor y se evapora.'},
+{cat:'🧊 Refrigeración Básica',q:'El compresor de un sistema de AC está caliente al tacto y hace ruido. ¿Es normal?',o:['No, un compresor siempre debe estar frío','Sí, comprimir gas genera calor y vibración','Solo si es un compresor scroll','Depende de la marca'],c:1,e:'Comprimir gas siempre genera calor. Un compresor caliente que funciona bien es completamente normal.',a:'Infla un globo y siente la boquilla: está caliente. Comprimir aire genera calor. El compresor hace lo mismo pero con refrigerante. Caliente = trabajando. Pero OJO: demasiado caliente = problema.'},
+{cat:'🧊 Refrigeración Básica',q:'Un sistema con R-410A tiene presión de succión de 118 PSI. Esto corresponde a una temperatura de evaporación de aproximadamente:',o:['32°F','40°F','50°F','25°F'],c:1,e:'R-410A a 118 PSI en succión = aproximadamente 40°F de temperatura de evaporación.',a:'Cada refrigerante tiene su tabla de presión-temperatura. Es como un diccionario: 118 PSI en R-410A siempre = 40°F. Memoriza los valores comunes o lleva tu tabla siempre.'},
+{cat:'🧊 Refrigeración Básica',q:'¿Qué pasa si cargas refrigerante líquido por el lado de succión (baja)?',o:['Enfría más rápido el sistema','Puede dañar el compresor por golpe de líquido','No pasa nada diferente','El refrigerante se evapora automáticamente'],c:1,e:'Líquido en succión puede causar slugging y dañar las válvulas del compresor.',a:'Es como tragar un cubo de hielo entero: te puedes ahogar. El compresor está diseñado para gas, no líquido. El líquido no se comprime y rompe las válvulas. Siempre carga en vapor por el lado de baja.'},
+{cat:'🧊 Refrigeración Básica',q:'El superheat se mide restando:',o:['Temperatura de succión menos temperatura ambiente','Temperatura de línea de succión menos temperatura de saturación a la presión de succión','Temperatura del evaporador menos temperatura del condensador','Temperatura del aire de retorno menos la del supply'],c:1,e:'Superheat = Temp real de la línea de succión - Temp de saturación según la presión de succión.',a:'Es como medir fiebre: la temperatura normal es 98.6°F (saturación). Si tienes 101°F, tu superheat es 2.4°F. Mides cuánto más caliente está el gas comparado con lo que debería estar.'},
+{cat:'🧊 Refrigeración Básica',q:'Los manifold gauges muestran azul 65 PSI y rojo 250 PSI en un sistema R-22. Esto sugiere:',o:['Presiones normales de operación','Sistema sobrecargado','Posible restricción o bajo flujo de aire','Fuga de refrigerante'],c:0,e:'Para R-22, succión ~65 PSI y descarga ~250 PSI son presiones normales en día caluroso.',a:'Es como cuando el doctor te toma la presión: 120/80 es normal. En R-22, 65/250 es saludable. Aprende a leer los gauges como el doctor lee tu presión.'},
+{cat:'🧊 Refrigeración Básica',q:'Si el superheat es demasiado alto, ¿qué indica generalmente?',o:['Hay mucho refrigerante en el sistema','Hay poco refrigerante o flujo de aire excesivo','El compresor está fallando','La válvula TXV está abierta de más'],c:1,e:'Superheat alto = poco refrigerante llegando al evaporador, o demasiado aire pasando por el evaporador.',a:'Superheat alto es como una olla con poca agua en la estufa: se seca rápido y se sobrecalienta. El evaporador necesita suficiente refrigerante para absorber calor.'},
+{cat:'🧊 Refrigeración Básica',q:'La manguera AMARILLA del manifold se conecta normalmente a:',o:['El lado de baja presión','El lado de alta presión','El tanque de refrigerante o bomba de vacío','El compresor directamente'],c:2,e:'Azul = baja (succión), Roja = alta (descarga), Amarilla = centro (tanque, vacío, o recuperación).',a:'Piensa en un semáforo: azul frío (baja), rojo caliente (alta), y amarillo en medio. La manguera amarilla es tu puente al tanque.'},
+{cat:'🧊 Refrigeración Básica',q:'La válvula TXV regula el flujo de refrigerante basándose en:',o:['La presión de descarga del compresor','La temperatura y presión del evaporador (superheat)','La temperatura ambiente exterior','El voltaje del sistema'],c:1,e:'La TXV sensa el superheat para modular cuánto refrigerante entra al evaporador.',a:'La TXV es como la llave del agua: si el evaporador necesita más refrigerante (superheat alto), abre más. Si tiene mucho (superheat bajo), cierra. Es automática e inteligente.'},
+{cat:'🧊 Refrigeración Básica',q:'Un filter drier saturado puede causar:',o:['Mayor eficiencia del sistema','Una restricción que se ve como un evaporador parcialmente congelado','Mejor lubricación del compresor','Aumento de refrigerante'],c:1,e:'Un filter drier tapado restringe el flujo, causando caída de presión y congelamiento parcial.',a:'Es como un filtro de café tapado: si está sucio, el café pasa poquito. Si el drier está saturado, el refrigerante no pasa bien y el evaporador se congela de un solo lado.'},
+{cat:'🧊 Refrigeración Básica',q:'Para comprar y manejar refrigerantes en USA necesitas certificación:',o:['NATE tipo I','OSHA 30 horas','EPA 608','HVAC Excellence'],c:2,e:'La certificación EPA 608 es OBLIGATORIA por ley federal. Sin ella, no puedes comprar refrigerante.',a:'EPA 608 es tu licencia de manejar del HVAC. Sin ella no compras refrigerante, no trabajas legalmente. Es como manejar sin licencia: te pueden multar miles de dólares.'},
+{cat:'🧊 Refrigeración Básica',q:'El subcooling se mide en:',o:['La línea de succión, restando temperaturas','La línea de líquido, restando la temp real de la temp de saturación a presión de descarga','El evaporador, midiendo la temperatura del aire','El compresor, midiendo su amperaje'],c:1,e:'Subcooling = Temp de saturación a presión de alta - Temp real de la línea de líquido.',a:'Si el superheat es la fiebre del gas, el subcooling es lo frío del líquido. Mides cuánto más frío está el líquido comparado con su punto de condensación. Normal es 10-15°F.'},
 
-// HERRAMIENTAS Y SEGURIDAD (12 preguntas)
-{cat:'🛡️ Herramientas y Seguridad',q:'¿Qué significa PPE?',o:['Presión Por Equipo','Personal Protective Equipment','Prueba Para Electricidad','Plan Para Emergencias'],c:1,e:'PPE = Personal Protective Equipment. Guantes, lentes, zapatos de seguridad son lo mínimo.'},
-{cat:'🛡️ Herramientas y Seguridad',q:'Antes de trabajar en un equipo eléctrico, ¿qué debes hacer PRIMERO?',o:['Empezar a trabajar rápido','Lockout/Tagout - desconectar y asegurar la energía','Llamar al jefe','Tomar foto'],c:1,e:'SIEMPRE desconecta y verifica que no hay voltaje antes de tocar cualquier componente eléctrico.'},
-{cat:'🛡️ Herramientas y Seguridad',q:'¿Qué herramienta usas para detectar fugas de refrigerante?',o:['Multímetro','Detector de fugas electrónico','Nivel','Cinta métrica'],c:1,e:'El detector electrónico de fugas sensa los gases de refrigerante y alerta cuando encuentra una fuga.'},
-{cat:'🛡️ Herramientas y Seguridad',q:'¿Para qué sirve una bomba de vacío?',o:['Inflar llantas','Remover aire y humedad del sistema antes de cargar refrigerante','Limpiar ductos','Medir presión'],c:1,e:'La bomba de vacío remueve aire y humedad del sistema. Sin vacío, el sistema no funciona bien.'},
-{cat:'🛡️ Herramientas y Seguridad',q:'¿Cuántos micrones es un buen vacío?',o:['5000 micrones','500 micrones o menos','50,000 micrones','No importa'],c:1,e:'Un vacío de 500 micrones o menos indica que el sistema está limpio de aire y humedad.'},
-{cat:'🛡️ Herramientas y Seguridad',q:'¿Qué tipo de lentes debes usar al soldar?',o:['Lentes de sol','Lentes de seguridad con protección lateral','No necesitas lentes','Lentes de lectura'],c:1,e:'Los lentes de seguridad protegen tus ojos de chispas, metal caliente y radiación UV al soldar.'},
-{cat:'🛡️ Herramientas y Seguridad',q:'¿Qué haces si hueles gas refrigerante en un cuarto cerrado?',o:['Seguir trabajando','Ventilar el área inmediatamente y salir si es necesario','Ignorarlo','Prender un cerillo'],c:1,e:'Los refrigerantes pueden desplazar el oxígeno en espacios cerrados. Ventila primero, seguridad siempre.'},
-{cat:'🛡️ Herramientas y Seguridad',q:'¿Para qué sirve el torque wrench?',o:['Cualquier tuerca','Apretar conexiones con la fuerza exacta especificada','Cortar tubería','Medir voltaje'],c:1,e:'El torque wrench asegura que las conexiones se aprieten con la fuerza correcta. Ni de más ni de menos.'},
-{cat:'🛡️ Herramientas y Seguridad',q:'¿Cada cuánto debes calibrar tu multímetro?',o:['Nunca','Una vez al año o según el fabricante','Cada 10 años','Solo cuando se rompe'],c:1,e:'Un multímetro descalibrado te da lecturas falsas. Calibración regular es parte de ser profesional.'},
-{cat:'🛡️ Herramientas y Seguridad',q:'¿Qué es OSHA?',o:['Una marca de herramientas','Occupational Safety and Health Administration','Un tipo de refrigerante','Una certificación de soldadura'],c:1,e:'OSHA establece y hace cumplir las normas de seguridad en el trabajo en USA.'},
-{cat:'🛡️ Herramientas y Seguridad',q:'¿Por qué nunca debes usar oxígeno para presurizar un sistema?',o:['Es muy caro','Puede causar una explosión al mezclarse con aceite','No tiene suficiente presión','Es ilegal en algunos estados'],c:1,e:'Oxígeno + aceite del compresor = EXPLOSIÓN. Usa nitrógeno seco para presurizar. Nunca oxígeno.'},
-{cat:'🛡️ Herramientas y Seguridad',q:'¿Qué haces si un capacitor tiene carga después de desconectar?',o:['Tocarlo con las manos','Descargarlo con una resistencia antes de tocarlo','Dejarlo así','Mojarlo con agua'],c:1,e:'Un capacitor cargado puede darte un shock peligroso. Siempre descárgalo con una resistencia de descarga.'},
+{cat:'🧊 Refrigeración Básica',q:'El subcooling se mide en:',o:['La línea de succión, restando temperaturas','La línea de líquido, restando la temp real de la temp de saturación a presión de descarga','El evaporador, midiendo la temperatura del aire','El compresor, midiendo su amperaje'],c:1,e:'Subcooling = Temp de saturación a presión de alta - Temp real de la línea de líquido.',a:'Si el superheat es la fiebre del gas, el subcooling es lo frío del líquido. Mides cuánto más frío está el líquido comparado con su punto de condensación. Normal es 10-15°F.'},
 
-// AIRE ACONDICIONADO BÁSICO (12 preguntas)
-{cat:'❄️ Aire Acondicionado Básico',q:'¿Qué es un mini split?',o:['Un compresor pequeño','Sistema de AC con unidad interior y exterior sin ductos','Un tipo de fusible','Una herramienta'],c:1,e:'El mini split tiene una unidad adentro (evaporador) y una afuera (condensador) conectadas por tubería de cobre.'},
-{cat:'❄️ Aire Acondicionado Básico',q:'¿Qué mide el SEER?',o:['La temperatura','La eficiencia energética del equipo','El tamaño del ducto','La presión del gas'],c:1,e:'SEER = Seasonal Energy Efficiency Ratio. Entre más alto el SEER, más eficiente y menos electricidad gasta.'},
-{cat:'❄️ Aire Acondicionado Básico',q:'¿Qué significa 1 tonelada de refrigeración?',o:['El peso del equipo','12,000 BTU/hora de capacidad de enfriamiento','1,000 libras de hielo','La presión del sistema'],c:1,e:'1 tonelada = 12,000 BTU/h. Una casa promedio usa 2-5 toneladas dependiendo del tamaño.'},
-{cat:'❄️ Aire Acondicionado Básico',q:'¿Para qué sirve el filtro de aire?',o:['Decoración','Atrapar polvo y partículas antes del evaporador','Enfriar el aire','Medir la presión'],c:1,e:'El filtro protege el evaporador y mejora la calidad del aire. Hay que cambiarlo cada 1-3 meses.'},
-{cat:'❄️ Aire Acondicionado Básico',q:'¿Qué causa que el evaporador se congele?',o:['Mucho refrigerante','Flujo de aire bajo, poco refrigerante, o filtro sucio','Temperatura muy alta afuera','El condensador está limpio'],c:1,e:'Evaporador congelado = algo anda mal. Revisa filtro, flujo de aire, y niveles de refrigerante.'},
-{cat:'❄️ Aire Acondicionado Básico',q:'¿Dónde está el condensador en un split system residencial?',o:['En el ático','Afuera de la casa','En el closet','En el baño'],c:1,e:'El condensador (unidad exterior) libera el calor al ambiente. Necesita buena ventilación afuera.'},
-{cat:'❄️ Aire Acondicionado Básico',q:'¿Cada cuánto se recomienda un mantenimiento de AC?',o:['Cada 10 años','2 veces al año (primavera y otoño)','Solo cuando falla','Cada mes'],c:1,e:'Mantenimiento preventivo 2 veces al año mantiene el equipo eficiente y previene fallas costosas.'},
-{cat:'❄️ Aire Acondicionado Básico',q:'¿Qué es el return air?',o:['Aire que sale de los registros','Aire que regresa al equipo para ser acondicionado','Aire del exterior','Aire del baño'],c:1,e:'El return air es el aire que regresa al sistema por el ducto de retorno para ser enfriado o calentado de nuevo.'},
-{cat:'❄️ Aire Acondicionado Básico',q:'¿Qué componente controla cuándo enciende y apaga el AC?',o:['El capacitor','El termostato','El filtro','El fusible'],c:1,e:'El termostato sensa la temperatura y manda señal para encender o apagar el equipo.'},
-{cat:'❄️ Aire Acondicionado Básico',q:'¿Qué pasa si el condensador está sucio?',o:['Enfría mejor','Las presiones suben y el equipo trabaja más duro','Nada','Baja el voltaje'],c:1,e:'Condensador sucio = no libera calor bien = presiones altas = más consumo de energía y posible daño al compresor.'},
-{cat:'❄️ Aire Acondicionado Básico',q:'¿Qué es BTU?',o:['Un tipo de gas','British Thermal Unit, unidad de medida de calor','Una marca de equipo','Un código de seguridad'],c:1,e:'BTU = British Thermal Unit. Es la cantidad de calor necesaria para subir 1°F a 1 libra de agua.'},
-{cat:'❄️ Aire Acondicionado Básico',q:'¿Cuál es la temperatura ideal del aire que sale del registro de un AC funcionando bien?',o:['50-55°F','55-65°F (15-20 grados menos que el return)','Igual que el return','80°F'],c:1,e:'El diferencial entre supply y return debe ser 15-20°F. Si no, algo anda mal con el sistema.'}
+// HERRAMIENTAS Y SEGURIDAD (12)
+{cat:'🛡️ Herramientas y Seguridad',q:'PPE en HVAC incluye lentes de seguridad, guantes y zapatos. ¿Cuándo es aceptable NO usar PPE?',o:['Cuando el trabajo es rápido y sencillo','Cuando hace mucho calor','Nunca — PPE es obligatorio en TODO momento','Cuando el supervisor no está viendo'],c:2,e:'PPE es obligatorio SIEMPRE. No hay excusa. Un accidente toma solo un segundo.',a:'Los accidentes no avisan. No dicen: oye, ponte los lentes que te va a saltar algo. Pasan en un parpadeo. PPE siempre, sin excepción, aunque sea un trabajo de 5 minutos.'},
+{cat:'🛡️ Herramientas y Seguridad',q:'Hiciste Lockout/Tagout en el panel. Antes de tocar los cables, debes:',o:['Empezar a trabajar, ya desconectaste','Verificar ausencia de voltaje con tu multímetro','Preguntarle al cliente si ya apagó todo','Revisar visualmente que no hay chispas'],c:1,e:'SIEMPRE verifica con tu multímetro después de LOTO. Puede haber fuentes de energía múltiples.',a:'Lockout es como ponerle seguro a una pistola. Pero un profesional SIEMPRE verifica que la cámara está vacía. Desconectar y NO verificar es como jugar ruleta rusa.'},
+{cat:'🛡️ Herramientas y Seguridad',q:'Tu detector de fugas electrónico no encuentra la fuga pero sospechas que existe. ¿Qué otro método usas?',o:['Agregar más refrigerante y ver si se mantiene','Presurizar con nitrógeno y usar agua jabonosa','Presurizar con oxígeno para mejor detección','Usar una vela para ver si la llama se mueve'],c:1,e:'Nitrógeno + agua jabonosa es el método secundario más confiable para encontrar fugas.',a:'Las burbujas no mienten. Presuriza con nitrógeno y ponte agua jabonosa en las conexiones. Donde haga burbujas, ahí está la fuga. Nunca uses oxígeno: puede explotar con aceite.'},
+{cat:'🛡️ Herramientas y Seguridad',q:'Después de hacer vacío, tu micron gauge marca 500 micrones. Cierras la válvula y esperas 10 minutos. Sube a 1500. Esto indica:',o:['Vacío exitoso, puedes cargar','Hay humedad en el sistema que se evapora','Hay una fuga en el sistema','Puede ser fuga O humedad, necesitas más pruebas'],c:3,e:'Un rise de 500 a 1500 puede ser humedad o fuga. Necesitas más tiempo o pruebas adicionales.',a:'Es como inflar una llanta y ver si baja: si baja rápido = fuga. Si baja poquito = puede ser la temperatura. A 1500 micrones después de 10 min, no sabes seguro. Haz más vacío y espera más.'},
+{cat:'🛡️ Herramientas y Seguridad',q:'Al soldar tubería de cobre con un tanque de refrigerante conectado, debes:',o:['No hay problema, el refrigerante no es inflamable','Fluir nitrógeno por la tubería mientras sueldas','Solo alejar el tanque un poco','Usar el tanque como soporte ya que es pesado'],c:1,e:'SIEMPRE fluye nitrógeno al soldar. Previene oxidación interna y es un requisito de seguridad.',a:'Al soldar sin nitrógeno, el interior del cobre se oxida y esos pedacitos sueltos van a tapar la TXV o el drier. El nitrógeno es como poner un escudo invisible dentro del tubo.'},
+{cat:'🛡️ Herramientas y Seguridad',q:'¿Qué haces si hueles refrigerante fuerte en un cuarto mecánico cerrado?',o:['Es normal, los cuartos mecánicos huelen así','Abrir ventilación y salir si es necesario, puede desplazar oxígeno','Ignorarlo si no te mareas','Prender un ventilador eléctrico dentro del cuarto'],c:1,e:'Los refrigerantes desplazan oxígeno en espacios cerrados. La asfixia puede ocurrir sin que te des cuenta.',a:'Los refrigerantes son invisibles y sin olor fuerte. Si ya hueles algo, hay MUCHO gas. Es como el monóxido de carbono: no lo ves pero te mata. Ventila y sal primero, investiga después.'},
+{cat:'🛡️ Herramientas y Seguridad',q:'Aprietas una conexión flare con torque wrench. ¿Por qué no debes apretarla más de lo especificado?',o:['Gasta más tiempo','Puedes rajar el flare y crear una fuga','No pasa nada, más apretado es mejor','Solo importa con tubería de aluminio'],c:1,e:'Apretar de más raja el cobre y crea fugas que no verás hasta que el sistema esté cargado.',a:'Es como apretar la tapa de un frasco de vidrio: si le pasas, la quiebras. El cobre es suave, si aprietas de más se raja y boom, tienes una fuga que te va a dar dolores de cabeza.'},
+{cat:'🛡️ Herramientas y Seguridad',q:'Tu multímetro marca voltaje inconsistente que sube y baja. ¿Qué puede estar pasando?',o:['Voltaje normal de AC','Conexión suelta o puntas de prueba dañadas','El equipo está modulando normalmente','El multímetro es demasiado preciso'],c:1,e:'Lecturas inestables casi siempre indican una conexión suelta, ya sea en el circuito o en tus puntas.',a:'Si el radio suena entrecortado, lo más probable es que la antena está floja. Igual con el multímetro: lecturas locas = conexión floja. Revisa tus puntas primero.'},
+{cat:'🛡️ Herramientas y Seguridad',q:'OSHA puede multar a un técnico individual que no use PPE hasta:',o:['No pueden multar al trabajador, solo a la empresa','$1,000 por la primera vez','Hasta $15,625 por violación seria','Solo dan advertencia verbal'],c:2,e:'OSHA puede multar tanto a la empresa como al individuo. Las multas serias llegan hasta $15,625.',a:'No es juego. OSHA tiene poder de ley. Una multa de $15,000 es más que tu sueldo de un mes. Y si alguien se lastima, pueden ser cargos criminales. PPE siempre.'},
+{cat:'🛡️ Herramientas y Seguridad',q:'Necesitas presurizar un sistema para buscar fugas. ¿Qué gas usas?',o:['Refrigerante R-22 porque es barato','Oxígeno porque es fácil de conseguir','Nitrógeno seco','Aire comprimido de la van'],c:2,e:'Nitrógeno seco es el ÚNICO gas aceptable para presurizar. Oxígeno explota con aceite.',a:'Oxígeno + aceite = bomba. Aire comprimido tiene humedad. Refrigerante contamina. Nitrógeno es inerte, seco y seguro. Es el ÚNICO que debes usar.'},
+{cat:'🛡️ Herramientas y Seguridad',q:'Un capacitor que mediste se ve hinchado en la parte superior. Tu acción:',o:['Medir microfaradios para ver si está bien','Reemplazarlo inmediatamente, un cap hinchado es defectuoso','Dejarlo si aún funciona','Descargarlo y volver a instalarlo'],c:1,e:'Un capacitor hinchado es defectuoso aunque todavía mida bien. Reemplaza siempre.',a:'Un capacitor hinchado es como una llanta ponchada: aunque todavía ruede, está a punto de reventar. Cámbialo ahora antes de que dañe el motor o el compresor.'},
+{cat:'🛡️ Herramientas y Seguridad',q:'Tu bomba de vacío logra 200 micrones pero al cerrar la válvula sube a 800 en 5 minutos y se detiene. Esto indica:',o:['Fuga grande en el sistema','Humedad residual que se está evaporando','La bomba está dañada','El sistema está listo para cargar'],c:1,e:'Si sube y se detiene (no sigue subiendo), generalmente es humedad evaporándose, no una fuga.',a:'Una fuga es como un globo con hueco: la presión sube y sube sin parar. La humedad es como un charquito que se seca: sube un poco y se estabiliza. Si se detiene, es humedad. Si sigue subiendo, es fuga.'},
+
+// AIRE ACONDICIONADO BÁSICO (12)
+{cat:'❄️ Aire Acondicionado Básico',q:'Un mini split es diferente de un split convencional porque:',o:['Usa menos refrigerante','No necesita ductos','Enfría más eficientemente','Trabaja solo con 110V'],c:1,e:'La principal diferencia del mini split es que no requiere ductos. Cada unidad interior enfría su zona.',a:'Un split convencional es como un sistema de riego con mangueras (ductos) que van a cada cuarto. El mini split es como tener una regadera individual en cada cuarto, sin mangueras. Más fácil de instalar.'},
+{cat:'❄️ Aire Acondicionado Básico',q:'Un equipo con SEER de 20 comparado con uno de SEER 14:',o:['Enfría más rápido','Enfría a menor temperatura','Usa menos electricidad para dar el mismo enfriamiento','Necesita menos refrigerante'],c:2,e:'SEER más alto = misma capacidad pero menos consumo eléctrico. No enfría más ni menos.',a:'Es como comparar un carro que da 30 millas por galón con uno de 20. Los dos te llevan al mismo lugar, pero el de 30 gasta menos gasolina. SEER alto = menos factura de luz.'},
+{cat:'❄️ Aire Acondicionado Básico',q:'Tu cliente tiene una casa de 2,000 sq ft. Según regla general, ¿cuántas toneladas de AC necesita?',o:['2 toneladas','3 a 4 toneladas dependiendo de factores','Siempre 5 toneladas para que sobre','1 tonelada es suficiente'],c:1,e:'Regla general: 400-500 sq ft por tonelada, pero aislamiento, ventanas y clima afectan el cálculo.',a:'La regla del pulgar es 1 tonelada por cada 400-500 pies cuadrados. Pero es como la ropa: no es solo la talla, importa si hace calor, si la casa tiene buen aislamiento, cuántas ventanas. Siempre haz Manual J.'},
+{cat:'❄️ Aire Acondicionado Básico',q:'El filtro de aire debe cambiarse cada:',o:['6 meses a 1 año','1-3 meses dependiendo del tipo y uso','Solo cuando el equipo no enfría','Cada 5 años con el mantenimiento'],c:1,e:'Filtros estándar de 1 pulgada: cada 1-3 meses. Filtros de 4 pulgadas: cada 6-12 meses.',a:'El filtro es como el cubrebocas del sistema. Si no lo cambias, se tapa y el equipo no puede respirar. Un filtro sucio es la causa #1 de llamadas de servicio innecesarias.'},
+{cat:'❄️ Aire Acondicionado Básico',q:'El evaporador está congelado. Tu PRIMER paso es:',o:['Agregar más refrigerante inmediatamente','Apagar el equipo y dejar que se descongele antes de diagnosticar','Raspar el hielo con un destornillador','Subir el termostato a calefacción'],c:1,e:'Primero deja que se descongele completamente. No puedes diagnosticar con hielo encima.',a:'Es como cuando se te empaña el parabrisas: primero limpia para poder ver, luego maneja. No diagnostiques con hielo — no puedes ver presiones reales ni medir flujo de aire correcto.'},
+{cat:'❄️ Aire Acondicionado Básico',q:'El condensador está en el sol directo y obstruido con plantas. Las presiones de alta van a estar:',o:['Más bajas de lo normal','Más altas de lo normal','Igual que siempre','Intermitentes'],c:1,e:'Condensador obstruido = no puede liberar calor = presión de alta se eleva.',a:'Es como taparte la boca mientras exhalas: la presión sube porque el aire no puede salir. El condensador necesita exhalar el calor. Si está tapado con plantas o basura, la presión sube.'},
+{cat:'❄️ Aire Acondicionado Básico',q:'El mantenimiento preventivo de AC se recomienda:',o:['Solo cuando algo falla','Una vez al año en primavera','Dos veces al año: primavera para AC y otoño para calefacción','Cada mes sin excepción'],c:2,e:'Dos visitas anuales: antes del verano para AC y antes del invierno para calefacción.',a:'Es como el dentista: vas dos veces al año aunque no te duela nada. Si esperas a que duela, el tratamiento es caro. Mantenimiento preventivo ahorra dinero y extiende la vida del equipo.'},
+{cat:'❄️ Aire Acondicionado Básico',q:'El return air en una casa está ubicado típicamente:',o:['En el techo cerca del AC','En una pared interior, generalmente bajo o central','Afuera de la casa','En el baño siempre'],c:1,e:'Los returns están en paredes interiores, centrales, para recircular el aire de la casa.',a:'El return es la boca del sistema que traga el aire de la casa para reciclarlo. Generalmente está abajo en la pared de un pasillo. Si lo tapas con un mueble, el sistema se ahoga.'},
+{cat:'❄️ Aire Acondicionado Básico',q:'El termostato llama por cooling pero el equipo no enciende. Mides 24V entre R y Y en el termostato. Esto indica:',o:['El termostato está malo','La señal sale bien del termostato, el problema está después','No hay voltaje suficiente','El compresor está en delay'],c:1,e:'24V entre R y Y = el termostato está mandando la señal correctamente. El problema está en otro lado.',a:'Es como cuando mandas un mensaje de texto y te dice enviado: tu teléfono hizo su trabajo. Si la otra persona no responde, el problema no es tu teléfono. 24V en el termostato = él está haciendo su trabajo.'},
+{cat:'❄️ Aire Acondicionado Básico',q:'Un condensador sucio puede causar TODO lo siguiente EXCEPTO:',o:['Presiones de descarga altas','Mayor consumo de energía','Menor superheat en el evaporador','Posible daño al compresor'],c:2,e:'Condensador sucio causa presiones altas, más consumo y posible daño. El superheat tiende a SUBIR, no bajar.',a:'Condensador sucio es como una persona acalorada que no puede sudar: la temperatura sube, gasta más energía, y eventualmente colapsa. Pero el superheat no baja, sube porque el sistema pierde eficiencia.'},
+{cat:'❄️ Aire Acondicionado Básico',q:'BTU significa British Thermal Unit. Un BTU es la energía necesaria para:',o:['Enfriar 1 libra de aire en 1°F','Subir 1 libra de agua en 1°F','Derretir 1 libra de hielo','Evaporar 1 libra de refrigerante'],c:1,e:'1 BTU = energía para subir 1°F a 1 libra de agua. Es la unidad base de calor en HVAC.',a:'Imagina una libra de agua (como una botellita). Un BTU es lo que necesitas para calentarla UN gradito. 12,000 BTU (1 tonelada) = calentar 12,000 botellitas un grado cada hora.'},
+{cat:'❄️ Aire Acondicionado Básico',q:'Mides la temperatura del supply a 58°F y el return a 75°F. El delta T es:',o:['133°F','58°F','17°F — está en rango normal','75°F'],c:2,e:'Delta T = Return - Supply = 75 - 58 = 17°F. Normal es 15-20°F.',a:'Delta T es la diferencia entre lo que entra y lo que sale. Como medir cuánto bajó la temperatura del agua después de ponerle hielo. 17°F de diferencia = tu equipo está trabajando bien.'}
 ];
 
 let quizData=[];
@@ -874,7 +934,7 @@ function showQuestion(){
             if(i===userAnswer&&!correct)cls+=' wrong';
             return '<div class="'+cls+'"><div class="quiz-letter">'+letters[i]+'</div><div>'+o+'</div></div>';
         }).join('');
-        document.getElementById('qExplain').innerHTML='<b>'+(D.lang==='es'?'Explicación:':'Explanation:')+'</b> '+q.e;
+        document.getElementById('qExplain').innerHTML=correct?('<b>'+(D.lang==='es'?'Explicación:':'Explanation:')+'</b> '+q.e):('<b style="color:#ff6b2b">'+(D.lang==='es'?'📖 Con peras y manzanas:':'📖 Simply put:')+'</b><br>'+q.a+'<br><br><b>'+(D.lang==='es'?'Técnico:':'Technical:')+'</b> '+q.e);
         document.getElementById('qExplain').classList.add('show');
         const nextBtn=document.getElementById('qNext');
         nextBtn.textContent=(quizIdx<quizData.length-1)?(D.lang==='es'?'Siguiente →':'Next →'):(D.lang==='es'?'Ver Resultado 🏆':'See Result 🏆');
@@ -989,22 +1049,26 @@ function answerQuiz(idx,el){
     if(correct){
         quizRight++;
         quizStreak++;
+        if(quizStreak>bestStreak)bestStreak=quizStreak;
         document.getElementById('qRight').textContent=quizRight;
         document.getElementById('qBubble').textContent=pickCheer(quizStreak);
         celebrate(quizStreak);
+        document.getElementById('qExplain').innerHTML='<b>'+(D.lang==='es'?'Explicación:':'Explanation:')+'</b> '+q.e;
+        speakText(D.lang==='es'?'Correcto. ':'Correct. ');
     }else{
         quizWrong++;
         quizStreak=0;
         document.getElementById('qWrong').textContent=quizWrong;
         document.getElementById('qBubble').textContent=pickMiss();
+        // Show deep explanation with analogy
+        let explain='<b style="color:#ff6b2b">'+(D.lang==='es'?'📖 Te lo explico con peras y manzanas:':'📖 Let me break it down simply:')+'</b><br>'+q.a+'<br><br><b>'+(D.lang==='es'?'Explicación técnica:':'Technical explanation:')+'</b> '+q.e;
+        document.getElementById('qExplain').innerHTML=explain;
+        speakText((D.lang==='es'?'Incorrecto. Te lo explico fácil: ':'Incorrect. Let me explain simply: ')+q.a);
     }
     
-    document.getElementById('qExplain').innerHTML='<b>'+(D.lang==='es'?'Explicación:':'Explanation:')+'</b> '+q.e;
     document.getElementById('qExplain').classList.add('show');
     document.getElementById('qNext').textContent=(quizIdx<quizData.length-1)?(D.lang==='es'?'Siguiente →':'Next →'):(D.lang==='es'?'Ver Resultado 🏆':'See Result 🏆');
     document.getElementById('qNext').classList.add('show');
-    
-    speakText(correct?(D.lang==='es'?'Correcto. ':'Correct. '):(D.lang==='es'?'Incorrecto. ':'Incorrect. ')+q.e);
 }
 
 function nextQuestion(){
@@ -1022,24 +1086,149 @@ function showResult(){
     document.getElementById('rScore').textContent=pct+'%';
     document.getElementById('rLabel').textContent=quizRight+' / '+quizData.length+(D.lang==='es'?' correctas':' correct');
     
+    // Award XP: 10 per correct, bonus for streaks
+    const xpEarned=quizRight*10+(bestStreak>=10?50:bestStreak>=5?25:0);
+    profile.xp+=xpEarned;
+    profile.totalCorrect+=quizRight;
+    profile.totalAnswered+=quizData.length;
+    profile.quizzesTaken++;
+    if(bestStreak>profile.bestStreak)profile.bestStreak=bestStreak;
+    
+    // Level up check
+    while(profile.xp>=profile.xpNeeded){
+        profile.xp-=profile.xpNeeded;
+        profile.level++;
+        profile.xpNeeded=Math.floor(profile.xpNeeded*1.4);
+    }
+    
     let medal,msg,stars;
-    if(pct>=90){medal='🏆';stars=5;msg=D.lang==='es'?'¡Increíble, '+D.name+'! Eres una máquina del HVAC. El Maestro Mario está orgulloso.':'Incredible, '+D.name+'! You\'re an HVAC machine!';}
-    else if(pct>=80){medal='🥇';stars=4;msg=D.lang==='es'?'¡Excelente, '+D.name+'! Tienes muy buena base. Sigue así.':'Excellent, '+D.name+'! Great foundation!';}
-    else if(pct>=70){medal='🥈';stars=3;msg=D.lang==='es'?'¡Bien, '+D.name+'! Vas por buen camino. Repasa los temas que fallaste.':'Good job, '+D.name+'! Review what you missed.';}
-    else if(pct>=60){medal='🥉';stars=2;msg=D.lang==='es'?'¡No está mal, '+D.name+'! Pero hay que estudiar más. Tú puedes.':'Not bad, '+D.name+'! But keep studying.';}
-    else{medal='📚';stars=1;msg=D.lang==='es'?'¡'+D.name+', hay que echarle más ganas! Repasa y vuelve a intentar. Vamos con todo.':D.name+', keep studying and try again!';}
+    const medalEarned=document.getElementById('rMedalEarned');
+    medalEarned.style.display='none';
+    
+    if(pct===100){
+        medal='🏆';stars=5;
+        msg=D.lang==='es'?'¡¡PERFECTO, '+D.name+'!! 100% sin fallar. ¡Eres leyenda! Te ganaste tu medalla de Bronce 🥉':'PERFECT, '+D.name+'!! 100% flawless. You earned your Bronze Medal 🥉';
+        if(!profile.medals.includes('bronze_principiante')){
+            profile.medals.push('bronze_principiante');
+            medalEarned.style.display='block';
+            document.getElementById('rNewMedal').textContent='🥉';
+            document.getElementById('rMedalName').textContent=D.lang==='es'?'¡MEDALLA DE BRONCE DESBLOQUEADA!\nPrincipiante Perfecto':'BRONZE MEDAL UNLOCKED!\nPerfect Beginner';
+        }
+    }else if(pct>=90){
+        medal='🏆';stars=5;
+        msg=D.lang==='es'?'¡Increíble, '+D.name+'! Casi perfecto. El Maestro Mario está orgulloso. ¡Intenta el 100% para tu medalla!':'Incredible, '+D.name+'! Almost perfect. Try for 100% to earn your medal!';
+    }else if(pct>=80){
+        medal='🥇';stars=4;
+        msg=D.lang==='es'?'¡Excelente, '+D.name+'! Tienes muy buena base. Repasa lo que fallaste y ve por el 100%.':'Excellent, '+D.name+'! Great foundation. Review mistakes and go for 100%!';
+    }else if(pct>=70){
+        medal='🥈';stars=3;
+        msg=D.lang==='es'?'¡Bien, '+D.name+'! Vas por buen camino. No te rindas, cada error es una lección.':'Good job, '+D.name+'! On the right track. Every mistake is a lesson.';
+    }else if(pct>=60){
+        medal='🥉';stars=2;
+        msg=D.lang==='es'?'¡No te desanimes, '+D.name+'! Ya eres ganador por intentarlo. Repasa y vuelve más fuerte.':'Don\'t get discouraged, '+D.name+'! You\'re a winner for trying. Review and come back stronger.';
+    }else{
+        medal='💪';stars=1;
+        msg=D.lang==='es'?'¡'+D.name+', vamos campeón! Todos fallamos al principio. Tú puedes, eres una estrella. ¡Estudia y regresa con todo!':D.name+', let\'s go champ! Everyone struggles at first. You\'re a star. Study and come back strong!';
+    }
     
     document.getElementById('rMedal').textContent=medal;
     document.getElementById('rMsg').textContent=msg;
     
     const starEls=document.querySelectorAll('#rStars span');
+    starEls.forEach((s,i)=>{s.classList.remove('lit');});
     starEls.forEach((s,i)=>{
         setTimeout(()=>{if(i<stars)s.classList.add('lit');},i*300);
     });
     
+    saveProfile();
+    document.getElementById('profileBtn').classList.add('active');
     cft();
     speakText(msg);
 }
+
+// ========== PROFILE & MEDAL SYSTEM ==========
+const MEDALS_DEF=[
+    {id:'bronze_principiante',icon:'🥉',name:'Bronce Principiante',desc:'100% en quiz principiante'},
+    {id:'silver_principiante',icon:'🥈',name:'Plata Principiante',desc:'100% dos veces seguidas'},
+    {id:'gold_principiante',icon:'🥇',name:'Oro Principiante',desc:'100% tres veces seguidas'},
+    {id:'streak_5',icon:'🔥',name:'En Llamas',desc:'Racha de 5 correctas'},
+    {id:'streak_10',icon:'⚡',name:'Imparable',desc:'Racha de 10 correctas'},
+    {id:'streak_20',icon:'💥',name:'Leyenda',desc:'Racha de 20 correctas'},
+    {id:'quiz_5',icon:'📝',name:'Estudiante',desc:'Completar 5 quizzes'},
+    {id:'quiz_15',icon:'📚',name:'Estudioso',desc:'Completar 15 quizzes'},
+    {id:'correct_100',icon:'💯',name:'Centurión',desc:'100 respuestas correctas'},
+    {id:'correct_500',icon:'🌟',name:'Maestro en Entrenamiento',desc:'500 respuestas correctas'},
+    {id:'level_5',icon:'⭐',name:'Nivel 5',desc:'Alcanzar nivel 5'},
+    {id:'level_10',icon:'👑',name:'Nivel 10',desc:'Alcanzar nivel 10'}
+];
+
+const LEVEL_TITLES={
+    1:'Aprendiz Novato',2:'Aprendiz',3:'Ayudante',4:'Técnico Jr.',5:'Técnico',
+    6:'Técnico Senior',7:'Especialista',8:'Experto',9:'Maestro',10:'Gran Maestro',
+    11:'Leyenda HVAC',12:'Maestro Supremo',15:'Dios del HVAC'
+};
+
+let profile={level:1,xp:0,xpNeeded:100,totalCorrect:0,totalAnswered:0,quizzesTaken:0,bestStreak:0,medals:[],perfectStreakCount:0};
+let bestStreak=0;
+
+function getTitle(lvl){
+    let title='Aprendiz';
+    for(let l of Object.keys(LEVEL_TITLES).map(Number).sort((a,b)=>b-a)){
+        if(lvl>=l){title=LEVEL_TITLES[l];break;}
+    }
+    return title;
+}
+
+function checkAutoMedals(){
+    if(bestStreak>=5&&!profile.medals.includes('streak_5'))profile.medals.push('streak_5');
+    if(bestStreak>=10&&!profile.medals.includes('streak_10'))profile.medals.push('streak_10');
+    if(bestStreak>=20&&!profile.medals.includes('streak_20'))profile.medals.push('streak_20');
+    if(profile.quizzesTaken>=5&&!profile.medals.includes('quiz_5'))profile.medals.push('quiz_5');
+    if(profile.quizzesTaken>=15&&!profile.medals.includes('quiz_15'))profile.medals.push('quiz_15');
+    if(profile.totalCorrect>=100&&!profile.medals.includes('correct_100'))profile.medals.push('correct_100');
+    if(profile.totalCorrect>=500&&!profile.medals.includes('correct_500'))profile.medals.push('correct_500');
+    if(profile.level>=5&&!profile.medals.includes('level_5'))profile.medals.push('level_5');
+    if(profile.level>=10&&!profile.medals.includes('level_10'))profile.medals.push('level_10');
+}
+
+function saveProfile(){
+    checkAutoMedals();
+    try{localStorage.setItem('maestro_profile',JSON.stringify(profile));}catch(e){}
+}
+
+function loadProfile(){
+    try{
+        const saved=localStorage.getItem('maestro_profile');
+        if(saved){
+            const p=JSON.parse(saved);
+            Object.assign(profile,p);
+            document.getElementById('profileBtn').classList.add('active');
+        }
+    }catch(e){}
+}
+
+function renderProfile(){
+    document.getElementById('profName').textContent=D.name||'Técnico';
+    document.getElementById('profTitle').textContent=getTitle(profile.level);
+    document.getElementById('profLevel').textContent=profile.level;
+    const xpPct=Math.round((profile.xp/profile.xpNeeded)*100);
+    document.getElementById('profXpBar').style.width=xpPct+'%';
+    document.getElementById('profXpTxt').textContent=profile.xp+' / '+profile.xpNeeded+' XP';
+    document.getElementById('profPts').textContent=profile.totalCorrect*10;
+    const acc=profile.totalAnswered>0?Math.round((profile.totalCorrect/profile.totalAnswered)*100):0;
+    document.getElementById('profAcc').textContent=acc+'%';
+    document.getElementById('profStrk').textContent=profile.bestStreak;
+    
+    // Medals grid
+    document.getElementById('medalsGrid').innerHTML=MEDALS_DEF.map(m=>{
+        const earned=profile.medals.includes(m.id);
+        return '<div class="medal-slot'+(earned?' earned':'')+'"><div class="medal-icon">'+(earned?m.icon:'🔒')+'</div><div class="medal-name">'+m.name+'</div><div style="font-size:10px;color:var(--muted);margin-top:2px">'+m.desc+'</div></div>';
+    }).join('');
+}
+
+// Load profile on start
+loadProfile();
+
 document.getElementById('nm').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.value.trim().length>=2)sName();});
 </script>
 </body>
