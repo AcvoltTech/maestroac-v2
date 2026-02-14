@@ -129,10 +129,11 @@
         @keyframes tblink{0%,80%,100%{opacity:.3;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
         
         /* MUSIC BUTTON */
-        .music-btn{position:fixed;bottom:20px;left:20px;z-index:800;width:48px;height:48px;border-radius:50%;background:var(--card);border:2px solid rgba(0,212,255,0.3);color:var(--electric);font-size:22px;cursor:pointer;display:none;align-items:center;justify-content:center;transition:all 0.3s;box-shadow:0 4px 15px rgba(0,0,0,0.3)}
+        .music-btn{position:fixed;bottom:20px;left:20px;z-index:800;width:48px;height:48px;border-radius:50%;background:var(--card);border:2px solid rgba(0,212,255,0.3);color:var(--electric);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.3s;box-shadow:0 4px 15px rgba(0,0,0,0.3)}
         .music-btn:hover{background:var(--card2);border-color:var(--electric);transform:scale(1.1)}
-        .music-btn.active{display:flex}
         .music-btn.muted{color:var(--muted);border-color:rgba(255,255,255,0.1)}
+        .music-settings{position:fixed;bottom:24px;left:76px;z-index:800;width:36px;height:36px;border-radius:50%;background:var(--card);border:2px solid rgba(0,212,255,0.15);color:var(--electric);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.3s;box-shadow:0 4px 12px rgba(0,0,0,0.3)}
+        .music-settings:hover{transform:scale(1.15);border-color:var(--electric)}
         
         /* QUIZ STYLES */
         .quiz-header{width:100%;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
@@ -187,9 +188,8 @@
         .fire-emoji{position:fixed;z-index:850;font-size:36px;pointer-events:none;animation:fireFloat 1.2s ease-out forwards}
         
         /* PROFILE SYSTEM */
-        .profile-btn{position:fixed;top:20px;right:20px;z-index:800;width:48px;height:48px;border-radius:50%;background:var(--card);border:2px solid rgba(255,215,0,0.4);color:var(--gold);font-size:22px;cursor:pointer;display:none;align-items:center;justify-content:center;transition:all 0.3s;box-shadow:0 4px 15px rgba(0,0,0,0.3)}
+        .profile-btn{position:fixed;top:20px;right:20px;z-index:800;width:48px;height:48px;border-radius:50%;background:var(--card);border:2px solid rgba(255,215,0,0.4);color:var(--gold);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.3s;box-shadow:0 4px 15px rgba(0,0,0,0.3)}
         .profile-btn:hover{transform:scale(1.1);border-color:var(--gold)}
-        .profile-btn.active{display:flex}
         .prof-card{background:var(--card);border:2px solid rgba(255,215,0,0.2);border-radius:16px;padding:20px;text-align:center;width:100%}
         .prof-name{font-family:'Fredoka',sans-serif;font-size:24px;font-weight:700;margin-top:8px}
         .prof-title{color:var(--electric);font-size:13px;text-transform:uppercase;letter-spacing:1.5px;margin-top:4px}
@@ -425,11 +425,13 @@
     <div style="width:100%;margin-top:20px;font-family:'Fredoka',sans-serif;font-size:18px;font-weight:700;text-align:center">🏅 Medallas</div>
     <div class="medals-grid" id="medalsGrid"></div>
     <button class="bt" onclick="go('s8');showQuestion()" style="margin-top:20px">📝 Seguir con el Quiz</button>
+    <button class="bt" onclick="toggleMusicPanel()" style="background:var(--card);border:2px solid rgba(0,212,255,0.3);margin-top:10px">🎶 Cambiar Música</button>
     <button class="bt" onclick="go('s7')" style="background:var(--card);border:2px solid var(--accent);margin-top:10px">← Volver a Mi Ruta</button>
 </div>
 </div>
 <div class="cw" id="conf"></div>
-<button class="music-btn" id="musicBtn" onclick="toggleMusic()" ondblclick="toggleMusicPanel(event)">🎵</button>
+<button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵</button>
+<button class="music-settings" onclick="toggleMusicPanel()">🎶</button>
 <div class="music-panel" id="musicPanel">
     <div class="music-panel-title">🎶 Elige tu música</div>
     <div id="musicOptions"></div>
@@ -1010,7 +1012,7 @@ const go=id=>{document.querySelectorAll('.s').forEach(s=>s.classList.remove('on'
 const rx=(id,c)=>{const e=document.getElementById(id);if(e){e.classList.add(c);setTimeout(()=>e.classList.remove(c),1500);}};
 
 function setLang(l){D.lang=l;unlockAudio();u();go('s2');document.getElementById('nm').placeholder=t('name_ph');speakText(t('welcome_speech'));}
-function sName(){D.name=document.getElementById('nm').value.trim();u();bLvl();go('s3');rx('a3','nod');speakText(t('level_speech'));}
+function sName(){D.name=document.getElementById('nm').value.trim();u();bLvl();go('s3');rx('a3','nod');speakText(t('level_speech'));document.getElementById('profileBtn').classList.add('active');}
 function pLvl(e,v){document.querySelectorAll('#lo .oc').forEach(o=>o.classList.remove('sel'));e.classList.add('sel');D.level=v;document.getElementById('b3').disabled=false;rx('a3','nod');}
 function sLvl(){u();bSpc();go('s4');speakText(t('spec_speech'));}
 function tSpc(e,k){if(k==='all'){document.querySelectorAll('#so .oc').forEach(o=>o.classList.remove('sel'));e.classList.add('sel');D.specs=['all'];}else{document.querySelector('#so .oc:last-child').classList.remove('sel');D.specs=D.specs.filter(s=>s!=='all');e.classList.toggle('sel');if(e.classList.contains('sel'))D.specs.push(k);else D.specs=D.specs.filter(s=>s!==k);}document.getElementById('b4').disabled=D.specs.length===0;rx('a4','nod');}
@@ -1507,7 +1509,8 @@ loadProfile();
 document.addEventListener('click',e=>{
     const panel=document.getElementById('musicPanel');
     const btn=document.getElementById('musicBtn');
-    if(musicPanelOpen&&!panel.contains(e.target)&&e.target!==btn){
+    const setBtn=document.querySelector('.music-settings');
+    if(musicPanelOpen&&!panel.contains(e.target)&&e.target!==btn&&e.target!==setBtn){
         musicPanelOpen=false;
         panel.classList.remove('open');
     }
