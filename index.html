@@ -380,15 +380,15 @@
     <div class="ai-chat">
         <div class="ai-chat-header">
             <div class="ai-chat-avatar"><img src="mario.jpg" alt="Mario"></div>
-            <div class="ai-chat-title"><h3>Maestro Mario AI</h3><span>🟢 Disponible para ayudarte</span></div>
+            <div class="ai-chat-title"><h3>Maestro Mario AI</h3><span id="aiChatStatus">🟢 Disponible para ayudarte</span></div>
             <button class="ai-chat-close" onclick="closeAIChat()">✕</button>
         </div>
         <div class="ai-chat-messages" id="aiMessages">
-            <div class="ai-msg mario">¡Órale técnico! Soy el Maestro Mario con inteligencia artificial. ¿En qué te puedo ayudar? Pregúntame lo que quieras sobre HVAC, refrigeración, o electricidad. 🔧</div>
+            <div class="ai-msg mario" id="aiChatWelcome">¡Órale técnico! Soy el Maestro Mario con inteligencia artificial. ¿En qué te puedo ayudar? Pregúntame lo que quieras sobre HVAC, refrigeración, o electricidad. 🔧</div>
         </div>
         <div class="speaking-indicator" id="speakingIndicator">
             <div class="waves"><div class="wave"></div><div class="wave"></div><div class="wave"></div><div class="wave"></div></div>
-            <span>Maestro Mario está hablando...</span>
+            <span id="aiChatTyping">Maestro Mario está hablando...</span>
         </div>
         <div class="ai-chat-input">
             <input type="text" id="aiInput" placeholder="Escribe tu pregunta..." onkeydown="if(event.key==='Enter'&&!event.shiftKey)sendAIMessage()">
@@ -489,8 +489,8 @@
         <div class="zone-card quiz-zone" onclick="goQuizZone()">
             <div class="zone-icon">📝</div>
             <div class="zone-info">
-                <div class="zone-name">Quiz Zone</div>
-                <div class="zone-desc">Toma quizzes y demuestra lo que sabes</div>
+                <div class="zone-name" id="hubQuizName">Quiz Zone</div>
+                <div class="zone-desc" id="hubQuizDesc">Toma quizzes y demuestra lo que sabes</div>
                 <div class="zone-stat">
                     <span class="zone-stat-item" id="hubQuizCount">📋 0 quizzes</span>
                     <span class="zone-stat-item" id="hubQuizTotal">📊 0 preguntas</span>
@@ -503,8 +503,8 @@
         <div class="zone-card study-zone" onclick="goStudyZone()">
             <div class="zone-icon">🔄</div>
             <div class="zone-info">
-                <div class="zone-name">Zona de Repaso</div>
-                <div class="zone-desc">Repasa solo las preguntas que fallaste en los quizzes</div>
+                <div class="zone-name" id="hubRepasoName">Zona de Repaso</div>
+                <div class="zone-desc" id="hubRepasoDesc">Repasa solo las preguntas que fallaste en los quizzes</div>
                 <div class="zone-stat">
                     <span class="zone-stat-item" id="hubStudyCount">🔄 0 por repasar</span>
                 </div>
@@ -516,8 +516,8 @@
         <div class="zone-card" style="border-color:rgba(46,204,113,0.2)" onclick="goStudyLibrary()">
             <div class="zone-icon" style="background:rgba(46,204,113,0.12);color:#2ecc71">📖</div>
             <div class="zone-info">
-                <div class="zone-name" style="color:#2ecc71">Zona de Estudio</div>
-                <div class="zone-desc">Todas las preguntas con explicaciones detalladas, fórmulas y ejemplos de campo</div>
+                <div class="zone-name" style="color:#2ecc71" id="hubEstudioName">Zona de Estudio</div>
+                <div class="zone-desc" id="hubEstudioDesc">Todas las preguntas con explicaciones detalladas, fórmulas y ejemplos de campo</div>
                 <div class="zone-stat">
                     <span class="zone-stat-item" id="hubLibraryCount">📖 0 temas disponibles</span>
                 </div>
@@ -529,8 +529,8 @@
         <div class="zone-card video-zone" onclick="goVideoZone()">
             <div class="zone-icon">🎥</div>
             <div class="zone-info">
-                <div class="zone-name">Video Zone</div>
-                <div class="zone-desc">Videos de Maestro Mario para aprender visualmente</div>
+                <div class="zone-name" id="hubVideoName">Video Zone</div>
+                <div class="zone-desc" id="hubVideoDesc">Videos de Maestro Mario para aprender visualmente</div>
                 <div class="zone-stat">
                     <span class="zone-stat-item">🎬 Videos de entrenamiento</span>
                 </div>
@@ -539,26 +539,26 @@
         </div>
     </div>
     
-    <button class="bt" onclick="go('s10');renderProfile()" style="background:var(--card);border:2px solid var(--gold);margin-top:16px">👤 Mi Perfil</button>
-    <button class="bt" onclick="go('s7')" style="background:var(--card);border:2px solid var(--accent);margin-top:8px">← Mi Ruta</button>
+    <button class="bt" onclick="go('s10');renderProfile()" style="background:var(--card);border:2px solid var(--gold);margin-top:16px" id="hubProfileBtn">👤 Mi Perfil</button>
+    <button class="bt" onclick="go('s7')" style="background:var(--card);border:2px solid var(--accent);margin-top:8px" id="hubRutaBtn">← Mi Ruta</button>
 </div>
 
 <!-- QUIZ ZONE SELECTOR -->
 <div class="s" id="s7b">
     <div class="lo"><div class="lo-t">📝 QUIZ ZONE</div></div>
     <div class="aw sm" onclick="openAIChat()"><div class="ag" style="background:radial-gradient(circle,var(--electric) 0%,transparent 70%)"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div><span class="ai-badge">AI</span></div>
-    <div class="bb">¿Qué quiz quieres tomar hoy?</div>
+    <div class="bb" id="quizSelBubble">¿Qué quiz quieres tomar hoy?</div>
     <div id="quizSelList" style="width:100%;display:flex;flex-direction:column;gap:12px;margin-top:16px"></div>
-    <button class="bt" onclick="go('s-hub');updateHub()" style="background:var(--card);border:2px solid var(--electric);margin-top:16px">← Volver al Hub</button>
+    <button class="bt" onclick="go('s-hub');updateHub()" style="background:var(--card);border:2px solid var(--electric);margin-top:16px" data-lang="volver-hub">← Volver al Hub</button>
 </div>
 
 <!-- STUDY ZONE -->
 <div class="s" id="s-study">
-    <div class="lo"><div class="lo-t">🔄 ZONA DE REPASO</div></div>
+    <div class="lo"><div class="lo-t" id="repasoTitle">🔄 ZONA DE REPASO</div></div>
     <div class="aw sm" onclick="openAIChat()"><div class="ag" style="background:radial-gradient(circle,var(--accent) 0%,transparent 70%)"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div><span class="ai-badge">AI</span></div>
-    <div class="bb" id="studyBubble">Aquí repasamos lo que necesitas reforzar.</div>
+    <div class="bb" id="studyBubble"></div>
     <div id="studyContent" style="width:100%;margin-top:16px"></div>
-    <button class="bt" onclick="go('s-hub');updateHub()" style="background:var(--card);border:2px solid var(--accent);margin-top:16px">← Volver al Hub</button>
+    <button class="bt" onclick="go('s-hub');updateHub()" style="background:var(--card);border:2px solid var(--accent);margin-top:16px" data-lang="volver-hub">← Volver al Hub</button>
 </div>
 
 <!-- STUDY QUIZ (reuses quiz UI but in study mode) -->
@@ -575,8 +575,8 @@
     <div class="quiz-opts" id="sqOpts"></div>
     <div class="quiz-explain" id="sqExplain"></div>
     <div class="quiz-nav">
-        <button class="quiz-prev" id="sqPrev" onclick="studyPrev()">← Anterior</button>
-        <button class="quiz-fwd" id="sqNext" onclick="studyNext()">Siguiente →</button>
+        <button class="quiz-prev" id="sqPrev" onclick="studyPrev()"></button>
+        <button class="quiz-fwd" id="sqNext" onclick="studyNext()"></button>
     </div>
 </div>
 
@@ -589,20 +589,20 @@
         <div class="quiz-result-label" id="srLabel"></div>
         <div class="bb quiz-result-msg" id="srMsg"></div>
     </div>
-    <button class="bt" onclick="startStudyQuiz(lastStudyCat)">🔄 Repasar de Nuevo</button>
-    <button class="bt" onclick="go('s-study');renderStudyZone()" style="background:var(--card);border:2px solid var(--accent);margin-top:10px">🔄 Zona de Repaso</button>
-    <button class="bt" onclick="go('s-hub');updateHub()" style="background:var(--card);border:2px solid var(--electric);margin-top:10px">← Volver al Hub</button>
+    <button class="bt" onclick="startStudyQuiz(lastStudyCat)" id="studyRetryBtn">🔄 Repasar de Nuevo</button>
+    <button class="bt" onclick="go('s-study');renderStudyZone()" style="background:var(--card);border:2px solid var(--accent);margin-top:10px" id="studyZoneRepasoBtn">🔄 Zona de Repaso</button>
+    <button class="bt" onclick="go('s-hub');updateHub()" style="background:var(--card);border:2px solid var(--electric);margin-top:10px" data-lang="volver-hub">← Volver al Hub</button>
 </div>
 
 <!-- ZONA DE ESTUDIO - ALL QUESTIONS WITH EXPLANATIONS -->
 <div class="s" id="s-library">
-    <div class="lo"><div class="lo-t">📖 ZONA DE ESTUDIO</div></div>
+    <div class="lo"><div class="lo-t" id="estudioTitle">📖 ZONA DE ESTUDIO</div></div>
     <div class="aw sm" onclick="openAIChat()"><div class="ag" style="background:radial-gradient(circle,#2ecc71 0%,transparent 70%)"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div><span class="ai-badge">AI</span></div>
-    <div class="bb" id="libraryBubble">Aquí puedes estudiar TODAS las preguntas con explicaciones detalladas y ejemplos de campo.</div>
+    <div class="bb" id="libraryBubble"></div>
     <div id="libraryContent" style="width:100%;margin-top:16px;padding-bottom:80px"></div>
     <!-- FLOATING NAV -->
     <div class="lib-float-nav">
-        <button class="bt" onclick="go('s-hub');updateHub()" style="background:var(--card);border:2px solid var(--accent);flex:1;margin:0;font-size:14px;padding:12px">← Volver al Hub</button>
+        <button class="bt" onclick="go('s-hub');updateHub()" style="background:var(--card);border:2px solid var(--accent);flex:1;margin:0;font-size:14px;padding:12px" data-lang="volver-hub">← Volver al Hub</button>
     </div>
 </div>
 
@@ -612,7 +612,7 @@
     <div id="libDetailContent" style="width:100%;margin-top:12px;padding-bottom:120px"></div>
     <!-- FLOATING NAV BUTTONS -->
     <div class="lib-float-nav">
-        <button class="bt" onclick="go('s-library');renderStudyLibrary()" style="background:linear-gradient(135deg,#2ecc71,#1a9955);flex:1;margin:0;font-size:13px;padding:12px 8px">📖 Zona de Estudio</button>
+        <button class="bt" onclick="go('s-library');renderStudyLibrary()" style="background:linear-gradient(135deg,#2ecc71,#1a9955);flex:1;margin:0;font-size:13px;padding:12px 8px"><span id="floatLibBtn">📖 Zona de Estudio</span></button>
         <button class="bt" onclick="go('s-hub');updateHub()" style="background:var(--card);border:2px solid var(--accent);flex:1;margin:0;font-size:13px;padding:12px 8px">← Hub</button>
     </div>
 </div>
@@ -621,9 +621,9 @@
 <div class="s" id="s-videos">
     <div class="lo"><div class="lo-t">🎥 VIDEO ZONE</div></div>
     <div class="aw sm" onclick="openAIChat()"><div class="ag" style="background:radial-gradient(circle,#9b59b6 0%,transparent 70%)"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div><span class="ai-badge">AI</span></div>
-    <div class="bb">Videos del Maestro Mario para que aprendas viendo.</div>
+    <div class="bb" id="videoBubble">Videos del Maestro Mario para que aprendas viendo.</div>
     <div id="videoContent" style="width:100%;margin-top:16px"></div>
-    <button class="bt" onclick="go('s-hub');updateHub()" style="background:var(--card);border:2px solid rgba(155,89,182,0.3);margin-top:16px">← Volver al Hub</button>
+    <button class="bt" onclick="go('s-hub');updateHub()" style="background:var(--card);border:2px solid rgba(155,89,182,0.3);margin-top:16px" data-lang="volver-hub">← Volver al Hub</button>
 </div>
 
 <!-- QUIZ -->
@@ -638,7 +638,7 @@
     <div class="bb" id="qBubble"></div>
     <div class="motive-bar" id="qMotive"><div class="motive-text" id="qMotiveText"></div><div class="motive-author" id="qMotiveAuthor"></div></div>
     <div class="formula-helper" id="qFormula">
-        <div class="formula-toggle" id="qFormToggle" onclick="toggleFormulaDetail()">📐 <span id="qFormToggleText">Mario te da una pista — tócame</span></div>
+        <div class="formula-toggle" id="qFormToggle" onclick="toggleFormulaDetail()">📐 <span id="qFormToggleText"></span></div>
         <div class="formula-hint" id="qFormDetail" style="display:none">
             <div class="formula-hint-title" id="qFormTitle">📐 Fórmula Necesaria</div>
             <div class="formula-hint-text" id="qFormText"></div>
@@ -690,8 +690,8 @@
     <div class="quiz-opts" id="qOpts"></div>
     <div class="quiz-explain" id="qExplain"></div>
     <div class="quiz-nav">
-        <button class="quiz-prev" id="qPrev" onclick="prevQuestion()">← Anterior</button>
-        <button class="quiz-fwd" id="qNext" onclick="nextQuestion()">Siguiente →</button>
+        <button class="quiz-prev" id="qPrev" onclick="prevQuestion()"></button>
+        <button class="quiz-fwd" id="qNext" onclick="nextQuestion()"></button>
     </div>
 </div>
 
@@ -711,15 +711,15 @@
         <!-- STUDY ZONE REDIRECT (shown when score < 70%) -->
         <div class="study-redirect" id="rStudyRedirect" style="display:none">
             <div class="study-redirect-icon">📚</div>
-            <div class="study-redirect-title">¡El Maestro Mario te recomienda repasar!</div>
+            <div class="study-redirect-title" id="studyRedirectTitle">¡El Maestro Mario te recomienda repasar!</div>
             <div class="study-redirect-desc" id="rStudyDesc">Tienes preguntas que necesitas reforzar. Ve a la Study Zone para dominarlas.</div>
-            <button class="bt" onclick="go('s-study');renderStudyZone()" style="background:var(--accent);margin-top:8px;padding:12px">🔄 Ir a Zona de Repaso →</button>
+            <button class="bt" onclick="go('s-study');renderStudyZone()" style="background:var(--accent);margin-top:8px;padding:12px"><span class='lang-repaso-btn'>🔄 Ir a Zona de Repaso →</span></button>
         </div>
     </div>
-    <button class="bt" onclick="retryQuiz()">🔄 Intentar de Nuevo</button>
-    <button class="bt" onclick="renderQuizSelector();go('s7b')" style="background:var(--card);border:2px solid var(--electric);margin-top:10px">📝 Otro Quiz</button>
-    <button class="bt" onclick="go('s10');renderProfile()" style="background:var(--card);border:2px solid var(--gold);margin-top:10px">👤 Ver Mi Perfil</button>
-    <button class="bt" onclick="go('s-hub');updateHub()" style="background:var(--card);border:2px solid var(--accent);margin-top:10px">← Volver al Hub</button>
+    <button class="bt" onclick="retryQuiz()" id="retryBtn">🔄 Intentar de Nuevo</button>
+    <button class="bt" onclick="renderQuizSelector();go('s7b')" style="background:var(--card);border:2px solid var(--electric);margin-top:10px" id="otherQuizBtn">📝 Otro Quiz</button>
+    <button class="bt" onclick="go('s10');renderProfile()" style="background:var(--card);border:2px solid var(--gold);margin-top:10px" id="viewProfileBtn">👤 Ver Mi Perfil</button>
+    <button class="bt" onclick="go('s-hub');updateHub()" style="background:var(--card);border:2px solid var(--accent);margin-top:10px" data-lang="volver-hub">← Volver al Hub</button>
 </div>
 
 <!-- PROFILE -->
@@ -727,15 +727,15 @@
     <div class="prof-card">
         <div class="prof-avatar" id="profAvatar" onclick="toggleAvatarPicker()">👤<div class="prof-avatar-edit">✏️</div></div>
         <div class="avatar-picker" id="avatarPicker">
-            <div class="avatar-picker-title">🔧 Elige tu Avatar</div>
-            <div class="avatar-picker-sub">Desbloquea avatares dominando quizzes y subiendo de nivel</div>
+            <div class="avatar-picker-title" id="avatarPickerTitle">🔧 Elige tu Avatar</div>
+            <div class="avatar-picker-sub" id="avatarPickerSub">Desbloquea avatares dominando quizzes y subiendo de nivel</div>
             <div id="avatarGrid"></div>
         </div>
         <div class="prof-name" id="profName"></div>
         <div class="prof-title" id="profTitle"></div>
         <div class="prof-level">
             <div>
-                <div style="font-size:12px;color:var(--muted)">NIVEL</div>
+                <div style="font-size:12px;color:var(--muted)" id="profLevelLabel">NIVEL</div>
                 <div class="prof-lvl-num" id="profLevel">1</div>
             </div>
         </div>
@@ -745,22 +745,22 @@
         </div>
     </div>
     <div class="prof-stats">
-        <div class="prof-stat"><div class="prof-stat-num" id="profPts">0</div><div class="prof-stat-label">Puntos</div></div>
-        <div class="prof-stat"><div class="prof-stat-num" id="profAcc">0%</div><div class="prof-stat-label">Precisión</div></div>
-        <div class="prof-stat"><div class="prof-stat-num" id="profStrk">0</div><div class="prof-stat-label">Mejor Racha</div></div>
+        <div class="prof-stat"><div class="prof-stat-num" id="profPts">0</div><div class="prof-stat-label" id="profPtsLabel">Puntos</div></div>
+        <div class="prof-stat"><div class="prof-stat-num" id="profAcc">0%</div><div class="prof-stat-label" id="profAccLabel">Precisión</div></div>
+        <div class="prof-stat"><div class="prof-stat-num" id="profStrk">0</div><div class="prof-stat-label" id="profStrkLabel">Mejor Racha</div></div>
     </div>
-    <div style="width:100%;margin-top:20px;font-family:'Fredoka',sans-serif;font-size:18px;font-weight:700;text-align:center">🏅 Medallas</div>
+    <div style="width:100%;margin-top:20px;font-family:'Fredoka',sans-serif;font-size:18px;font-weight:700;text-align:center" id="profMedalsTitle">🏅 Medallas</div>
     <div class="medals-grid" id="medalsGrid"></div>
-    <button class="bt" onclick="renderQuizSelector();go('s7b')" style="margin-top:20px">📝 Tomar un Quiz</button>
-    <button class="bt" onclick="toggleMusicPanel()" style="background:var(--card);border:2px solid rgba(0,212,255,0.3);margin-top:10px">🎶 Cambiar Música</button>
-    <button class="bt" onclick="go('s-hub');updateHub()" style="background:var(--card);border:2px solid var(--accent);margin-top:10px">← Volver al Hub</button>
+    <button class="bt" onclick="renderQuizSelector();go('s7b')" style="margin-top:20px" id="profQuizBtn">📝 Tomar un Quiz</button>
+    <button class="bt" onclick="toggleMusicPanel()" style="background:var(--card);border:2px solid rgba(0,212,255,0.3);margin-top:10px" id="profMusicBtn">🎶 Cambiar Música</button>
+    <button class="bt" onclick="go('s-hub');updateHub()" style="background:var(--card);border:2px solid var(--accent);margin-top:10px" data-lang="volver-hub">← Volver al Hub</button>
 </div>
 </div>
 <div class="cw" id="conf"></div>
 <button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵</button>
 <button class="music-settings" onclick="toggleMusicPanel()">🎶</button>
 <div class="music-panel" id="musicPanel">
-    <div class="music-panel-title">🎶 Elige tu música</div>
+    <div class="music-panel-title" id="musicPanelTitle">🎶 Elige tu música</div>
     <div id="musicOptions"></div>
     <div class="music-upload" onclick="document.getElementById('musicFile').click()">
         <div>📁 <b>Mi Música</b></div>
@@ -799,16 +799,16 @@ let customAudio=null;
 let musicPanelOpen=false;
 
 const MUSIC_STYLES=[
-    {id:'pokemon',icon:'🎮',name:'Pokémon Adventure',desc:'8-bit clásico'},
-    {id:'lofi',icon:'🎧',name:'Lo-Fi Chill',desc:'Relajado para estudiar'},
-    {id:'battle',icon:'⚔️',name:'Boss Battle',desc:'Épico e intenso'},
-    {id:'reggaeton',icon:'🎺',name:'Reggaetón Study',desc:'Ritmo latino'},
-    {id:'jazz',icon:'🎷',name:'Jazz Smooth',desc:'Suave y elegante'},
-    {id:'tropical',icon:'🌴',name:'Tropical Vibes',desc:'Cumbia y playa'},
-    {id:'rock8bit',icon:'🎸',name:'Rock 8-Bit',desc:'Rock clásico pixelado'},
-    {id:'ambient',icon:'🌙',name:'Ambient Night',desc:'Calmado nocturno'},
-    {id:'mariachi',icon:'🇲🇽',name:'Mariachi Digital',desc:'Orgullo mexicano'},
-    {id:'silent',icon:'🔇',name:'Sin Música',desc:'Solo silencio'}
+    {id:'pokemon',icon:'🎮',name:'Pokémon Adventure',desc:'8-bit clásico',desc_en:'8-bit classic'},
+    {id:'lofi',icon:'🎧',name:'Lo-Fi Chill',desc:'Relajado para estudiar',desc_en:'Relaxed for studying'},
+    {id:'battle',icon:'⚔️',name:'Boss Battle',desc:'Épico e intenso',desc_en:'Epic and intense'},
+    {id:'reggaeton',icon:'🎺',name:'Reggaetón Study',desc:'Ritmo latino',desc_en:'Latin rhythm'},
+    {id:'jazz',icon:'🎷',name:'Jazz Smooth',desc:'Suave y elegante',desc_en:'Smooth and elegant'},
+    {id:'tropical',icon:'🌴',name:'Tropical Vibes',desc:'Cumbia y playa',desc_en:'Cumbia and beach'},
+    {id:'rock8bit',icon:'🎸',name:'Rock 8-Bit',desc:'Rock clásico pixelado',desc_en:'Classic pixel rock'},
+    {id:'ambient',icon:'🌙',name:'Ambient Night',desc:'Calmado nocturno',desc_en:'Calm nighttime'},
+    {id:'mariachi',icon:'🇲🇽',name:'Mariachi Digital',desc:'Orgullo mexicano',desc_en:'Mexican pride'},
+    {id:'silent',icon:'🔇',name:'Sin Música',desc:'Solo silencio',desc_en:'Just silence'}
 ];
 
 function noteFreq(note,octave){
@@ -960,7 +960,7 @@ function renderMusicOptions(){
     document.getElementById('musicOptions').innerHTML=MUSIC_STYLES.map(s=>
         '<div class="music-option'+(currentMusicStyle===s.id?' selected':'')+'" onclick="switchMusic(\''+s.id+'\')">'+
         '<div class="music-option-icon">'+s.icon+'</div>'+
-        '<div class="music-option-info"><div class="music-option-name">'+s.name+'</div><div class="music-option-desc">'+s.desc+'</div></div>'+
+        '<div class="music-option-info"><div class="music-option-name">'+s.name+'</div><div class="music-option-desc">'+(D.lang==="es"?s.desc:(s.desc_en||s.desc))+'</div></div>'+
         '</div>'
     ).join('');
     // Show custom music option if loaded
@@ -1210,10 +1210,10 @@ async function getAIResponse(msg){
         });
         if(!r.ok)throw new Error('Chat API error');
         const d=await r.json();
-        return d.content&&d.content[0]?d.content[0].text:'¡Órale técnico! Hubo un problema, intenta de nuevo.';
+        return d.content&&d.content[0]?d.content[0].text:(D.lang==='es'?'¡Órale técnico! Hubo un problema, intenta de nuevo.':'Hey technician! There was a problem, try again.');
     }catch(e){
         console.error('AI Chat Error:',e);
-        return '¡Órale! Problema de conexión. Intenta de nuevo.';
+        return D.lang==='es'?'¡Órale! Problema de conexión. Intenta de nuevo.':'Connection problem. Please try again.';
     }
 }
 
@@ -1224,6 +1224,59 @@ let speechAbort=null;
 function prepareForSpeech(text){
     if(!text)return text;
     let t=text;
+    // Use English speech conversions if language is English
+    if(D.lang==='en'){
+        t=t.replace(/(\d+)\s*°F/g,'$1 degrees Fahrenheit');
+        t=t.replace(/(\d+)\s*°C/g,'$1 degrees Celsius');
+        t=t.replace(/(\d+)\s*°/g,'$1 degrees');
+        t=t.replace(/R-(\d+)([A-Za-z]*)/g,function(m,num,suffix){
+            if(!suffix)return 'refrigerant R '+num;
+            return 'refrigerant R '+num+' '+suffix;
+        });
+        t=t.replace(/(\d+)\s*psi/gi,'$1 P S I');
+        t=t.replace(/(\d+)\s*kW\b/g,'$1 kilowatts');
+        t=t.replace(/(\d+)\s*HP\b/gi,'$1 horsepower');
+        t=t.replace(/BTU\/h/gi,'B T U per hour');
+        t=t.replace(/BTU/gi,'B T U');
+        t=t.replace(/(\d+)\s*V\b(?!olt)/g,'$1 volts');
+        t=t.replace(/(\d+)\s*W\b(?!att)/g,'$1 watts');
+        t=t.replace(/(\d+)\s*Ω/g,'$1 ohms');
+        t=t.replace(/(\d+)\s*A\b(?![\w])/g,'$1 amps');
+        t=t.replace(/CFM/g,'C F M');
+        t=t.replace(/TXV/g,'thermostatic expansion valve');
+        t=t.replace(/EPR/g,'evaporator pressure regulator');
+        t=t.replace(/GWP/g,'global warming potential');
+        t=t.replace(/ODP/g,'ozone depletion potential');
+        t=t.replace(/\s*×\s*/g,' times ');
+        t=t.replace(/\s*÷\s*/g,' divided by ');
+        t=t.replace(/\s*=\s*/g,' equals ');
+        t=t.replace(/\s*\+\s*/g,' plus ');
+        t=t.replace(/\s*−\s*/g,' minus ');
+        t=t.replace(/√/g,'square root of ');
+        t=t.replace(/²/g,' squared');
+        t=t.replace(/\//g,' over ');
+        t=t.replace(/HVAC/g,'H V A C');
+        t=t.replace(/NEC/g,'National Electrical Code');
+        t=t.replace(/NFPA/g,'N F P A');
+        t=t.replace(/OSHA/g,'O S H A');
+        t=t.replace(/EPA/g,'E P A');
+        t=t.replace(/LOTO/g,'lockout tagout');
+        t=t.replace(/AC\b/g,'air conditioning');
+        t=t.replace(/GFCI/g,'G F C I');
+        t=t.replace(/AFCI/g,'A F C I');
+        t=t.replace(/VFD/g,'variable frequency drive');
+        t=t.replace(/POE/g,'polyolester oil');
+        t=t.replace(/PAG/g,'P A G oil');
+        t=t.replace(/CW\b/g,'clockwise');
+        t=t.replace(/CCW\b/g,'counter clockwise');
+        t=t.replace(/UV\b/g,'ultraviolet');
+        t=t.replace(/&/g,' and ');
+        t=t.replace(/%/g,' percent');
+        t=t.replace(/#/g,'number ');
+        t=t.replace(/[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu,'');
+        t=t.replace(/\s{2,}/g,' ').trim();
+        return t;
+    }
     // === FIRST: Refrigerant names (before unit conversions to avoid R-404A → "404 amperios") ===
     t=t.replace(/R-(\d+)([A-Za-z]*)/g,function(m,num,suffix){
         if(!suffix)return 'refrigerante R '+num;
@@ -1485,7 +1538,7 @@ const u=()=>{document.querySelectorAll('[data-t]').forEach(e=>e.textContent=t(e.
 const go=id=>{document.querySelectorAll('.s').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on');window.scrollTo(0,0);};
 const rx=(id,c)=>{const e=document.getElementById(id);if(e){e.classList.add(c);setTimeout(()=>e.classList.remove(c),1500);}};
 
-function setLang(l){D.lang=l;unlockAudio();u();go('s2');document.getElementById('nm').placeholder=t('name_ph');speakText(t('welcome_speech'));}
+function setLang(l){D.lang=l;unlockAudio();u();updateLanguageUI();go('s2');document.getElementById('nm').placeholder=t('name_ph');speakText(t('welcome_speech'));}
 function sName(){D.name=document.getElementById('nm').value.trim();u();bLvl();go('s3');rx('a3','nod');speakText(t('level_speech'));document.getElementById('profileBtn').classList.add('active');}
 function pLvl(e,v){document.querySelectorAll('#lo .oc').forEach(o=>o.classList.remove('sel'));e.classList.add('sel');D.level=v;document.getElementById('b3').disabled=false;rx('a3','nod');}
 function sLvl(){u();bSpc();go('s4');speakText(t('spec_speech'));}
@@ -1510,9 +1563,9 @@ function startApp(){
 }
 
 const QUIZ_LIST=[
-    {id:'principiante',icon:'📚',title:'Principiante HVAC',desc:'50 preguntas de electricidad básica, refrigeración, AC, herramientas y seguridad',count:50,data:'QUIZ_PRINCIPIANTE',color:'#00d4ff'},
-    {id:'electricidad',icon:'⚡',title:'Electricidad Avanzada',desc:'117 preguntas: Ley de Ohm, NEC, motores, VFD, GFCI, AFCI, circuitos, contactores',count:117,data:'QUIZ_ELECTRICIDAD',color:'#ffd700'},
-    {id:'refrigeracion',icon:'❄️',title:'Refrigeración Completa',desc:'200 preguntas: Doméstica, Comercial, Walk-in, EPA 608, Troubleshooting, Refrigerantes, Seguridad',count:200,data:'QUIZ_REFRIGERACION',color:'#00e5ff'}
+    {id:'principiante',icon:'📚',title:'Principiante HVAC',title_en:'HVAC Beginner',desc:'50 preguntas de electricidad básica, refrigeración, AC, herramientas y seguridad',desc_en:'50 questions on basic electrical, refrigeration, AC, tools and safety',count:50,data:'QUIZ_PRINCIPIANTE',color:'#00d4ff'},
+    {id:'electricidad',icon:'⚡',title:'Electricidad Avanzada',title_en:'Advanced Electrical',desc:'117 preguntas: Ley de Ohm, NEC, motores, VFD, GFCI, AFCI, circuitos, contactores',desc_en:'117 questions: Ohm\'s Law, NEC, motors, VFD, GFCI, AFCI, circuits, contactors',count:117,data:'QUIZ_ELECTRICIDAD',color:'#ffd700'},
+    {id:'refrigeracion',icon:'❄️',title:'Refrigeración Completa',title_en:'Complete Refrigeration',desc:'200 preguntas: Doméstica, Comercial, Walk-in, EPA 608, Troubleshooting, Refrigerantes, Seguridad',desc_en:'200 questions: Domestic, Commercial, Walk-in, EPA 608, Troubleshooting, Refrigerants, Safety',count:200,data:'QUIZ_REFRIGERACION',color:'#00e5ff'}
 ];
 
 function renderQuizSelector(){
@@ -1525,8 +1578,8 @@ function renderQuizSelector(){
         return '<div class="quiz-sel-card" onclick="selectQuiz(\''+q.id+'\')" style="border-color:'+q.color+'22">'+
             '<div class="qs-icon" style="background:'+q.color+'15;color:'+q.color+'">'+q.icon+'</div>'+
             '<div class="qs-info"><div class="qs-title" style="color:'+q.color+'">'+q.title+'</div>'+
-            '<div class="qs-desc">'+q.desc+'</div>'+
-            '<div class="qs-count">📝 '+q.count+' preguntas</div>'+stars+'</div>'+badge+'</div>';
+            '<div class="qs-desc">'+(D.lang==='es'?q.desc:(q.desc_en||q.desc))+'</div>'+
+            '<div class="qs-count">📝 '+q.count+(D.lang==='es'?' preguntas':' questions')+'</div>'+stars+'</div>'+badge+'</div>';
     }).join('');
 }
 
@@ -1951,7 +2004,7 @@ function showFormulaHelper(q){
     }
     
     helper.classList.add('show');
-    document.getElementById('qFormToggleText').textContent=D.lang==='es'?'📐 '+formula.hint:'📐 '+formula.hint;
+    document.getElementById('qFormToggleText').textContent='📐 '+(D.lang==='es'?formula.hint:(formula.hint_en||formula.hint));
     document.getElementById('qFormTitle').textContent=formula.title;
     document.getElementById('qFormText').innerHTML=
         '<span class="formula-big">'+formula.formula+'</span>'+
@@ -1998,63 +2051,54 @@ function getFormulaHintBubble(q){
 
 // ========== MOTIVATIONAL QUOTES SYSTEM ==========
 const MOTIVATION_QUOTES=[
-    // 48 Leyes del Poder - Robert Greene
-    {text:'"Nunca brilles más que tu maestro... hasta que lo superes."',author:'— 48 Leyes del Poder',cat:'power'},
-    {text:'"Los que más saben, más practican en silencio."',author:'— Inspirado en 48 Leyes del Poder',cat:'power'},
-    {text:'"Domina el arte de la paciencia — todo maestro fue primero estudiante."',author:'— 48 Leyes del Poder',cat:'power'},
-    {text:'"El éxito no viene de lo que haces de vez en cuando, sino de lo que haces consistentemente."',author:'— 48 Leyes del Poder',cat:'power'},
-    {text:'"Planea hasta el final: el técnico que anticipa, domina."',author:'— 48 Leyes del Poder',cat:'power'},
-    {text:'"Aprende a usar la ausencia para aumentar tu valor."',author:'— 48 Leyes del Poder',cat:'power'},
-    {text:'"Gana a través de tus acciones, nunca a través de argumentos."',author:'— 48 Leyes del Poder',cat:'power'},
-    {text:'"La reputación es la piedra angular del poder — cuida tu trabajo."',author:'— 48 Leyes del Poder',cat:'power'},
-    
-    // El Arte de la Guerra - Sun Tzu
-    {text:'"El guerrero que se prepara, no le teme a la batalla."',author:'— El Arte de la Guerra, Sun Tzu',cat:'war'},
-    {text:'"Conoce tu oficio y conoce tus herramientas, y en 100 diagnósticos no fallarás."',author:'— Adaptado de Sun Tzu',cat:'war'},
-    {text:'"La victoria pertenece al que se prepara más."',author:'— El Arte de la Guerra, Sun Tzu',cat:'war'},
-    {text:'"Un técnico preparado no necesita suerte."',author:'— Inspirado en Sun Tzu',cat:'war'},
-    {text:'"El mejor diagnóstico se hace antes de abrir la unidad."',author:'— Adaptado de Sun Tzu',cat:'war'},
-    
-    // Piense y Hágase Rico - Napoleon Hill
-    {text:'"Todo lo que la mente puede concebir y creer, lo puede lograr."',author:'— Napoleon Hill',cat:'hill'},
-    {text:'"El punto de partida de todo logro es el deseo."',author:'— Napoleon Hill',cat:'hill'},
-    {text:'"La paciencia, la persistencia y el sudor hacen una combinación imbatible."',author:'— Napoleon Hill',cat:'hill'},
-    {text:'"No esperes. El momento perfecto nunca llegará. Empieza ahora."',author:'— Napoleon Hill',cat:'hill'},
-    
-    // Los 7 Hábitos - Stephen Covey
-    {text:'"Comienza con el fin en mente — ¿quieres ser dueño o empleado?"',author:'— Stephen Covey',cat:'covey'},
-    {text:'"Afila la sierra: cada hora que estudias vale más que 10 horas de trabajo sin preparación."',author:'— Adaptado de Stephen Covey',cat:'covey'},
-    {text:'"Primero lo primero: domina las bases y todo lo demás caerá en su lugar."',author:'— Stephen Covey',cat:'covey'},
-    
-    // Padre Rico Padre Pobre - Kiyosaki
-    {text:'"Los pobres trabajan por dinero. Los ricos hacen que el dinero trabaje para ellos."',author:'— Robert Kiyosaki',cat:'kiyosaki'},
-    {text:'"La educación financiera es el puente entre ser técnico y ser empresario."',author:'— Adaptado de Kiyosaki',cat:'kiyosaki'},
-    {text:'"Tu conocimiento es tu activo más valioso — invierte en él."',author:'— Robert Kiyosaki',cat:'kiyosaki'},
-    
-    // HVAC / Maestro Mario originales
-    {text:'"Si no mides, estás adivinando." ¡Nunca adivines, mide!',author:'— Maestro Mario',cat:'mario'},
-    {text:'"El técnico que estudia hoy, cobra más mañana."',author:'— Maestro Mario',cat:'mario'},
-    {text:'"Cada pregunta que fallas es una lección que ganas."',author:'— Maestro Mario',cat:'mario'},
-    {text:'"No hay técnico malo, hay técnico que no practica."',author:'— Maestro Mario',cat:'mario'},
-    {text:'"Tu herramienta más poderosa es tu conocimiento, no tu llave."',author:'— Maestro Mario',cat:'mario'},
-    {text:'"Un técnico sin certificación es como un doctor sin título."',author:'— Maestro Mario',cat:'mario'},
-    {text:'"El que sabe diagnosticar, nunca se queda sin trabajo."',author:'— Maestro Mario',cat:'mario'},
-    {text:'"Hoy estudias, mañana cobras. Así de simple."',author:'— Maestro Mario',cat:'mario'},
-    {text:'"La diferencia entre un técnico de $20/hr y uno de $50/hr es lo que sabe, no lo que hace."',author:'— Maestro Mario',cat:'mario'},
-    {text:'"Cada circuito que entiendes, cada fórmula que dominas, te acerca a tu libertad."',author:'— Maestro Mario',cat:'mario'},
-    {text:'"Los mejores técnicos nunca dejan de aprender."',author:'— Maestro Mario',cat:'mario'},
-    {text:'"Tu competencia no estudia — tú sí. Por eso vas a ganar."',author:'— Maestro Mario',cat:'mario'},
-    
-    // Mentalidad Mamba - Kobe Bryant
-    {text:'"El trabajo duro supera al talento cuando el talento no trabaja duro."',author:'— Kobe Bryant',cat:'mamba'},
-    {text:'"Yo no le tengo miedo al fracaso. Le tengo miedo a no intentarlo."',author:'— Kobe Bryant',cat:'mamba'},
-    
-    // Otros
-    {text:'"El éxito es la suma de pequeños esfuerzos repetidos día tras día."',author:'— Robert Collier',cat:'other'},
-    {text:'"Disciplina es hacer lo que necesitas hacer, aunque no tengas ganas."',author:'— Anónimo',cat:'other'},
-    {text:'"El experto en algo fue una vez un principiante."',author:'— Helen Hayes',cat:'other'},
-    {text:'"No te compares con otros. Compárate con quien eras ayer."',author:'— Jordan Peterson',cat:'other'},
-    {text:'"La consistencia es más importante que la perfección."',author:'— Anónimo',cat:'other'},
+    // 48 Laws of Power - Robert Greene
+    {es:'"Nunca brilles más que tu maestro... hasta que lo superes."',en:'"Never outshine your master... until you surpass them."',author:'— 48 Laws of Power'},
+    {es:'"Los que más saben, más practican en silencio."',en:'"Those who know most, practice in silence."',author:'— 48 Laws of Power'},
+    {es:'"Domina el arte de la paciencia — todo maestro fue primero estudiante."',en:'"Master the art of patience — every master was first a student."',author:'— 48 Laws of Power'},
+    {es:'"El éxito no viene de lo que haces de vez en cuando, sino de lo que haces consistentemente."',en:'"Success doesn\'t come from what you do occasionally, but from what you do consistently."',author:'— 48 Laws of Power'},
+    {es:'"Planea hasta el final: el técnico que anticipa, domina."',en:'"Plan all the way to the end: the tech who anticipates, dominates."',author:'— 48 Laws of Power'},
+    {es:'"Gana a través de tus acciones, nunca a través de argumentos."',en:'"Win through your actions, never through arguments."',author:'— 48 Laws of Power'},
+    {es:'"La reputación es la piedra angular del poder — cuida tu trabajo."',en:'"Reputation is the cornerstone of power — take care of your work."',author:'— 48 Laws of Power'},
+    // Art of War - Sun Tzu
+    {es:'"El guerrero que se prepara, no le teme a la batalla."',en:'"The warrior who prepares does not fear the battle."',author:'— Sun Tzu'},
+    {es:'"Conoce tu oficio y conoce tus herramientas, y en 100 diagnósticos no fallarás."',en:'"Know your trade and know your tools, and in 100 diagnostics you will not fail."',author:'— Sun Tzu'},
+    {es:'"La victoria pertenece al que se prepara más."',en:'"Victory belongs to the most prepared."',author:'— Sun Tzu'},
+    {es:'"Un técnico preparado no necesita suerte."',en:'"A prepared technician doesn\'t need luck."',author:'— Sun Tzu'},
+    {es:'"El mejor diagnóstico se hace antes de abrir la unidad."',en:'"The best diagnostic is done before opening the unit."',author:'— Sun Tzu'},
+    // Napoleon Hill
+    {es:'"Todo lo que la mente puede concebir y creer, lo puede lograr."',en:'"Whatever the mind can conceive and believe, it can achieve."',author:'— Napoleon Hill'},
+    {es:'"El punto de partida de todo logro es el deseo."',en:'"The starting point of all achievement is desire."',author:'— Napoleon Hill'},
+    {es:'"La paciencia, la persistencia y el sudor hacen una combinación imbatible."',en:'"Patience, persistence, and perspiration make an unbeatable combination."',author:'— Napoleon Hill'},
+    {es:'"No esperes. El momento perfecto nunca llegará. Empieza ahora."',en:'"Don\'t wait. The perfect moment will never come. Start now."',author:'— Napoleon Hill'},
+    // Stephen Covey
+    {es:'"Comienza con el fin en mente — ¿quieres ser dueño o empleado?"',en:'"Begin with the end in mind — do you want to be an owner or an employee?"',author:'— Stephen Covey'},
+    {es:'"Afila la sierra: cada hora que estudias vale más que 10 horas de trabajo sin preparación."',en:'"Sharpen the saw: every hour you study is worth more than 10 hours of unprepared work."',author:'— Stephen Covey'},
+    {es:'"Primero lo primero: domina las bases y todo lo demás caerá en su lugar."',en:'"First things first: master the basics and everything else falls into place."',author:'— Stephen Covey'},
+    // Kiyosaki
+    {es:'"Los pobres trabajan por dinero. Los ricos hacen que el dinero trabaje para ellos."',en:'"The poor work for money. The rich make money work for them."',author:'— Robert Kiyosaki'},
+    {es:'"Tu conocimiento es tu activo más valioso — invierte en él."',en:'"Your knowledge is your most valuable asset — invest in it."',author:'— Robert Kiyosaki'},
+    // Maestro Mario
+    {es:'"Si no mides, estás adivinando." ¡Nunca adivines, mide!',en:'"If you don\'t measure, you\'re guessing." Never guess, measure!',author:'— Maestro Mario'},
+    {es:'"El técnico que estudia hoy, cobra más mañana."',en:'"The technician who studies today earns more tomorrow."',author:'— Maestro Mario'},
+    {es:'"Cada pregunta que fallas es una lección que ganas."',en:'"Every question you miss is a lesson you gain."',author:'— Maestro Mario'},
+    {es:'"No hay técnico malo, hay técnico que no practica."',en:'"There\'s no bad technician, only one who doesn\'t practice."',author:'— Maestro Mario'},
+    {es:'"Tu herramienta más poderosa es tu conocimiento, no tu llave."',en:'"Your most powerful tool is your knowledge, not your wrench."',author:'— Maestro Mario'},
+    {es:'"Un técnico sin certificación es como un doctor sin título."',en:'"A technician without certification is like a doctor without a degree."',author:'— Maestro Mario'},
+    {es:'"El que sabe diagnosticar, nunca se queda sin trabajo."',en:'"The one who knows how to diagnose never runs out of work."',author:'— Maestro Mario'},
+    {es:'"Hoy estudias, mañana cobras. Así de simple."',en:'"Study today, earn more tomorrow. Simple as that."',author:'— Maestro Mario'},
+    {es:'"La diferencia entre un técnico de $20/hr y uno de $50/hr es lo que sabe, no lo que hace."',en:'"The difference between a $20/hr and a $50/hr tech is what they know, not what they do."',author:'— Maestro Mario'},
+    {es:'"Cada circuito que entiendes, cada fórmula que dominas, te acerca a tu libertad."',en:'"Every circuit you understand, every formula you master, brings you closer to freedom."',author:'— Maestro Mario'},
+    {es:'"Los mejores técnicos nunca dejan de aprender."',en:'"The best technicians never stop learning."',author:'— Maestro Mario'},
+    {es:'"Tu competencia no estudia — tú sí. Por eso vas a ganar."',en:'"Your competition isn\'t studying — you are. That\'s why you\'ll win."',author:'— Maestro Mario'},
+    // Kobe Bryant
+    {es:'"El trabajo duro supera al talento cuando el talento no trabaja duro."',en:'"Hard work beats talent when talent doesn\'t work hard."',author:'— Kobe Bryant'},
+    {es:'"Yo no le tengo miedo al fracaso. Le tengo miedo a no intentarlo."',en:'"I don\'t fear failure. I fear not trying."',author:'— Kobe Bryant'},
+    // Other
+    {es:'"El éxito es la suma de pequeños esfuerzos repetidos día tras día."',en:'"Success is the sum of small efforts repeated day after day."',author:'— Robert Collier'},
+    {es:'"Disciplina es hacer lo que necesitas hacer, aunque no tengas ganas."',en:'"Discipline is doing what you need to do, even when you don\'t feel like it."',author:'— Anonymous'},
+    {es:'"El experto en algo fue una vez un principiante."',en:'"The expert in anything was once a beginner."',author:'— Helen Hayes'},
+    {es:'"No te compares con otros. Compárate con quien eras ayer."',en:'"Don\'t compare yourself to others. Compare yourself to who you were yesterday."',author:'— Jordan Peterson'},
+    {es:'"La consistencia es más importante que la perfección."',en:'"Consistency is more important than perfection."',author:'— Anonymous'},
 ];
 
 let lastQuoteIdx=-1;
@@ -2083,6 +2127,7 @@ function showQuestion(){
     const pct=Math.round((quizIdx/quizData.length)*100);
     document.getElementById('qBar').style.width=pct+'%';
     document.getElementById('qNum').textContent=(D.lang==='es'?'Pregunta ':'Question ')+(quizIdx+1)+' / '+quizData.length;
+    document.getElementById('qPrev').textContent=D.lang==='es'?'← Anterior':'← Previous';
     document.getElementById('qCat').textContent=q.cat;
     
     // Show formula helper if question needs it
@@ -2261,11 +2306,11 @@ function answerQuiz(idx,el){
         // === MILESTONE MESSAGES based on progress ===
         const progressPct=Math.round(((quizIdx+1)/quizData.length)*100);
         if(progressPct>=90&&progressPct<95){
-            cheer='🎯 ¡Concentración total, '+D.name+'! ¡Ya lo tienes, campeón!';
+            cheer=D.lang==='es'?'🎯 ¡Concentración total, '+D.name+'! ¡Ya lo tienes, campeón!':'🎯 Total focus, '+D.name+'! You almost got it, champ!';
         }else if(progressPct>=70&&progressPct<75){
-            cheer='👑 ¡Ya puedes saborear la victoria, '+D.name+'! ¡No aflojes!';
+            cheer=D.lang==='es'?'👑 ¡Ya puedes saborear la victoria, '+D.name+'! ¡No aflojes!':'👑 You can taste victory, '+D.name+'! Don\'t let up!';
         }else if(progressPct>=48&&progressPct<52){
-            cheer='🏅 ¡Ya casi llegas a la mitad! ¡Esa medalla se acerca, '+D.name+'!';
+            cheer=D.lang==='es'?'🏅 ¡Ya casi llegas a la mitad! ¡Esa medalla se acerca, '+D.name+'!':'🏅 Almost halfway there! That medal is getting closer, '+D.name+'!';
         }
         document.getElementById('qBubble').textContent=cheer;
         celebrate(quizStreak);
@@ -2413,10 +2458,10 @@ function showResult(){
     const retryBtn=document.querySelector('#s9 .bt[onclick="retryQuiz()"]');
     if(retryBtn){
         if(failedCount>0&&pct<100){
-            retryBtn.textContent='🔄 Repasar las '+failedCount+' que fallé';
+            retryBtn.textContent=D.lang==='es'?'🔄 Repasar las '+failedCount+' que fallé':'🔄 Review the '+failedCount+' I missed';
             retryBtn.style.display='block';
         }else{
-            retryBtn.textContent='🔄 ¡Perfecto! Intentar de Nuevo';
+            retryBtn.textContent=D.lang==='es'?'🔄 ¡Perfecto! Intentar de Nuevo':'🔄 Perfect! Try Again';
         }
     }
     
@@ -2428,6 +2473,9 @@ function showResult(){
         document.getElementById('rStudyDesc').textContent=D.lang==='es'?
             'Tienes '+wrongCount+' preguntas que necesitas reforzar. Ve a la Zona de Repaso para dominarlas.':
             'You have '+wrongCount+' questions to review. Go to the Review Zone to master them.';
+    // Update redirect button text
+    const redirectTitle=document.querySelector('#rStudyRedirect .study-redirect-title');
+    if(redirectTitle)redirectTitle.textContent=D.lang==='es'?'¡El Maestro Mario te recomienda repasar!':'Maestro Mario recommends you review!';
     }else{
         studyRedirect.style.display='none';
     }
@@ -2435,22 +2483,29 @@ function showResult(){
 
 // ========== PROFILE & MEDAL SYSTEM ==========
 const MEDALS_DEF=[
-    {id:'bronze_principiante',icon:'🥉',name:'Bronce Principiante',desc:'100% en quiz principiante'},
-    {id:'silver_principiante',icon:'🥈',name:'Plata Principiante',desc:'100% dos veces seguidas'},
-    {id:'gold_principiante',icon:'🥇',name:'Oro Principiante',desc:'100% tres veces seguidas'},
-    {id:'bronze_electricidad',icon:'⚡',name:'Maestro Eléctrico',desc:'100% en quiz de electricidad'},
-    {id:'bronze_refrigeracion',icon:'❄️',name:'Maestro Refrigeración',desc:'100% en quiz de refrigeración'},
-    {id:'streak_5',icon:'🔥',name:'En Llamas',desc:'Racha de 5 correctas'},
-    {id:'streak_10',icon:'⚡',name:'Imparable',desc:'Racha de 10 correctas'},
-    {id:'streak_20',icon:'💥',name:'Leyenda',desc:'Racha de 20 correctas'},
-    {id:'quiz_5',icon:'📝',name:'Estudiante',desc:'Completar 5 quizzes'},
-    {id:'quiz_15',icon:'📚',name:'Estudioso',desc:'Completar 15 quizzes'},
-    {id:'correct_100',icon:'💯',name:'Centurión',desc:'100 respuestas correctas'},
-    {id:'correct_500',icon:'🌟',name:'Maestro en Entrenamiento',desc:'500 respuestas correctas'},
-    {id:'level_5',icon:'⭐',name:'Nivel 5',desc:'Alcanzar nivel 5'},
-    {id:'level_10',icon:'👑',name:'Nivel 10',desc:'Alcanzar nivel 10'}
+    {id:'bronze_principiante',icon:'🥉',name:'Bronce Principiante',name_en:'Bronze Beginner',desc:'100% en quiz principiante',desc_en:'100% on beginner quiz'},
+    {id:'silver_principiante',icon:'🥈',name:'Plata Principiante',name_en:'Silver Beginner',desc:'100% dos veces seguidas',desc_en:'100% twice in a row'},
+    {id:'gold_principiante',icon:'🥇',name:'Oro Principiante',name_en:'Gold Beginner',desc:'100% tres veces seguidas',desc_en:'100% three times in a row'},
+    {id:'bronze_electricidad',icon:'⚡',name:'Maestro Eléctrico',name_en:'Electrical Master',desc:'100% en quiz de electricidad',desc_en:'100% on electrical quiz'},
+    {id:'bronze_refrigeracion',icon:'❄️',name:'Maestro Refrigeración',name_en:'Refrigeration Master',desc:'100% en quiz de refrigeración',desc_en:'100% on refrigeration quiz'},
+    {id:'streak_5',icon:'🔥',name:'En Llamas',name_en:'On Fire',desc:'Racha de 5 correctas',desc_en:'Streak of 5 correct'},
+    {id:'streak_10',icon:'⚡',name:'Imparable',name_en:'Unstoppable',desc:'Racha de 10 correctas',desc_en:'Streak of 10 correct'},
+    {id:'streak_20',icon:'💥',name:'Leyenda',name_en:'Legend',desc:'Racha de 20 correctas',desc_en:'Streak of 20 correct'},
+    {id:'quiz_5',icon:'📝',name:'Estudiante',name_en:'Student',desc:'Completar 5 quizzes',desc_en:'Complete 5 quizzes'},
+    {id:'quiz_15',icon:'📚',name:'Estudioso',name_en:'Scholar',desc:'Completar 15 quizzes',desc_en:'Complete 15 quizzes'},
+    {id:'correct_100',icon:'💯',name:'Centurión',name_en:'Centurion',desc:'100 respuestas correctas',desc_en:'100 correct answers'},
+    {id:'correct_500',icon:'🌟',name:'Maestro en Entrenamiento',name_en:'Master in Training',desc:'500 respuestas correctas',desc_en:'500 correct answers'},
+    {id:'level_5',icon:'⭐',name:'Nivel 5',name_en:'Level 5',desc:'Alcanzar nivel 5',desc_en:'Reach level 5'},
+    {id:'level_10',icon:'👑',name:'Nivel 10',name_en:'Level 10',desc:'Alcanzar nivel 10',desc_en:'Reach level 10'}
 ];
 
+const LEVEL_TITLES_ES={
+    1:'Aprendiz Novato',2:'Aprendiz',3:'Ayudante',4:'Técnico Jr.',5:'Técnico',
+    6:'Técnico Senior',7:'Especialista',8:'Experto',9:'Maestro',10:'Gran Maestro',};
+const LEVEL_TITLES_EN={
+    1:'Rookie Apprentice',2:'Apprentice',3:'Helper',4:'Jr. Technician',5:'Technician',
+    6:'Senior Technician',7:'Specialist',8:'Expert',9:'Master',10:'Grand Master',};
+function getLevelTitle(lvl){return D.lang==='es'?(LEVEL_TITLES_ES[lvl]||'Leyenda'):(LEVEL_TITLES_EN[lvl]||'Legend');}
 const LEVEL_TITLES={
     1:'Aprendiz Novato',2:'Aprendiz',3:'Ayudante',4:'Técnico Jr.',5:'Técnico',
     6:'Técnico Senior',7:'Especialista',8:'Experto',9:'Maestro',10:'Gran Maestro',
@@ -2662,7 +2717,9 @@ function renderProfile(){
     // Medals grid
     document.getElementById('medalsGrid').innerHTML=MEDALS_DEF.map(m=>{
         const earned=profile.medals.includes(m.id);
-        return '<div class="medal-slot'+(earned?' earned':'')+'"><div class="medal-icon">'+(earned?m.icon:'🔒')+'</div><div class="medal-name">'+m.name+'</div><div style="font-size:10px;color:var(--muted);margin-top:2px">'+m.desc+'</div></div>';
+        const mName=D.lang==='es'?m.name:(m.name_en||m.name);
+        const mDesc=D.lang==='es'?m.desc:(m.desc_en||m.desc);
+        return '<div class="medal-slot'+(earned?' earned':'')+'"><div class="medal-icon">'+(earned?m.icon:'🔒')+'</div><div class="medal-name">'+mName+'</div><div style="font-size:10px;color:var(--muted);margin-top:2px">'+mDesc+'</div></div>';
     }).join('');
 }
 
@@ -2750,20 +2807,108 @@ function getStudyCategories(){
 }
 
 // === HUB FUNCTIONS ===
+function updateLanguageUI(){
+    const es=D.lang==='es';
+    // Helper to set text by ID
+    function tx(id,esT,enT){const el=document.getElementById(id);if(el)el.textContent=es?esT:enT;}
+    function txH(id,esT,enT){const el=document.getElementById(id);if(el)el.innerHTML=es?esT:enT;}
+    
+    // === HUB ZONES ===
+    tx('hubQuizName','Quiz Zone','Quiz Zone');
+    tx('hubQuizDesc',es?'Toma quizzes y demuestra lo que sabes':'Take quizzes and show what you know','Take quizzes and show what you know');
+    tx('hubQuizBadge',es?'¡Vamos!':'Let\'s go!','Let\'s go!');
+    tx('hubRepasoName',es?'Zona de Repaso':'Review Zone','Review Zone');
+    tx('hubRepasoDesc',es?'Repasa solo las preguntas que fallaste en los quizzes':'Review only the questions you missed in quizzes','Review only the questions you missed in quizzes');
+    tx('hubEstudioName',es?'Zona de Estudio':'Study Zone','Study Zone');
+    tx('hubEstudioDesc',es?'Todas las preguntas con explicaciones detalladas, fórmulas y ejemplos de campo':'All questions with detailed explanations, formulas and field examples','All questions with detailed explanations, formulas and field examples');
+    tx('hubVideoName','Video Zone','Video Zone');
+    tx('hubVideoDesc',es?'Videos de Maestro Mario para aprender visualmente':'Maestro Mario videos to learn visually','Maestro Mario videos to learn visually');
+    tx('hubProfileBtn',es?'👤 Mi Perfil':'👤 My Profile','👤 My Profile');
+    tx('hubRutaBtn',es?'← Mi Ruta':'← My Path','← My Path');
+    
+    // === SECTION TITLES ===
+    tx('repasoTitle',es?'🔄 ZONA DE REPASO':'🔄 REVIEW ZONE','🔄 REVIEW ZONE');
+    tx('estudioTitle',es?'📖 ZONA DE ESTUDIO':'📖 STUDY ZONE','📖 STUDY ZONE');
+    
+    // === QUIZ SELECTOR ===
+    tx('quizSelBubble',es?'¿Qué quiz quieres tomar hoy?':'Which quiz do you want to take today?','Which quiz do you want to take today?');
+    
+    // === STUDY ZONE ===
+    const sb=document.getElementById('studyBubble');
+    if(sb&&!sb.textContent)sb.textContent=es?'Aquí repasamos lo que necesitas reforzar.':'Here we review what you need to strengthen.';
+    
+    // === LIBRARY ===
+    tx('floatLibBtn',es?'📖 Zona de Estudio':'📖 Study Zone','📖 Study Zone');
+    const lb=document.getElementById('libraryBubble');
+    if(lb&&(!lb.textContent||lb.textContent.includes('estudiar')||lb.textContent.includes('study')))
+        lb.textContent=es?'Aquí puedes estudiar TODAS las preguntas con explicaciones detalladas y ejemplos de campo.':'Here you can study ALL questions with detailed explanations and field examples.';
+    
+    // === VIDEO ZONE ===
+    tx('videoBubble',es?'Videos del Maestro Mario para que aprendas viendo.':'Maestro Mario videos to learn by watching.','Maestro Mario videos to learn by watching.');
+    
+    // === AI CHAT ===
+    tx('aiChatStatus',es?'🟢 Disponible para ayudarte':'🟢 Available to help you','🟢 Available to help you');
+    tx('aiChatWelcome',es?'¡Órale técnico! Soy el Maestro Mario con inteligencia artificial. ¿En qué te puedo ayudar? Pregúntame lo que quieras sobre HVAC, refrigeración, o electricidad. 🔧':'Hey technician! I\'m Maestro Mario with AI. How can I help? Ask me anything about HVAC, refrigeration, or electrical. 🔧','');
+    tx('aiChatTyping',es?'Maestro Mario está hablando...':'Maestro Mario is typing...','Maestro Mario is typing...');
+    
+    // === AVATAR & MUSIC ===
+    tx('avatarPickerTitle',es?'🔧 Elige tu Avatar':'🔧 Choose your Avatar','🔧 Choose your Avatar');
+    tx('avatarPickerSub',es?'Desbloquea avatares dominando quizzes y subiendo de nivel':'Unlock avatars by mastering quizzes and leveling up','Unlock avatars by mastering quizzes and leveling up');
+    tx('musicPanelTitle',es?'🎶 Elige tu música':'🎶 Choose your music','🎶 Choose your music');
+    
+    // === FORMULA HINT DEFAULT ===
+    const ft=document.getElementById('qFormToggleText');
+    if(ft&&!ft.textContent)ft.textContent=es?'Mario te da una pista — tócame':'Mario gives you a hint — tap me';
+    
+    // === QUIZ NAV BUTTONS (defaults) ===
+    const qp=document.getElementById('qPrev');if(qp&&!qp.textContent)qp.textContent=es?'← Anterior':'← Previous';
+    const qn=document.getElementById('qNext');if(qn&&!qn.textContent)qn.textContent=es?'Siguiente →':'Next →';
+    const sp=document.getElementById('sqPrev');if(sp&&!sp.textContent)sp.textContent=es?'← Anterior':'← Previous';
+    const sn=document.getElementById('sqNext');if(sn&&!sn.textContent)sn.textContent=es?'Siguiente →':'Next →';
+    
+    // === RESULT PAGE ===
+    tx('retryBtn',es?'🔄 Intentar de Nuevo':'🔄 Try Again','🔄 Try Again');
+    tx('otherQuizBtn',es?'📝 Otro Quiz':'📝 Another Quiz','📝 Another Quiz');
+    tx('viewProfileBtn',es?'👤 Ver Mi Perfil':'👤 View My Profile','👤 View My Profile');
+    tx('studyRedirectTitle',es?'¡El Maestro Mario te recomienda repasar!':'Maestro Mario recommends you review!','Maestro Mario recommends you review!');
+    
+    // === STUDY RESULT ===
+    tx('studyRetryBtn',es?'🔄 Repasar de Nuevo':'🔄 Review Again','🔄 Review Again');
+    tx('studyZoneRepasoBtn',es?'🔄 Zona de Repaso':'🔄 Review Zone','🔄 Review Zone');
+    
+    // === PROFILE PAGE ===
+    tx('profLevelLabel',es?'NIVEL':'LEVEL','LEVEL');
+    tx('profPtsLabel',es?'Puntos':'Points','Points');
+    tx('profAccLabel',es?'Precisión':'Accuracy','Accuracy');
+    tx('profStrkLabel',es?'Mejor Racha':'Best Streak','Best Streak');
+    tx('profMedalsTitle',es?'🏅 Medallas':'🏅 Medals','🏅 Medals');
+    tx('profQuizBtn',es?'📝 Tomar un Quiz':'📝 Take a Quiz','📝 Take a Quiz');
+    tx('profMusicBtn',es?'🎶 Cambiar Música':'🎶 Change Music','🎶 Change Music');
+    tx('avatarPickerTitle',es?'🔧 Elige tu Avatar':'🔧 Choose your Avatar','🔧 Choose your Avatar');
+    tx('avatarPickerSub',es?'Desbloquea avatares dominando quizzes y subiendo de nivel':'Unlock avatars by mastering quizzes and leveling up','Unlock avatars by mastering quizzes and leveling up');
+    
+    // === ALL "Volver al Hub" BUTTONS ===
+    document.querySelectorAll('[data-lang="volver-hub"]').forEach(b=>{b.textContent=es?'← Volver al Hub':'← Back to Hub';});
+    
+    // === LANG-REPASO-BTN ===
+    document.querySelectorAll('.lang-repaso-btn').forEach(b=>{b.textContent=es?'🔄 Ir a Zona de Repaso →':'🔄 Go to Review Zone →';});
+}
+
 function updateHub(){
+    updateLanguageUI();
     // Quiz zone stats
     const totalQuizzes=QUIZ_LIST.length;
     const totalQs=QUIZ_LIST.reduce((s,q)=>s+q.count,0);
     document.getElementById('hubQuizCount').textContent='📋 '+totalQuizzes+' quizzes';
-    document.getElementById('hubQuizTotal').textContent='📊 '+totalQs+' preguntas';
+    document.getElementById('hubQuizTotal').textContent='📊 '+totalQs+(D.lang==='es'?' preguntas':' questions');
     
     // Study zone stats
     const studyQs=getStudyQuestions();
-    document.getElementById('hubStudyCount').textContent='🔄 '+studyQs.length+' por repasar';
+    document.getElementById('hubStudyCount').textContent='🔄 '+studyQs.length+(D.lang==='es'?' por repasar':' to review');
     const studyBadge=document.getElementById('hubStudyBadge');
     if(studyQs.length>0){
         studyBadge.style.display='block';
-        studyBadge.textContent=studyQs.length>=10?'🔥 '+studyQs.length:studyQs.length>=5?'⚠️ '+studyQs.length:'📖 '+studyQs.length;
+        studyBadge.textContent=studyQs.length>=10?'🔥 '+studyQs.length:studyQs.length>=5?'⚠️ '+studyQs.length:(D.lang==='es'?'📖 Repasa':'📖 Review');
     }else{
         studyBadge.style.display='none';
     }
@@ -2819,7 +2964,7 @@ function renderStudyZone(){
             '<div class="study-empty-title">'+(D.lang==='es'?'¡Todo limpio!':'All clean!')+'</div>'+
             '<div class="study-empty-desc">'+(D.lang==='es'?'No tienes preguntas por repasar. ¡Sigue tomando quizzes para seguir aprendiendo!':'No questions to review. Keep taking quizzes to keep learning!')+'</div>'+
             '</div>'+
-            '<button class="bt" onclick="goQuizZone()" style="margin-top:16px">📝 Ir a Quiz Zone</button>';
+            '<button class="bt" onclick="goQuizZone()" style="margin-top:16px">'+(D.lang==='es'?'📝 Ir a Quiz Zone':'📝 Go to Quiz Zone')+'</button>';
         return;
     }
     
@@ -3078,9 +3223,11 @@ function renderStudyLibrary(){
     const cats=getLibraryCategories();
     const allQ=getAllQuizQuestions();
     const bubble=document.getElementById('libraryBubble');
-    bubble.textContent=D.name+', aquí tienes '+allQ.length+' preguntas organizadas por tema. Estudia con calma, cada una tiene explicación completa y ejemplos de campo.';
+    bubble.textContent=D.lang==='es'?
+        D.name+', aquí tienes '+allQ.length+' preguntas organizadas por tema. Estudia con calma, cada una tiene explicación completa y ejemplos de campo.':
+        D.name+', here are '+allQ.length+' questions organized by topic. Study at your pace, each has full explanations and field examples.';
     
-    let html='<div style="text-align:center;margin-bottom:16px;font-size:14px;color:var(--electric);font-weight:700">📖 '+allQ.length+' preguntas disponibles en '+Object.keys(cats).length+' temas</div>';
+    let html='<div style="text-align:center;margin-bottom:16px;font-size:14px;color:var(--electric);font-weight:700">📖 '+allQ.length+(D.lang==='es'?' preguntas disponibles en ':' questions available in ')+Object.keys(cats).length+(D.lang==='es'?' temas':' topics')+'</div>';
     
     const sortedCats=Object.keys(cats).sort((a,b)=>cats[b].count-cats[a].count);
     
@@ -3089,7 +3236,7 @@ function renderStudyLibrary(){
         html+='<div class="quiz-sel-card" onclick="showLibraryCategory(\''+cat.replace(/'/g,"\\'")+'\')" style="border-color:rgba(46,204,113,0.15);margin-bottom:10px">';
         html+='<div class="qs-icon" style="background:rgba(46,204,113,0.1);font-size:32px">'+c.icon+'</div>';
         html+='<div class="qs-info"><div class="qs-title" style="color:#2ecc71">'+cat+'</div>';
-        html+='<div class="qs-count" style="color:var(--muted)">📖 '+c.count+' preguntas con explicación</div>';
+        html+='<div class="qs-count" style="color:var(--muted)">📖 '+c.count+(D.lang==='es'?' preguntas con explicación':' questions with explanation')+'</div>';
         html+='</div></div>';
     }
     
@@ -3125,11 +3272,11 @@ function showLibraryCategory(catName){
     document.getElementById('libDetailTitle').textContent=catName;
     const container=document.getElementById('libDetailContent');
     
-    let html='<div style="text-align:center;margin-bottom:14px;font-size:13px;color:var(--muted)">'+cat.count+' preguntas — toca cada una para estudiar a fondo</div>';
+    let html='<div style="text-align:center;margin-bottom:14px;font-size:13px;color:var(--muted)">'+cat.count+(D.lang==='es'?' preguntas — toca cada una para estudiar a fondo':' questions — tap each to study in depth')+'</div>';
     cat.questions.forEach((q,i)=>{
         const letters=['A','B','C','D'];
         html+='<div style="background:var(--card);border:1.5px solid rgba(46,204,113,0.15);border-radius:16px;padding:18px;margin-bottom:14px">';
-        html+='<div style="font-size:11px;color:var(--electric);font-weight:700;margin-bottom:6px;letter-spacing:1px">📖 PREGUNTA '+(i+1)+' DE '+cat.count+'</div>';
+        html+='<div style="font-size:11px;color:var(--electric);font-weight:700;margin-bottom:6px;letter-spacing:1px">📖 '+(D.lang==='es'?'PREGUNTA':'QUESTION')+' '+(i+1)+(D.lang==='es'?' DE ':' OF ')+cat.count+'</div>';
         html+='<div style="font-size:15px;font-weight:700;line-height:1.5;margin-bottom:12px">'+q.q+'</div>';
         
         // Options - all shown with correct highlighted
@@ -3145,22 +3292,22 @@ function showLibraryCategory(catName){
         
         // === TECHNICAL EXPLANATION (primary, bigger) ===
         html+='<div style="background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.2);border-radius:12px;padding:16px;margin-top:14px">';
-        html+='<div style="font-size:14px;font-weight:700;color:var(--electric);margin-bottom:8px">📘 Explicación Técnica Detallada</div>';
+        html+='<div style="font-size:14px;font-weight:700;color:var(--electric);margin-bottom:8px">📘 '+(D.lang==='es'?'Explicación Técnica Detallada':'Detailed Technical Explanation')+'</div>';
         html+='<div style="font-size:14px;line-height:1.7;color:var(--txt)">'+q.e+'</div>';
         
         // === WHY CORRECT ANSWER (detailed reasoning) ===
         html+='<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(0,212,255,0.15)">';
-        html+='<div style="font-size:12px;font-weight:700;color:#2ecc71;margin-bottom:4px">✅ ¿Por qué la respuesta '+letters[q.c]+' es correcta?</div>';
-        html+='<div style="font-size:13px;line-height:1.6;color:var(--muted)">La opción correcta es <b style="color:#2ecc71">'+q.o[q.c]+'</b>. '+q.e+'</div>';
+        html+='<div style="font-size:12px;font-weight:700;color:#2ecc71;margin-bottom:4px">✅ '+(D.lang==='es'?'¿Por qué la respuesta '+letters[q.c]+' es correcta?':'Why is answer '+letters[q.c]+' correct?')+'</div>';
+        html+='<div style="font-size:13px;line-height:1.6;color:var(--muted)">'+(D.lang==='es'?'La opción correcta es':'The correct answer is')+' <b style="color:#2ecc71">'+q.o[q.c]+'</b>. '+q.e+'</div>';
         html+='</div>';
         
         // === WHY OTHERS ARE WRONG ===
         let wrongExplain='';
         q.o.forEach((opt,j)=>{
-            if(j!==q.c) wrongExplain+='<span style="color:#e74c3c">'+letters[j]+')</span> '+opt+' — Incorrecto. ';
+            if(j!==q.c) wrongExplain+='<span style="color:#e74c3c">'+letters[j]+')</span> '+opt+(D.lang==='es'?' — Incorrecto. ':' — Incorrect. ');
         });
         html+='<div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(0,212,255,0.1)">';
-        html+='<div style="font-size:12px;font-weight:700;color:#e74c3c;margin-bottom:4px">❌ ¿Por qué las otras están mal?</div>';
+        html+='<div style="font-size:12px;font-weight:700;color:#e74c3c;margin-bottom:4px">❌ '+(D.lang==='es'?'¿Por qué las otras están mal?':'Why are the others wrong?')+'</div>';
         html+='<div style="font-size:12px;line-height:1.6;color:var(--muted)">'+wrongExplain+'</div>';
         html+='</div>';
         html+='</div>';
@@ -3169,12 +3316,12 @@ function showLibraryCategory(catName){
         const formulas=detectFormulas(q.q+' '+q.e);
         if(formulas.length>0){
             html+='<div style="background:rgba(241,196,15,0.08);border:1px solid rgba(241,196,15,0.25);border-radius:12px;padding:16px;margin-top:8px">';
-            html+='<div style="font-size:14px;font-weight:700;color:var(--gold);margin-bottom:10px">📐 Fórmulas Aplicables</div>';
+            html+='<div style="font-size:14px;font-weight:700;color:var(--gold);margin-bottom:10px">📐 '+(D.lang==='es'?'Fórmulas Aplicables':'Applicable Formulas')+'</div>';
             formulas.forEach(f=>{
                 html+='<div style="background:rgba(0,0,0,0.2);border-radius:10px;padding:12px;margin-bottom:8px">';
                 html+='<div style="font-family:Fredoka;font-size:16px;color:var(--gold);font-weight:700;text-align:center;margin-bottom:6px">'+f.f+'</div>';
                 html+='<div style="font-size:12px;color:var(--electric);font-weight:600;margin-bottom:4px">'+f.name+'</div>';
-                html+='<div style="font-size:12px;color:var(--muted);line-height:1.5">📊 Ejemplo: '+f.ex+'</div>';
+                html+='<div style="font-size:12px;color:var(--muted);line-height:1.5">📊 '+(D.lang==='es'?'Ejemplo':'Example')+': '+f.ex+'</div>';
                 html+='</div>';
             });
             html+='</div>';
@@ -3183,7 +3330,7 @@ function showLibraryCategory(catName){
         // === FIELD TIP (analogy - secondary, collapsible feel) ===
         if(q.a){
             html+='<div style="background:rgba(255,107,43,0.06);border:1px solid rgba(255,107,43,0.15);border-radius:12px;padding:14px;margin-top:8px">';
-            html+='<div style="font-size:12px;font-weight:700;color:var(--accent);margin-bottom:6px">💡 Tip de Campo (Analogía):</div>';
+            html+='<div style="font-size:12px;font-weight:700;color:var(--accent);margin-bottom:6px">💡 '+(D.lang==='es'?'Tip de Campo (Analogía):':'Field Tip (Analogy):')+'</div>';
             html+='<div style="font-size:13px;line-height:1.6;color:var(--muted)">'+q.a+'</div>';
             html+='</div>';
         }
@@ -3201,7 +3348,7 @@ function updateHubLibraryCount(){
     if(el){
         const all=getAllQuizQuestions();
         const cats=getLibraryCategories();
-        el.textContent='📖 '+all.length+' preguntas en '+Object.keys(cats).length+' temas';
+        el.textContent='📖 '+all.length+(D.lang==='es'?' preguntas en ':' questions in ')+Object.keys(cats).length+(D.lang==='es'?' temas':' topics');
     }
 }
 
