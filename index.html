@@ -157,6 +157,13 @@
         .quiz-next{width:100%;padding:14px;border:none;border-radius:var(--r);background:linear-gradient(135deg,var(--accent),#e84500);color:white;font-family:'Fredoka',sans-serif;font-size:16px;font-weight:700;cursor:pointer;margin-top:14px;display:none;transition:all .25s;box-shadow:0 4px 18px rgba(255,107,43,.25)}
         .quiz-next:hover{transform:translateY(-2px)}
         .quiz-next.show{display:block}
+        .quiz-nav{display:flex;gap:10px;width:100%;margin-top:14px}
+        .quiz-nav button{flex:1;padding:14px;border:none;border-radius:var(--r);font-family:'Fredoka',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:all .25s;display:none}
+        .quiz-nav button.show{display:block}
+        .quiz-prev{background:var(--card);border:2px solid rgba(0,212,255,0.3) !important;color:var(--electric)}
+        .quiz-prev:hover{border-color:var(--electric) !important;transform:translateY(-2px)}
+        .quiz-fwd{background:linear-gradient(135deg,var(--accent),#e84500);color:white;box-shadow:0 4px 18px rgba(255,107,43,.25)}
+        .quiz-fwd:hover{transform:translateY(-2px)}
         .quiz-result{text-align:center;width:100%}
         .quiz-result-score{font-family:'Fredoka',sans-serif;font-size:64px;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--electric));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
         .quiz-result-label{font-size:18px;color:var(--muted);margin-top:4px}
@@ -166,6 +173,18 @@
         .quiz-stars span{font-size:32px;opacity:0.2;transition:all 0.5s}
         .quiz-stars span.lit{opacity:1;animation:starPop 0.5s ease-out}
         @keyframes starPop{0%{transform:scale(0)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+        
+        /* CELEBRATION EFFECTS */
+        @keyframes screenShake{0%,100%{transform:translateX(0)}10%,50%,90%{transform:translateX(-4px)}30%,70%{transform:translateX(4px)}}
+        @keyframes bigShake{0%,100%{transform:translateX(0)}10%,50%,90%{transform:translateX(-8px) rotate(-1deg)}30%,70%{transform:translateX(8px) rotate(1deg)}}
+        @keyframes lightning{0%{opacity:0}5%{opacity:0.8}10%{opacity:0}15%{opacity:1}20%{opacity:0}100%{opacity:0}}
+        @keyframes streakPulse{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
+        @keyframes fireFloat{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-120px) scale(0.3);opacity:0}}
+        .shake{animation:screenShake 0.4s ease}
+        .big-shake{animation:bigShake 0.6s ease}
+        .streak-badge{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:900;font-size:48px;font-family:'Fredoka',sans-serif;font-weight:700;color:white;text-shadow:0 0 30px rgba(255,107,43,0.8),0 0 60px rgba(255,107,43,0.4);animation:streakPulse 0.6s ease;pointer-events:none;white-space:nowrap}
+        .lightning-flash{position:fixed;top:0;left:0;width:100%;height:100%;background:white;z-index:850;pointer-events:none;animation:lightning 0.4s ease}
+        .fire-emoji{position:fixed;z-index:850;font-size:36px;pointer-events:none;animation:fireFloat 1.2s ease-out forwards}
     </style>
 </head>
 <body>
@@ -298,7 +317,10 @@
     <div class="quiz-q" id="qText"></div>
     <div class="quiz-opts" id="qOpts"></div>
     <div class="quiz-explain" id="qExplain"></div>
-    <button class="quiz-next" id="qNext" onclick="nextQuestion()">Siguiente →</button>
+    <div class="quiz-nav">
+        <button class="quiz-prev" id="qPrev" onclick="prevQuestion()">← Anterior</button>
+        <button class="quiz-fwd" id="qNext" onclick="nextQuestion()">Siguiente →</button>
+    </div>
 </div>
 
 <!-- QUIZ RESULT -->
@@ -801,6 +823,7 @@ let quizIdx=0;
 let quizRight=0;
 let quizWrong=0;
 let quizAnswered=false;
+let quizAnswers=[];
 
 function shuffleArray(arr){
     const a=[...arr];
@@ -810,7 +833,8 @@ function shuffleArray(arr){
 
 function startQuiz(){
     quizData=shuffleArray(QUIZ_PRINCIPIANTE);
-    quizIdx=0;quizRight=0;quizWrong=0;
+    quizIdx=0;quizRight=0;quizWrong=0;quizStreak=0;
+    quizAnswers=new Array(quizData.length).fill(-1);
     document.getElementById('qRight').textContent='0';
     document.getElementById('qWrong').textContent='0';
     go('s8');
@@ -825,24 +849,133 @@ function retryQuiz(){
 
 function showQuestion(){
     if(quizIdx>=quizData.length){showResult();return;}
-    quizAnswered=false;
     const q=quizData[quizIdx];
+    const alreadyAnswered=quizAnswers[quizIdx]>=0;
+    quizAnswered=alreadyAnswered;
     const pct=Math.round((quizIdx/quizData.length)*100);
     document.getElementById('qBar').style.width=pct+'%';
     document.getElementById('qNum').textContent=(D.lang==='es'?'Pregunta ':'Question ')+(quizIdx+1)+' / '+quizData.length;
     document.getElementById('qCat').textContent=q.cat;
-    document.getElementById('qBubble').textContent=quizIdx===0?(D.lang==='es'?'¡Dale, tú puedes!':'You got this!'):(D.lang==='es'?'¿Qué piensas, '+D.name+'?':'What do you think, '+D.name+'?');
-    document.getElementById('qText').textContent=q.q;
-    document.getElementById('qExplain').classList.remove('show');
-    document.getElementById('qNext').classList.remove('show');
-    const letters=['A','B','C','D'];
-    document.getElementById('qOpts').innerHTML=q.o.map((o,i)=>'<div class="quiz-opt" onclick="answerQuiz('+i+',this)"><div class="quiz-letter">'+letters[i]+'</div><div>'+o+'</div></div>').join('');
+    
+    // Back button
+    const prevBtn=document.getElementById('qPrev');
+    if(quizIdx>0){prevBtn.classList.add('show');}else{prevBtn.classList.remove('show');}
+    
+    if(alreadyAnswered){
+        // Revisiting a question already answered
+        const userAnswer=quizAnswers[quizIdx];
+        const correct=userAnswer===q.c;
+        document.getElementById('qBubble').textContent=correct?(D.lang==='es'?'✅ Ya contestaste bien esta pregunta.':'✅ You already got this right.'):(D.lang==='es'?'❌ Aquí fallaste. La correcta es la '+['A','B','C','D'][q.c]+'.':'❌ You missed this one. Correct: '+['A','B','C','D'][q.c]+'.');
+        document.getElementById('qText').textContent=q.q;
+        const letters=['A','B','C','D'];
+        document.getElementById('qOpts').innerHTML=q.o.map((o,i)=>{
+            let cls='quiz-opt disabled';
+            if(i===q.c)cls+=' correct';
+            if(i===userAnswer&&!correct)cls+=' wrong';
+            return '<div class="'+cls+'"><div class="quiz-letter">'+letters[i]+'</div><div>'+o+'</div></div>';
+        }).join('');
+        document.getElementById('qExplain').innerHTML='<b>'+(D.lang==='es'?'Explicación:':'Explanation:')+'</b> '+q.e;
+        document.getElementById('qExplain').classList.add('show');
+        const nextBtn=document.getElementById('qNext');
+        nextBtn.textContent=(quizIdx<quizData.length-1)?(D.lang==='es'?'Siguiente →':'Next →'):(D.lang==='es'?'Ver Resultado 🏆':'See Result 🏆');
+        nextBtn.classList.add('show');
+    }else{
+        // New unanswered question
+        document.getElementById('qBubble').textContent=quizIdx===0?(D.lang==='es'?'¡Dale, tú puedes!':'You got this!'):(D.lang==='es'?'¿Qué piensas, '+D.name+'?':'What do you think, '+D.name+'?');
+        document.getElementById('qText').textContent=q.q;
+        document.getElementById('qExplain').classList.remove('show');
+        document.getElementById('qNext').classList.remove('show');
+        const letters=['A','B','C','D'];
+        document.getElementById('qOpts').innerHTML=q.o.map((o,i)=>'<div class="quiz-opt" onclick="answerQuiz('+i+',this)"><div class="quiz-letter">'+letters[i]+'</div><div>'+o+'</div></div>').join('');
+    }
     window.scrollTo(0,0);
+}
+
+let quizStreak=0;
+
+const CHEERS_ES=[
+    ['¡Correcto!','¡Bien hecho!','¡Así se hace!','¡Muy bien, '+'{name}'+'!','¡Buena elección!'],
+    ['¡Divino!','¡Perfecto!','¡Excelente!','¡Maravilloso!','¡Órale, '+'{name}'+'!'],
+    ['¡Espectacular!','¡Eres crack!','¡Increíble, '+'{name}'+'!','¡Qué máquina!'],
+    ['🔥 ¡IMPARABLE! 🔥','⚡ ¡NO TE PARA NADIE! ⚡','💪 ¡ERES UNA BESTIA! 💪','🏆 ¡VAS CON TODO! 🏆']
+];
+const CHEERS_EN=[
+    ['Correct!','Well done!','Nice job!','Good pick, '+'{name}'+'!','That\'s right!'],
+    ['Perfect!','Excellent!','Brilliant!','Amazing!','Great work, '+'{name}'+'!'],
+    ['Spectacular!','You\'re on fire!','Incredible, '+'{name}'+'!','Crushing it!'],
+    ['🔥 UNSTOPPABLE! 🔥','⚡ NOBODY STOPS YOU! ⚡','💪 YOU\'RE A BEAST! 💪','🏆 ALL THE WAY! 🏆']
+];
+const MISS_ES=['No te preocupes, así se aprende.','Casi, pero no. ¡Tú puedes!','Échale ojo a esto.','No pasa nada, sigue adelante.','A estudiar este tema un poco más.'];
+const MISS_EN=['Don\'t worry, that\'s how we learn.','Almost! You got this.','Take a closer look at this one.','No worries, keep going.','Review this topic a bit more.'];
+
+function pickCheer(streak){
+    const cheers=D.lang==='es'?CHEERS_ES:CHEERS_EN;
+    let tier=0;
+    if(streak>=8)tier=3;
+    else if(streak>=5)tier=2;
+    else if(streak>=3)tier=1;
+    const list=cheers[tier];
+    return list[Math.floor(Math.random()*list.length)].replace('{name}',D.name);
+}
+
+function pickMiss(){
+    const list=D.lang==='es'?MISS_ES:MISS_EN;
+    return list[Math.floor(Math.random()*list.length)]+' '+(D.lang==='es'?'La correcta es la ':'Correct answer is ')+['A','B','C','D'][quizData[quizIdx].c]+'.';
+}
+
+function celebrate(streak){
+    const el=document.getElementById('s8');
+    // Vibrate phone
+    if(navigator.vibrate){
+        if(streak>=5)navigator.vibrate([100,50,100,50,200]);
+        else navigator.vibrate(80);
+    }
+    // Screen shake
+    if(streak>=5){
+        el.classList.add('big-shake');
+        setTimeout(()=>el.classList.remove('big-shake'),600);
+    }else if(streak>=2){
+        el.classList.add('shake');
+        setTimeout(()=>el.classList.remove('shake'),400);
+    }
+    // Lightning flash at 5+ streak
+    if(streak>=5){
+        const flash=document.createElement('div');
+        flash.className='lightning-flash';
+        document.body.appendChild(flash);
+        setTimeout(()=>flash.remove(),400);
+    }
+    // Fire emojis at 3+ streak
+    if(streak>=3){
+        const emojis=streak>=8?['🔥','⚡','💥','🌟','✨']:streak>=5?['🔥','⚡','💥']:['🔥','✨'];
+        for(let i=0;i<(streak>=8?12:streak>=5?8:4);i++){
+            setTimeout(()=>{
+                const fire=document.createElement('div');
+                fire.className='fire-emoji';
+                fire.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+                fire.style.left=Math.random()*80+10+'%';
+                fire.style.bottom='10%';
+                document.body.appendChild(fire);
+                setTimeout(()=>fire.remove(),1200);
+            },i*100);
+        }
+    }
+    // Streak badge at 5+ 
+    if(streak>=5){
+        const badge=document.createElement('div');
+        badge.className='streak-badge';
+        badge.textContent=streak>=10?'🏆 '+streak+'x COMBO! 🏆':streak>=8?'⚡ '+streak+'x RACHA! ⚡':'🔥 '+streak+'x STREAK! 🔥';
+        document.body.appendChild(badge);
+        setTimeout(()=>badge.remove(),1500);
+    }
+    // Confetti at 5+
+    if(streak>=5)cft();
 }
 
 function answerQuiz(idx,el){
     if(quizAnswered)return;
     quizAnswered=true;
+    quizAnswers[quizIdx]=idx;
     const q=quizData[quizIdx];
     const correct=idx===q.c;
     const opts=document.querySelectorAll('.quiz-opt');
@@ -855,14 +988,15 @@ function answerQuiz(idx,el){
     
     if(correct){
         quizRight++;
+        quizStreak++;
         document.getElementById('qRight').textContent=quizRight;
-        document.getElementById('qBubble').textContent=D.lang==='es'?['¡Así se hace!','¡Correcto, '+D.name+'!','¡Órale, muy bien!','¡Excelente!'][Math.floor(Math.random()*4)]:['Correct!','Great job!','Excellent!','You got it!'][Math.floor(Math.random()*4)];
-        showVideo('correcto',null);
+        document.getElementById('qBubble').textContent=pickCheer(quizStreak);
+        celebrate(quizStreak);
     }else{
         quizWrong++;
+        quizStreak=0;
         document.getElementById('qWrong').textContent=quizWrong;
-        document.getElementById('qBubble').textContent=D.lang==='es'?'No te preocupes, así se aprende. La respuesta correcta es la '+['A','B','C','D'][q.c]+'.':'Don\'t worry, that\'s how we learn. Correct answer is '+['A','B','C','D'][q.c]+'.';
-        showVideo('incorrecto',null);
+        document.getElementById('qBubble').textContent=pickMiss();
     }
     
     document.getElementById('qExplain').innerHTML='<b>'+(D.lang==='es'?'Explicación:':'Explanation:')+'</b> '+q.e;
@@ -876,6 +1010,10 @@ function answerQuiz(idx,el){
 function nextQuestion(){
     quizIdx++;
     showQuestion();
+}
+
+function prevQuestion(){
+    if(quizIdx>0){quizIdx--;showQuestion();}
 }
 
 function showResult(){
