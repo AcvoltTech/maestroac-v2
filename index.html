@@ -253,6 +253,68 @@
         .music-upload:hover{border-color:var(--electric);background:rgba(0,212,255,0.05)}
         .music-upload-label{font-size:12px;color:var(--muted)}
         .music-upload-name{font-size:12px;color:var(--electric);margin-top:4px;font-weight:600;display:none}
+        
+        /* ========== 3-ZONE HUB ========== */
+        .hub-title{font-family:'Fredoka',sans-serif;font-size:22px;font-weight:700;text-align:center;margin:8px 0 4px;color:var(--txt)}
+        .hub-sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:16px}
+        .zone-cards{width:100%;display:flex;flex-direction:column;gap:14px}
+        .zone-card{background:var(--card);border:2.5px solid rgba(255,255,255,0.06);border-radius:20px;padding:20px 18px;cursor:pointer;transition:all 0.35s;display:flex;align-items:center;gap:16px;position:relative;overflow:hidden}
+        .zone-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--zone-color,transparent) 0%,transparent 60%);opacity:0.06;transition:opacity 0.3s}
+        .zone-card:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,0.3)}
+        .zone-card:hover::before{opacity:0.12}
+        .zone-card:active{transform:scale(0.98)}
+        .zone-icon{width:64px;height:64px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0;transition:all 0.3s}
+        .zone-card:hover .zone-icon{transform:scale(1.08)}
+        .zone-info{flex:1}
+        .zone-name{font-family:'Fredoka',sans-serif;font-size:18px;font-weight:700;margin-bottom:2px}
+        .zone-desc{font-size:12.5px;color:var(--muted);line-height:1.4}
+        .zone-badge{position:absolute;top:12px;right:12px;font-size:10px;padding:3px 10px;border-radius:10px;font-weight:700;text-transform:uppercase;font-family:'Fredoka',sans-serif}
+        .zone-stat{display:flex;gap:8px;margin-top:6px}
+        .zone-stat-item{font-size:11px;color:var(--electric);font-weight:600;display:flex;align-items:center;gap:4px}
+        .zone-card.quiz-zone{border-color:rgba(0,212,255,0.2);--zone-color:#00d4ff}
+        .zone-card.quiz-zone .zone-icon{background:rgba(0,212,255,0.12);color:#00d4ff}
+        .zone-card.quiz-zone .zone-name{color:#00d4ff}
+        .zone-card.quiz-zone:hover{border-color:rgba(0,212,255,0.5)}
+        .zone-card.study-zone{border-color:rgba(255,107,43,0.2);--zone-color:#ff6b2b}
+        .zone-card.study-zone .zone-icon{background:rgba(255,107,43,0.12);color:#ff6b2b}
+        .zone-card.study-zone .zone-name{color:#ff6b2b}
+        .zone-card.study-zone:hover{border-color:rgba(255,107,43,0.5)}
+        .zone-card.video-zone{border-color:rgba(155,89,182,0.2);--zone-color:#9b59b6}
+        .zone-card.video-zone .zone-icon{background:rgba(155,89,182,0.12);color:#9b59b6}
+        .zone-card.video-zone .zone-name{color:#9b59b6}
+        .zone-card.video-zone:hover{border-color:rgba(155,89,182,0.5)}
+        .zone-count{background:rgba(255,255,255,0.06);border-radius:8px;padding:2px 8px;font-size:11px;color:var(--muted);font-weight:600}
+        
+        /* STUDY ZONE */
+        .study-empty{text-align:center;padding:40px 20px}
+        .study-empty-icon{font-size:72px;margin-bottom:16px}
+        .study-empty-title{font-family:'Fredoka',sans-serif;font-size:20px;font-weight:700;color:var(--electric);margin-bottom:8px}
+        .study-empty-desc{font-size:14px;color:var(--muted);line-height:1.5;max-width:300px;margin:0 auto}
+        .study-topic{background:var(--card);border:2px solid rgba(255,107,43,0.15);border-radius:14px;padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:all 0.25s;display:flex;align-items:center;gap:12px}
+        .study-topic:hover{border-color:var(--accent);transform:translateY(-2px)}
+        .study-topic-icon{font-size:28px;width:44px;text-align:center}
+        .study-topic-info{flex:1}
+        .study-topic-name{font-family:'Fredoka',sans-serif;font-size:15px;font-weight:700}
+        .study-topic-count{font-size:12px;color:var(--accent);font-weight:600;margin-top:2px}
+        .study-alert{background:linear-gradient(135deg,rgba(255,107,43,0.12),rgba(231,76,60,0.08));border:1.5px solid rgba(255,107,43,0.25);border-radius:14px;padding:14px 16px;margin-bottom:16px;text-align:center;font-size:13px;color:var(--accent);line-height:1.5}
+        .study-alert b{color:var(--txt)}
+        
+        /* VIDEO ZONE */
+        .video-card{background:var(--card);border:2px solid rgba(155,89,182,0.15);border-radius:16px;padding:16px;margin-bottom:12px;cursor:pointer;transition:all 0.25s;display:flex;align-items:center;gap:14px}
+        .video-card:hover{border-color:rgba(155,89,182,0.4);transform:translateY(-2px)}
+        .video-card-thumb{width:72px;height:50px;border-radius:10px;background:rgba(155,89,182,0.15);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
+        .video-card-info{flex:1}
+        .video-card-title{font-family:'Fredoka',sans-serif;font-size:14px;font-weight:700}
+        .video-card-desc{font-size:11px;color:var(--muted);margin-top:2px}
+        .video-card-dur{font-size:11px;color:#9b59b6;font-weight:600;margin-top:4px}
+        .video-section-title{font-family:'Fredoka',sans-serif;font-size:16px;font-weight:700;color:var(--txt);margin:16px 0 10px;display:flex;align-items:center;gap:8px}
+        
+        /* STUDY REDIRECT BANNER */
+        .study-redirect{background:linear-gradient(135deg,rgba(255,107,43,0.15),rgba(231,76,60,0.1));border:2px solid rgba(255,107,43,0.3);border-radius:16px;padding:18px;margin-top:14px;text-align:center;animation:pulse-border 2s infinite}
+        @keyframes pulse-border{0%,100%{border-color:rgba(255,107,43,0.3)}50%{border-color:rgba(255,107,43,0.7)}}
+        .study-redirect-icon{font-size:40px;margin-bottom:8px}
+        .study-redirect-title{font-family:'Fredoka',sans-serif;font-size:16px;font-weight:700;color:var(--accent)}
+        .study-redirect-desc{font-size:13px;color:var(--muted);margin:6px 0 12px;line-height:1.4}
     </style>
 </head>
 <body>
@@ -372,13 +434,116 @@
     <button class="bt" onclick="startApp()" data-t="start_btn"></button>
 </div>
 
-<!-- QUIZ SELECTOR -->
-<div class="s" id="s7b">
+<!-- ========== 3-ZONE HUB ========== -->
+<div class="s" id="s-hub">
     <div class="lo"><div class="lo-t">MAESTRO MARIO</div></div>
-    <div class="aw md" id="a7b" onclick="openAIChat()"><div class="ag" style="background:radial-gradient(circle,var(--electric) 0%,transparent 70%)"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div><span class="ai-badge">AI</span></div>
+    <div class="aw sm" onclick="openAIChat()"><div class="ag" style="background:radial-gradient(circle,var(--electric) 0%,transparent 70%)"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div><span class="ai-badge">AI</span></div>
+    <div class="bb" id="hubBubble">¿Qué quieres hacer hoy?</div>
+    
+    <div class="zone-cards">
+        <!-- QUIZ ZONE -->
+        <div class="zone-card quiz-zone" onclick="goQuizZone()">
+            <div class="zone-icon">📝</div>
+            <div class="zone-info">
+                <div class="zone-name">Quiz Zone</div>
+                <div class="zone-desc">Toma quizzes y demuestra lo que sabes</div>
+                <div class="zone-stat">
+                    <span class="zone-stat-item" id="hubQuizCount">📋 0 quizzes</span>
+                    <span class="zone-stat-item" id="hubQuizTotal">📊 0 preguntas</span>
+                </div>
+            </div>
+            <div class="zone-badge" style="background:rgba(0,212,255,0.15);color:#00d4ff" id="hubQuizBadge">¡Vamos!</div>
+        </div>
+        
+        <!-- STUDY ZONE -->
+        <div class="zone-card study-zone" onclick="goStudyZone()">
+            <div class="zone-icon">📚</div>
+            <div class="zone-info">
+                <div class="zone-name">Study Zone</div>
+                <div class="zone-desc">Repasa las preguntas que más se te dificultan</div>
+                <div class="zone-stat">
+                    <span class="zone-stat-item" id="hubStudyCount">🔄 0 por repasar</span>
+                </div>
+            </div>
+            <div class="zone-badge" style="background:rgba(255,107,43,0.15);color:#ff6b2b;display:none" id="hubStudyBadge">⚠️ Repasa</div>
+        </div>
+        
+        <!-- VIDEO ZONE -->
+        <div class="zone-card video-zone" onclick="goVideoZone()">
+            <div class="zone-icon">🎥</div>
+            <div class="zone-info">
+                <div class="zone-name">Video Zone</div>
+                <div class="zone-desc">Videos de Maestro Mario para aprender visualmente</div>
+                <div class="zone-stat">
+                    <span class="zone-stat-item">🎬 Videos de entrenamiento</span>
+                </div>
+            </div>
+            <div class="zone-badge" style="background:rgba(155,89,182,0.15);color:#9b59b6">Pronto</div>
+        </div>
+    </div>
+    
+    <button class="bt" onclick="go('s10');renderProfile()" style="background:var(--card);border:2px solid var(--gold);margin-top:16px">👤 Mi Perfil</button>
+    <button class="bt" onclick="go('s7')" style="background:var(--card);border:2px solid var(--accent);margin-top:8px">← Mi Ruta</button>
+</div>
+
+<!-- QUIZ ZONE SELECTOR -->
+<div class="s" id="s7b">
+    <div class="lo"><div class="lo-t">📝 QUIZ ZONE</div></div>
+    <div class="aw sm" onclick="openAIChat()"><div class="ag" style="background:radial-gradient(circle,var(--electric) 0%,transparent 70%)"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div><span class="ai-badge">AI</span></div>
     <div class="bb">¿Qué quiz quieres tomar hoy?</div>
     <div id="quizSelList" style="width:100%;display:flex;flex-direction:column;gap:12px;margin-top:16px"></div>
-    <button class="bt" onclick="go('s7')" style="background:var(--card);border:2px solid var(--accent);margin-top:16px">← Mi Ruta</button>
+    <button class="bt" onclick="go('s-hub');updateHub()" style="background:var(--card);border:2px solid var(--electric);margin-top:16px">← Volver al Hub</button>
+</div>
+
+<!-- STUDY ZONE -->
+<div class="s" id="s-study">
+    <div class="lo"><div class="lo-t">📚 STUDY ZONE</div></div>
+    <div class="aw sm" onclick="openAIChat()"><div class="ag" style="background:radial-gradient(circle,var(--accent) 0%,transparent 70%)"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div><span class="ai-badge">AI</span></div>
+    <div class="bb" id="studyBubble">Aquí repasamos lo que necesitas reforzar.</div>
+    <div id="studyContent" style="width:100%;margin-top:16px"></div>
+    <button class="bt" onclick="go('s-hub');updateHub()" style="background:var(--card);border:2px solid var(--accent);margin-top:16px">← Volver al Hub</button>
+</div>
+
+<!-- STUDY QUIZ (reuses quiz UI but in study mode) -->
+<div class="s" id="s-study-quiz">
+    <div class="quiz-header">
+        <div class="quiz-cat" id="sqCat">📚 REPASO</div>
+        <div class="quiz-score">✅ <span class="correct" id="sqRight">0</span> | ❌ <span class="wrong" id="sqWrong">0</span></div>
+    </div>
+    <div class="pb"><div class="pbf" id="sqBar" style="width:0%"></div></div>
+    <div class="quiz-num" id="sqNum"></div>
+    <div class="aw sm" onclick="openAIChat()"><div class="ag"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div><span class="ai-badge">AI</span></div>
+    <div class="bb" id="sqBubble"></div>
+    <div class="quiz-q" id="sqText"></div>
+    <div class="quiz-opts" id="sqOpts"></div>
+    <div class="quiz-explain" id="sqExplain"></div>
+    <div class="quiz-nav">
+        <button class="quiz-prev" id="sqPrev" onclick="studyPrev()">← Anterior</button>
+        <button class="quiz-fwd" id="sqNext" onclick="studyNext()">Siguiente →</button>
+    </div>
+</div>
+
+<!-- STUDY RESULT -->
+<div class="s" id="s-study-result">
+    <div class="aw md" onclick="openAIChat()"><div class="ag" style="background:radial-gradient(circle,var(--accent) 0%,transparent 70%)"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div><span class="ai-badge">AI</span></div>
+    <div class="quiz-result">
+        <div class="quiz-medal" id="srMedal"></div>
+        <div class="quiz-result-score" id="srScore"></div>
+        <div class="quiz-result-label" id="srLabel"></div>
+        <div class="bb quiz-result-msg" id="srMsg"></div>
+    </div>
+    <button class="bt" onclick="startStudyQuiz(lastStudyCat)">🔄 Repasar de Nuevo</button>
+    <button class="bt" onclick="go('s-study');renderStudyZone()" style="background:var(--card);border:2px solid var(--accent);margin-top:10px">📚 Study Zone</button>
+    <button class="bt" onclick="go('s-hub');updateHub()" style="background:var(--card);border:2px solid var(--electric);margin-top:10px">← Volver al Hub</button>
+</div>
+
+<!-- VIDEO ZONE -->
+<div class="s" id="s-videos">
+    <div class="lo"><div class="lo-t">🎥 VIDEO ZONE</div></div>
+    <div class="aw sm" onclick="openAIChat()"><div class="ag" style="background:radial-gradient(circle,#9b59b6 0%,transparent 70%)"></div><div class="ar"></div><div class="ai"><img src="mario.jpg" alt="M"></div><span class="ai-badge">AI</span></div>
+    <div class="bb">Videos del Maestro Mario para que aprendas viendo.</div>
+    <div id="videoContent" style="width:100%;margin-top:16px"></div>
+    <button class="bt" onclick="go('s-hub');updateHub()" style="background:var(--card);border:2px solid rgba(155,89,182,0.3);margin-top:16px">← Volver al Hub</button>
 </div>
 
 <!-- QUIZ -->
@@ -413,11 +578,18 @@
             <div style="font-size:48px" id="rNewMedal"></div>
             <div style="font-family:'Fredoka',sans-serif;font-size:18px;font-weight:700;color:var(--gold);margin-top:8px" id="rMedalName"></div>
         </div>
+        <!-- STUDY ZONE REDIRECT (shown when score < 70%) -->
+        <div class="study-redirect" id="rStudyRedirect" style="display:none">
+            <div class="study-redirect-icon">📚</div>
+            <div class="study-redirect-title">¡Maestro Mario te recomienda repasar!</div>
+            <div class="study-redirect-desc" id="rStudyDesc">Tienes preguntas que necesitas reforzar. Ve a la Study Zone para dominarlas.</div>
+            <button class="bt" onclick="go('s-study');renderStudyZone()" style="background:var(--accent);margin-top:8px;padding:12px">📚 Ir a Study Zone →</button>
+        </div>
     </div>
     <button class="bt" onclick="retryQuiz()">🔄 Intentar de Nuevo</button>
     <button class="bt" onclick="renderQuizSelector();go('s7b')" style="background:var(--card);border:2px solid var(--electric);margin-top:10px">📝 Otro Quiz</button>
     <button class="bt" onclick="go('s10');renderProfile()" style="background:var(--card);border:2px solid var(--gold);margin-top:10px">👤 Ver Mi Perfil</button>
-    <button class="bt" onclick="go('s7')" style="background:var(--card);border:2px solid var(--accent);margin-top:10px">← Volver a Mi Ruta</button>
+    <button class="bt" onclick="go('s-hub');updateHub()" style="background:var(--card);border:2px solid var(--accent);margin-top:10px">← Volver al Hub</button>
 </div>
 
 <!-- PROFILE -->
@@ -450,7 +622,7 @@
     <div class="medals-grid" id="medalsGrid"></div>
     <button class="bt" onclick="renderQuizSelector();go('s7b')" style="margin-top:20px">📝 Tomar un Quiz</button>
     <button class="bt" onclick="toggleMusicPanel()" style="background:var(--card);border:2px solid rgba(0,212,255,0.3);margin-top:10px">🎶 Cambiar Música</button>
-    <button class="bt" onclick="go('s7')" style="background:var(--card);border:2px solid var(--accent);margin-top:10px">← Volver a Mi Ruta</button>
+    <button class="bt" onclick="go('s-hub');updateHub()" style="background:var(--card);border:2px solid var(--accent);margin-top:10px">← Volver al Hub</button>
 </div>
 </div>
 <div class="cw" id="conf"></div>
@@ -1121,10 +1293,9 @@ function bRt(){var r=[];if(D.specs.includes('all')||D.specs.includes('electrical
 
 function startApp(){
     enterStudyMode();
-    renderQuizSelector();
-    go('s7b');
-    rx('a7b','nod');
-    speakText(D.lang==='es'?'¡'+D.name+'! Elige qué quiz quieres tomar. Cada uno tiene preguntas bien capciositas.':'Choose your quiz, '+D.name+'! Each one has tricky questions.');
+    updateHub();
+    go('s-hub');
+    speakText(D.lang==='es'?'¡'+D.name+'! Bienvenido a tu centro de entrenamiento. Elige qué quieres hacer: tomar un quiz, repasar lo que fallaste, o ver videos.':'Welcome '+D.name+'! Choose what you want to do: take a quiz, study what you missed, or watch videos.');
 }
 
 const QUIZ_LIST=[
@@ -1590,6 +1761,8 @@ function answerQuiz(idx,el){
         celebrate(quizStreak);
         document.getElementById('qExplain').innerHTML='<b>'+(D.lang==='es'?'Explicación:':'Explanation:')+'</b> '+q.e;
         speakText(cheer+' '+q.e);
+        // Track correct in study tracker (reduce fail count)
+        trackAnswer(q,true);
     }else{
         quizWrong++;
         quizStreak=0;
@@ -1606,6 +1779,8 @@ function answerQuiz(idx,el){
         document.getElementById('qExplain').innerHTML=explain;
         // Mario speaks EVERYTHING: motivation + analogy + technical explanation
         speakText(motivation+' '+(D.lang==='es'?'Te lo explico fácil: ':'Let me explain simply: ')+q.a+' '+(D.lang==='es'?'En términos técnicos: ':'Technically speaking: ')+q.e);
+        // Track wrong in study tracker
+        trackAnswer(q,false);
     }
     
     document.getElementById('qExplain').classList.add('show');
@@ -1702,6 +1877,18 @@ function showResult(){
     
     cft();
     speakText(msg);
+    
+    // Show study zone redirect if score < 70%
+    const studyRedirect=document.getElementById('rStudyRedirect');
+    const wrongCount=getStudyQuestions().length;
+    if(pct<70&&wrongCount>0){
+        studyRedirect.style.display='block';
+        document.getElementById('rStudyDesc').textContent=D.lang==='es'?
+            'Tienes '+wrongCount+' preguntas que necesitas reforzar. El Maestro Mario te recomienda ir a la Study Zone para dominarlas.':
+            'You have '+wrongCount+' questions to review. Maestro Mario recommends the Study Zone to master them.';
+    }else{
+        studyRedirect.style.display='none';
+    }
 }
 
 // ========== PROFILE & MEDAL SYSTEM ==========
@@ -1831,6 +2018,368 @@ document.addEventListener('click',e=>{
 });
 
 document.getElementById('nm').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.value.trim().length>=2)sName();});
+
+// ========== 3-ZONE SYSTEM ==========
+
+// === WRONG ANSWER TRACKER ===
+// Stores: { "questionHash": { q, cat, fails, lastFail, masteredAt, quizId } }
+function getTracker(){
+    try{return JSON.parse(localStorage.getItem('maestro_study_tracker')||'{}');}catch(e){return{};}
+}
+function saveTracker(t){
+    try{localStorage.setItem('maestro_study_tracker',JSON.stringify(t));}catch(e){}
+}
+
+function questionHash(q){
+    // Simple hash from question text
+    return q.q.substring(0,60).replace(/[^a-zA-Z0-9áéíóúñ]/g,'').toLowerCase();
+}
+
+function trackAnswer(q,correct){
+    const tracker=getTracker();
+    const hash=questionHash(q);
+    if(!tracker[hash]){
+        tracker[hash]={q:q.q,cat:q.cat,fails:0,correct:0,lastFail:null,masteredAt:null,quizId:currentQuizId,
+            // Store full question for study mode
+            fullQ:{cat:q.cat,q:q.q,o:[...q.o],c:q.c,e:q.e,a:q.a}
+        };
+    }
+    if(correct){
+        tracker[hash].correct++;
+        // If they get it right 2 times after failing, mark as mastered
+        if(tracker[hash].fails>0&&tracker[hash].correct>=2){
+            tracker[hash].masteredAt=Date.now();
+        }
+    }else{
+        tracker[hash].fails++;
+        tracker[hash].lastFail=Date.now();
+        tracker[hash].masteredAt=null; // Reset mastery if they fail again
+        tracker[hash].correct=0; // Reset correct streak
+    }
+    saveTracker(tracker);
+}
+
+function getStudyQuestions(catFilter){
+    const tracker=getTracker();
+    const questions=[];
+    for(const hash in tracker){
+        const t=tracker[hash];
+        // Include if: failed at least 1 time AND not mastered yet
+        if(t.fails>=1&&!t.masteredAt&&t.fullQ){
+            if(!catFilter||t.cat===catFilter){
+                questions.push({...t.fullQ,_hash:hash,_fails:t.fails});
+            }
+        }
+    }
+    // Sort by most fails first
+    questions.sort((a,b)=>b._fails-a._fails);
+    return questions;
+}
+
+function getStudyCategories(){
+    const questions=getStudyQuestions();
+    const cats={};
+    questions.forEach(q=>{
+        if(!cats[q.cat])cats[q.cat]={count:0,icon:q.cat.split(' ')[0]};
+        cats[q.cat].count++;
+    });
+    return cats;
+}
+
+// === HUB FUNCTIONS ===
+function updateHub(){
+    // Quiz zone stats
+    const totalQuizzes=QUIZ_LIST.length;
+    const totalQs=QUIZ_LIST.reduce((s,q)=>s+q.count,0);
+    document.getElementById('hubQuizCount').textContent='📋 '+totalQuizzes+' quizzes';
+    document.getElementById('hubQuizTotal').textContent='📊 '+totalQs+' preguntas';
+    
+    // Study zone stats
+    const studyQs=getStudyQuestions();
+    document.getElementById('hubStudyCount').textContent='🔄 '+studyQs.length+' por repasar';
+    const studyBadge=document.getElementById('hubStudyBadge');
+    if(studyQs.length>0){
+        studyBadge.style.display='block';
+        studyBadge.textContent=studyQs.length>=10?'🔥 '+studyQs.length:studyQs.length>=5?'⚠️ '+studyQs.length:'📖 '+studyQs.length;
+    }else{
+        studyBadge.style.display='none';
+    }
+    
+    // Hub bubble message
+    const bubble=document.getElementById('hubBubble');
+    if(studyQs.length>=10){
+        bubble.textContent=D.lang==='es'?'¡'+D.name+'! Tienes '+studyQs.length+' preguntas por repasar. ¡Ve a la Study Zone!':''+D.name+'! You have '+studyQs.length+' questions to review. Hit the Study Zone!';
+    }else if(studyQs.length>0){
+        bubble.textContent=D.lang==='es'?'¿Qué quieres hacer hoy, '+D.name+'? Tienes '+studyQs.length+' preguntas pendientes de repaso.':'What do you want to do, '+D.name+'? You have '+studyQs.length+' questions to review.';
+    }else{
+        bubble.textContent=D.lang==='es'?'¡'+D.name+'! ¿Listo para aprender? Elige tu zona.':''+D.name+'! Ready to learn? Pick your zone.';
+    }
+}
+
+function goQuizZone(){
+    renderQuizSelector();
+    go('s7b');
+    speakText(D.lang==='es'?'¡Vamos con los quizzes, '+D.name+'! Elige cuál quieres tomar.':'Let\'s do quizzes, '+D.name+'! Pick which one you want.');
+}
+
+function goStudyZone(){
+    renderStudyZone();
+    go('s-study');
+    const count=getStudyQuestions().length;
+    if(count>0){
+        speakText(D.lang==='es'?'Zona de estudio, '+D.name+'. Tienes '+count+' preguntas para repasar. ¡Vamos a dominarlas!':'Study zone, '+D.name+'. You have '+count+' questions to review. Let\'s master them!');
+    }else{
+        speakText(D.lang==='es'?'¡'+D.name+', tu zona de estudio está limpia! Ve a tomar quizzes para practicar.':''+D.name+', your study zone is clean! Go take quizzes to practice.');
+    }
+}
+
+function goVideoZone(){
+    renderVideoZone();
+    go('s-videos');
+    speakText(D.lang==='es'?'Zona de videos. Pronto tendrás videos del Maestro Mario aquí.':'Video zone. Maestro Mario videos coming soon.');
+}
+
+// === STUDY ZONE RENDER ===
+function renderStudyZone(){
+    const container=document.getElementById('studyContent');
+    const questions=getStudyQuestions();
+    const cats=getStudyCategories();
+    const bubble=document.getElementById('studyBubble');
+    
+    if(questions.length===0){
+        bubble.textContent=D.lang==='es'?'¡Felicidades '+D.name+'! No tienes preguntas pendientes. Ve a tomar quizzes.':'Congrats '+D.name+'! No pending questions. Go take quizzes.';
+        container.innerHTML='<div class="study-empty">'+
+            '<div class="study-empty-icon">🎉</div>'+
+            '<div class="study-empty-title">'+(D.lang==='es'?'¡Todo limpio!':'All clean!')+'</div>'+
+            '<div class="study-empty-desc">'+(D.lang==='es'?'No tienes preguntas por repasar. ¡Sigue tomando quizzes para seguir aprendiendo!':'No questions to review. Keep taking quizzes to keep learning!')+'</div>'+
+            '</div>'+
+            '<button class="bt" onclick="goQuizZone()" style="margin-top:16px">📝 Ir a Quiz Zone</button>';
+        return;
+    }
+    
+    bubble.textContent=D.lang==='es'?D.name+', tienes '+questions.length+' preguntas que necesitas reforzar. ¡Tú puedes!':D.name+', you have '+questions.length+' questions to strengthen. You got this!';
+    
+    let html='<div class="study-alert">📚 '+(D.lang==='es'?'Tienes <b>'+questions.length+' preguntas</b> que fallaste en los quizzes. Repásalas aquí hasta dominarlas.':'You have <b>'+questions.length+' questions</b> you missed in quizzes. Review them here until you master them.')+'</div>';
+    
+    // Show "Review All" button
+    html+='<button class="bt" onclick="startStudyQuiz(\'all\')" style="margin-bottom:16px">🔥 '+(D.lang==='es'?'Repasar Todas ('+questions.length+')':'Review All ('+questions.length+')')+'</button>';
+    
+    // Show by category
+    for(const cat in cats){
+        html+='<div class="study-topic" onclick="startStudyQuiz(\''+cat.replace(/'/g,"\\'")+'\')">';
+        html+='<div class="study-topic-icon">'+cats[cat].icon+'</div>';
+        html+='<div class="study-topic-info">';
+        html+='<div class="study-topic-name">'+cat+'</div>';
+        html+='<div class="study-topic-count">'+cats[cat].count+(D.lang==='es'?' preguntas por repasar':' questions to review')+'</div>';
+        html+='</div></div>';
+    }
+    
+    // Show mastered count
+    const tracker=getTracker();
+    const mastered=Object.values(tracker).filter(t=>t.masteredAt).length;
+    if(mastered>0){
+        html+='<div style="text-align:center;margin-top:20px;font-size:13px;color:var(--electric)">✅ '+(D.lang==='es'?mastered+' preguntas dominadas':mastered+' questions mastered')+'</div>';
+    }
+    
+    container.innerHTML=html;
+}
+
+// === STUDY QUIZ MODE ===
+let studyData=[];
+let studyIdx=0;
+let studyRight=0;
+let studyWrong=0;
+let studyAnswered=false;
+let studyAnswers=[];
+let lastStudyCat='all';
+
+function startStudyQuiz(catFilter){
+    lastStudyCat=catFilter;
+    const questions=catFilter==='all'?getStudyQuestions():getStudyQuestions(catFilter);
+    if(questions.length===0){
+        goStudyZone();
+        return;
+    }
+    studyData=shuffleArray(questions);
+    studyIdx=0;studyRight=0;studyWrong=0;
+    studyAnswers=new Array(studyData.length).fill(-1);
+    document.getElementById('sqRight').textContent='0';
+    document.getElementById('sqWrong').textContent='0';
+    go('s-study-quiz');
+    showStudyQuestion();
+}
+
+function showStudyQuestion(){
+    if(studyIdx>=studyData.length){showStudyResult();return;}
+    const q=studyData[studyIdx];
+    const alreadyAnswered=studyAnswers[studyIdx]>=0;
+    studyAnswered=alreadyAnswered;
+    const pct=Math.round((studyIdx/studyData.length)*100);
+    document.getElementById('sqBar').style.width=pct+'%';
+    document.getElementById('sqNum').textContent='📚 '+(D.lang==='es'?'Repaso ':'Review ')+(studyIdx+1)+' / '+studyData.length;
+    document.getElementById('sqCat').textContent=q.cat;
+    
+    const prevBtn=document.getElementById('sqPrev');
+    if(studyIdx>0){prevBtn.classList.add('show');}else{prevBtn.classList.remove('show');}
+    
+    if(alreadyAnswered){
+        const userAnswer=studyAnswers[studyIdx];
+        const correct=userAnswer===q.c;
+        document.getElementById('sqBubble').textContent=correct?'✅ ¡Bien! Ya la dominas.':'❌ Sigue intentando. La correcta es la '+['A','B','C','D'][q.c]+'.';
+        document.getElementById('sqText').textContent=q.q;
+        const letters=['A','B','C','D'];
+        document.getElementById('sqOpts').innerHTML=q.o.map((o,i)=>{
+            let cls='quiz-opt disabled';
+            if(i===q.c)cls+=' correct';
+            if(i===userAnswer&&!correct)cls+=' wrong';
+            return '<div class="'+cls+'"><div class="quiz-letter">'+letters[i]+'</div><div>'+o+'</div></div>';
+        }).join('');
+        document.getElementById('sqExplain').innerHTML='<b style="color:#ff6b2b">📖</b> '+q.a+'<br><br><b>Técnico:</b> '+q.e;
+        document.getElementById('sqExplain').classList.add('show');
+        const nextBtn=document.getElementById('sqNext');
+        nextBtn.textContent=(studyIdx<studyData.length-1)?'Siguiente →':'Ver Resultado 🏆';
+        nextBtn.classList.add('show');
+    }else{
+        document.getElementById('sqBubble').textContent=D.lang==='es'?'Esta la fallaste antes. ¡Piénsale bien, '+D.name+'!':'You missed this before. Think carefully, '+D.name+'!';
+        document.getElementById('sqText').textContent=q.q;
+        document.getElementById('sqExplain').classList.remove('show');
+        document.getElementById('sqNext').classList.remove('show');
+        const letters=['A','B','C','D'];
+        document.getElementById('sqOpts').innerHTML=q.o.map((o,i)=>'<div class="quiz-opt" onclick="answerStudy('+i+',this)"><div class="quiz-letter">'+letters[i]+'</div><div>'+o+'</div></div>').join('');
+    }
+    window.scrollTo(0,0);
+}
+
+function answerStudy(idx,el){
+    if(studyAnswered)return;
+    studyAnswered=true;
+    studyAnswers[studyIdx]=idx;
+    const q=studyData[studyIdx];
+    const correct=idx===q.c;
+    const opts=document.querySelectorAll('#s-study-quiz .quiz-opt');
+    
+    opts.forEach((o,i)=>{
+        if(i===q.c)o.classList.add('correct');
+        if(i===idx&&!correct)o.classList.add('wrong');
+        if(i!==q.c&&i!==idx)o.classList.add('disabled');
+    });
+    
+    // Track in study tracker
+    trackAnswer(q,correct);
+    
+    if(correct){
+        studyRight++;
+        document.getElementById('sqRight').textContent=studyRight;
+        document.getElementById('sqBubble').textContent=D.lang==='es'?'✅ ¡Muy bien, '+D.name+'! ¡Ya le estás agarrando!':'✅ Great job, '+D.name+'! You\'re getting it!';
+        document.getElementById('sqExplain').innerHTML='<b>Explicación:</b> '+q.e;
+        celebrate(1);
+        speakText(D.lang==='es'?'¡Correcto! Ya le agarraste. ':'Correct! You got it. '+q.e);
+    }else{
+        studyWrong++;
+        document.getElementById('sqWrong').textContent=studyWrong;
+        document.getElementById('sqBubble').textContent=D.lang==='es'?'❌ Aún no, '+D.name+'. La correcta es la '+['A','B','C','D'][q.c]+'. Lee bien la explicación.':'❌ Not yet, '+D.name+'. Correct: '+['A','B','C','D'][q.c]+'. Read the explanation.';
+        document.getElementById('sqExplain').innerHTML='<b style="color:#ff6b2b">📖 Con peras y manzanas:</b><br>'+q.a+'<br><br><b>Técnico:</b> '+q.e;
+        speakText(D.lang==='es'?'Aún no, pero no te rindas. Te lo explico: ':' Not yet, but don\'t give up. Let me explain: '+q.a+' '+q.e);
+    }
+    
+    document.getElementById('sqExplain').classList.add('show');
+    document.getElementById('sqNext').textContent=(studyIdx<studyData.length-1)?'Siguiente →':'Ver Resultado 🏆';
+    document.getElementById('sqNext').classList.add('show');
+}
+
+function studyNext(){
+    stopSpeech();
+    studyIdx++;
+    showStudyQuestion();
+}
+
+function studyPrev(){
+    stopSpeech();
+    if(studyIdx>0){studyIdx--;showStudyQuestion();}
+}
+
+function showStudyResult(){
+    go('s-study-result');
+    const pct=studyData.length>0?Math.round((studyRight/studyData.length)*100):0;
+    document.getElementById('srScore').textContent=pct+'%';
+    document.getElementById('srLabel').textContent=studyRight+' / '+studyData.length+(D.lang==='es'?' correctas en repaso':' correct in review');
+    
+    let medal,msg;
+    if(pct>=90){
+        medal='🏆';
+        msg=D.lang==='es'?'¡Increíble, '+D.name+'! ¡Ya dominas estas preguntas! Las que sacaste bien se van de tu zona de estudio.':'Amazing, '+D.name+'! You\'ve mastered these! Correct ones leave your study zone.';
+    }else if(pct>=70){
+        medal='🥇';
+        msg=D.lang==='es'?'¡Muy bien, '+D.name+'! Vas mejorando. Sigue repasando las que fallaste.':'Great job, '+D.name+'! You\'re improving. Keep reviewing the ones you missed.';
+    }else if(pct>=50){
+        medal='🥈';
+        msg=D.lang==='es'?'¡Vas progresando, '+D.name+'! Repasa las explicaciones y vuelve a intentar.':'Making progress, '+D.name+'! Review explanations and try again.';
+    }else{
+        medal='💪';
+        msg=D.lang==='es'?'¡No te rindas, '+D.name+'! La práctica hace al maestro. Lee las explicaciones con calma.':'Don\'t give up, '+D.name+'! Practice makes perfect. Read explanations carefully.';
+    }
+    
+    document.getElementById('srMedal').textContent=medal;
+    document.getElementById('srMsg').textContent=msg;
+    
+    // Award XP for study
+    const xpEarned=studyRight*5;
+    profile.xp+=xpEarned;
+    while(profile.xp>=profile.xpNeeded){
+        profile.xp-=profile.xpNeeded;
+        profile.level++;
+        profile.xpNeeded=Math.floor(profile.xpNeeded*1.4);
+    }
+    saveProfile();
+    
+    cft();
+    speakText(msg);
+}
+
+// === VIDEO ZONE ===
+const VIDEO_TOPICS=[
+    {cat:'⚡ Electricidad',videos:[
+        {title:'Ley de Ohm Explicada',desc:'Voltaje, corriente y resistencia con ejemplos reales',icon:'⚡',dur:'Próximamente'},
+        {title:'Cómo Usar el Multímetro',desc:'Medir voltaje, amperaje, resistencia y continuidad',icon:'🔬',dur:'Próximamente'},
+        {title:'Circuitos Serie vs Paralelo',desc:'Diferencias y cómo diagnosticar cada uno',icon:'🔌',dur:'Próximamente'},
+        {title:'GFCI y AFCI Explicados',desc:'Protecciones eléctricas y cuándo se requieren',icon:'🛡️',dur:'Próximamente'}
+    ]},
+    {cat:'❄️ Aire Acondicionado',videos:[
+        {title:'Ciclo de Refrigeración',desc:'Los 4 componentes y cómo funciona el sistema',icon:'🔄',dur:'Próximamente'},
+        {title:'Superheat y Subcooling',desc:'Qué son, cómo medirlos y valores normales',icon:'🌡️',dur:'Próximamente'},
+        {title:'Diagnóstico con Manifold',desc:'Leer presiones y diagnosticar problemas',icon:'📊',dur:'Próximamente'},
+        {title:'Mantenimiento Preventivo',desc:'Checklist completo para servicio de AC',icon:'🔧',dur:'Próximamente'}
+    ]},
+    {cat:'🧊 Refrigeración',videos:[
+        {title:'Walk-in Coolers 101',desc:'Componentes y troubleshooting básico',icon:'🧊',dur:'Próximamente'},
+        {title:'Válvula TXV',desc:'Cómo funciona y cómo diagnosticar problemas',icon:'⚙️',dur:'Próximamente'},
+        {title:'EPA 608 Prep',desc:'Todo lo que necesitas para pasar el examen',icon:'📋',dur:'Próximamente'}
+    ]},
+    {cat:'🛡️ Seguridad',videos:[
+        {title:'Lockout/Tagout (LOTO)',desc:'Procedimiento correcto paso a paso',icon:'🔒',dur:'Próximamente'},
+        {title:'PPE para HVAC',desc:'Equipo de protección personal obligatorio',icon:'🥽',dur:'Próximamente'}
+    ]}
+];
+
+function renderVideoZone(){
+    const container=document.getElementById('videoContent');
+    let html='';
+    
+    VIDEO_TOPICS.forEach(topic=>{
+        html+='<div class="video-section-title">'+topic.cat+'</div>';
+        topic.videos.forEach(v=>{
+            html+='<div class="video-card" onclick="alert(\''+(D.lang==='es'?'Próximamente — estamos grabando los videos del Maestro Mario':'Coming soon — we are recording Maestro Mario videos')+'\')">';
+            html+='<div class="video-card-thumb">'+v.icon+'</div>';
+            html+='<div class="video-card-info">';
+            html+='<div class="video-card-title">'+v.title+'</div>';
+            html+='<div class="video-card-desc">'+v.desc+'</div>';
+            html+='<div class="video-card-dur">🎬 '+v.dur+'</div>';
+            html+='</div></div>';
+        });
+    });
+    
+    container.innerHTML=html;
+}
 </script>
 </body>
 </html>
