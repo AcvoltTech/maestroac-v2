@@ -825,34 +825,78 @@ async function speakText(text){
         isSpeaking=true;
         lowerMusicForSpeech();
         document.getElementById('speakingIndicator').classList.add('active');
-        const r=await fetch(SUPABASE_URL+'/tutor-ia-voice',{
-            method:'POST',
-            headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({text:text})
-        });
-        if(!r.ok)throw new Error('Voice API error');
-        const audioBlob=await r.blob();
-        const audioUrl=URL.createObjectURL(audioBlob);
-        const audio=document.getElementById('aiAudio');
-        audio.src=audioUrl;
-        audio.onended=function(){
-            isSpeaking=false;
-            document.getElementById('speakingIndicator').classList.remove('active');
-            restoreMusicAfterSpeech();
-            URL.revokeObjectURL(audioUrl);
-        };
-        audio.onerror=function(){
-            isSpeaking=false;
-            document.getElementById('speakingIndicator').classList.remove('active');
-            restoreMusicAfterSpeech();
-        };
-        await audio.play();
+        
+        // Split long text into chunks at sentence boundaries (max ~400 chars each)
+        const chunks=splitTextChunks(text,400);
+        
+        for(let i=0;i<chunks.length;i++){
+            const chunk=chunks[i].trim();
+            if(!chunk)continue;
+            const r=await fetch(SUPABASE_URL+'/tutor-ia-voice',{
+                method:'POST',
+                headers:{'Content-Type':'application/json'},
+                body:JSON.stringify({text:chunk})
+            });
+            if(!r.ok)throw new Error('Voice API error chunk '+i);
+            const audioBlob=await r.blob();
+            const audioUrl=URL.createObjectURL(audioBlob);
+            const audio=document.getElementById('aiAudio');
+            audio.src=audioUrl;
+            
+            // Wait for this chunk to finish playing before next
+            await new Promise((resolve,reject)=>{
+                audio.onended=function(){
+                    URL.revokeObjectURL(audioUrl);
+                    resolve();
+                };
+                audio.onerror=function(){
+                    URL.revokeObjectURL(audioUrl);
+                    resolve(); // Continue even if one chunk fails
+                };
+                audio.play().catch(()=>resolve());
+            });
+        }
+        
+        isSpeaking=false;
+        document.getElementById('speakingIndicator').classList.remove('active');
+        restoreMusicAfterSpeech();
     }catch(e){
         console.error('Voice Error:',e);
         isSpeaking=false;
         document.getElementById('speakingIndicator').classList.remove('active');
         restoreMusicAfterSpeech();
     }
+}
+
+function splitTextChunks(text,maxLen){
+    if(text.length<=maxLen)return[text];
+    const chunks=[];
+    let remaining=text;
+    while(remaining.length>0){
+        if(remaining.length<=maxLen){
+            chunks.push(remaining);
+            break;
+        }
+        // Find best split point: period, exclamation, question mark, or comma
+        let splitAt=-1;
+        for(let i=Math.min(maxLen,remaining.length)-1;i>=maxLen*0.5;i--){
+            if('.!?'.includes(remaining[i])){splitAt=i+1;break;}
+        }
+        if(splitAt===-1){
+            for(let i=Math.min(maxLen,remaining.length)-1;i>=maxLen*0.5;i--){
+                if(',;:'.includes(remaining[i])){splitAt=i+1;break;}
+            }
+        }
+        if(splitAt===-1){
+            for(let i=Math.min(maxLen,remaining.length)-1;i>=maxLen*0.5;i--){
+                if(remaining[i]===' '){splitAt=i+1;break;}
+            }
+        }
+        if(splitAt===-1)splitAt=maxLen;
+        chunks.push(remaining.substring(0,splitAt));
+        remaining=remaining.substring(splitAt);
+    }
+    return chunks;
 }
 
 function openAIChat(){
@@ -1211,10 +1255,11 @@ function answerQuiz(idx,el){
         quizStreak++;
         if(quizStreak>bestStreak)bestStreak=quizStreak;
         document.getElementById('qRight').textContent=quizRight;
-        document.getElementById('qBubble').textContent=pickCheer(quizStreak);
+        const cheer=pickCheer(quizStreak);
+        document.getElementById('qBubble').textContent=cheer;
         celebrate(quizStreak);
         document.getElementById('qExplain').innerHTML='<b>'+(D.lang==='es'?'Explicación:':'Explanation:')+'</b> '+q.e;
-        speakText(D.lang==='es'?'Correcto. ':'Correct. ');
+        speakText(cheer+' '+q.e);
     }else{
         quizWrong++;
         quizStreak=0;
@@ -1222,15 +1267,15 @@ function answerQuiz(idx,el){
         const motivation=pickMiss();
         const bubble=document.getElementById('qBubble');
         bubble.textContent=motivation;
-        // After 3 seconds, update bubble with the simple analogy
+        // After 4 seconds, update bubble with the simple analogy
         setTimeout(()=>{
             bubble.innerHTML='<span style="color:#ff6b2b">📖</span> '+q.a;
-        },3500);
+        },4000);
         // Show deep explanation with analogy
         let explain='<b style="color:#ff6b2b">'+(D.lang==='es'?'📖 Te lo explico con peras y manzanas:':'📖 Let me break it down simply:')+'</b><br>'+q.a+'<br><br><b>'+(D.lang==='es'?'Explicación técnica:':'Technical explanation:')+'</b> '+q.e;
         document.getElementById('qExplain').innerHTML=explain;
-        // Mario speaks motivation FIRST, then simple explanation
-        speakText(motivation+' ... '+q.a);
+        // Mario speaks EVERYTHING: motivation + analogy + technical explanation
+        speakText(motivation+' '+(D.lang==='es'?'Te lo explico fácil: ':'Let me explain simply: ')+q.a+' '+(D.lang==='es'?'En términos técnicos: ':'Technically speaking: ')+q.e);
     }
     
     document.getElementById('qExplain').classList.add('show');
