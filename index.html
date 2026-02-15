@@ -1843,6 +1843,7 @@ const QUIZ_LIST=[
 ];
 
 function renderQuizSelector(){
+    if(!window.checkAIPremium || !window.checkAIPremium()) return;
     const el=document.getElementById('quizSelList');
     const scores=JSON.parse(localStorage.getItem('maestro_quiz_scores')||'{}');
     el.innerHTML=QUIZ_LIST.map(q=>{
@@ -1865,6 +1866,7 @@ function getStarsHTML(pct){
 let currentQuizId='principiante';
 
 function selectQuiz(id){
+    if(!window.checkAIPremium || !window.checkAIPremium()) return;
     currentQuizId=id;
     const q=QUIZ_LIST.find(x=>x.id===id);
     startQuiz(id);
@@ -2102,6 +2104,7 @@ function startQuiz(id){
 }
 
 function retryQuiz(){
+    if(!window.checkAIPremium || !window.checkAIPremium()) return;
     // Only retry the questions the user got WRONG (not the entire quiz)
     const failedQuestions=[];
     for(let i=0;i<quizData.length;i++){
@@ -3264,6 +3267,7 @@ function renderNewbieZone(){
 
 // === STUDY ZONE RENDER ===
 function renderStudyZone(){
+    if(!window.checkAIPremium || !window.checkAIPremium()) return;
     const container=document.getElementById('studyContent');
     const questions=getStudyQuestions();
     const cats=getStudyCategories();
@@ -3317,6 +3321,7 @@ let studyAnswers=[];
 let lastStudyCat='all';
 
 function startStudyQuiz(catFilter){
+    if(!window.checkAIPremium || !window.checkAIPremium()) return;
     lastStudyCat=catFilter;
     const questions=catFilter==='all'?getStudyQuestions():getStudyQuestions(catFilter);
     if(questions.length===0){
@@ -3533,6 +3538,7 @@ function getLibraryCategories(){
 }
 
 function renderStudyLibrary(){
+    if(!window.checkAIPremium || !window.checkAIPremium()) return;
     const container=document.getElementById('libraryContent');
     const cats=getLibraryCategories();
     const allQ=getAllQuizQuestions();
@@ -3675,22 +3681,39 @@ function updateHubLibraryCount(){
 
 <!-- AI PAYWALL MODAL -->
 <div class="paywall-overlay" id="paywallModal">
-  <div class="paywall-card">
-    <div class="pw-icon">🤖</div>
-    <div class="pw-title">AI MAESTRO MARIO</div>
-    <div class="pw-subtitle">Desbloquea el poder de la inteligencia artificial</div>
-    <div class="pw-features">
-      <div class="pw-feature"><span>✅</span> Mario te explica con IA</div>
-      <div class="pw-feature"><span>✅</span> Chat ilimitado con Mario</div>
-      <div class="pw-feature"><span>✅</span> Voz de Mario te guía</div>
-      <div class="pw-feature"><span>✅</span> Pistas inteligentes</div>
-      <div class="pw-feature"><span>✅</span> 50,000 caracteres/mes</div>
-      <div class="pw-feature"><span>✅</span> Funciona en AMBAS apps</div>
+  <div class="paywall-card" style="max-width:440px;padding:28px 24px">
+    <!-- Mario avatar -->
+    <div style="display:flex;justify-content:center;margin-bottom:12px">
+      <div style="width:80px;height:80px;border-radius:50%;overflow:hidden;border:3px solid var(--accent);box-shadow:0 0 20px rgba(255,107,43,0.3)">
+        <img src="mario.jpg" alt="Maestro Mario" style="width:100%;height:100%;object-fit:cover">
+      </div>
     </div>
-    <div class="pw-price">$49 USD</div>
+    
+    <!-- Mario's personal message -->
+    <div class="pw-title" style="font-size:20px" id="pwTitle">¡Hey, técnico!</div>
+    <div style="background:var(--card2);border-radius:16px;padding:16px;margin:12px 0;text-align:left;font-size:14px;line-height:1.7;color:var(--txt);border-left:3px solid var(--accent)">
+      <span id="pwMarioMsg">Esta es una herramienta poderosa que te puede cambiar la carrera. 🚀 Con la suscripción AI Premium desbloqueas todo el contenido y yo personalmente te guío paso a paso con inteligencia artificial.</span>
+    </div>
+
+    <!-- Benefits -->
+    <div class="pw-features" style="margin:16px 0">
+      <div class="pw-feature"><span>🧠</span> 417+ preguntas de práctica con explicaciones</div>
+      <div class="pw-feature"><span>🤖</span> Chat con Mario AI — te explico como si estuviéramos en el campo</div>
+      <div class="pw-feature"><span>🗣️</span> Mi voz te guía mientras estudias</div>
+      <div class="pw-feature"><span>📊</span> Todo lo que aprendas aquí cuenta en Maestro ACVOLT</div>
+      <div class="pw-feature"><span>🏆</span> Quizzes, certificaciones, medallas y más</div>
+      <div class="pw-feature"><span>🔄</span> Las DOS apps conectadas — un solo progreso</div>
+    </div>
+
+    <!-- Community message -->
+    <div style="background:rgba(0,212,255,0.08);border-radius:12px;padding:12px 14px;margin:12px 0;text-align:center;font-size:13px;line-height:1.6;color:var(--electric);border:1px solid rgba(0,212,255,0.15)">
+      💙 Al suscribirte ayudas a <b>ACVOLT Tech School</b> a seguir mejorando las apps, crear más contenido y ofrecer mejores recursos para toda la comunidad de técnicos HVAC.
+    </div>
+
+    <div class="pw-price" style="margin-top:16px">$49 USD</div>
     <div class="pw-period">por mes · cancela cuando quieras</div>
-    <button class="pw-btn" onclick="startStripeCheckout()">💳 Suscribirse</button>
-    <button class="pw-close" onclick="closePaywall()">✖ No gracias</button>
+    <button class="pw-btn" onclick="startStripeCheckout()">💳 Quiero Suscribirme</button>
+    <button class="pw-close" onclick="closePaywall()">Ahora no, gracias</button>
   </div>
 </div>
 
@@ -3757,6 +3780,12 @@ function updateHubLibraryCount(){
   window.checkAIPremium = function(){
     var d = getPremiumData();
     if(!d.active){
+      // Personalize Mario's message
+      var nombre = (typeof D !== 'undefined' && D.name) ? D.name.split(' ')[0] : 'técnico';
+      var titleEl = document.getElementById('pwTitle');
+      var msgEl = document.getElementById('pwMarioMsg');
+      if(titleEl) titleEl.textContent = '¡Hey, ' + nombre + '! 👋';
+      if(msgEl) msgEl.innerHTML = 'Veo que quieres seguir avanzando — eso me dice mucho de ti. 💪 Esta herramienta es poderosa, <b>' + nombre + '</b>. Con AI Premium desbloqueas todos los quizzes, la zona de estudio, y yo personalmente te guío con inteligencia artificial. Todo lo que aprendas aquí <b>cuenta en Maestro ACVOLT</b> también — las dos apps trabajan juntas para que llegues más lejos.';
       document.getElementById('paywallModal').classList.add('active');
       return false;
     }
