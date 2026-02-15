@@ -392,7 +392,7 @@
             <button class="ai-chat-close" onclick="closeAIChat()">✕</button>
         </div>
         <div class="ai-chat-messages" id="aiMessages">
-            <div class="ai-msg mario" id="aiChatWelcome">¡Órale técnico! Soy el Maestro Mario con inteligencia artificial. ¿En qué te puedo ayudar? Pregúntame lo que quieras sobre HVAC, refrigeración, o electricidad. 🔧</div>
+            <div class="ai-msg mario" id="aiChatWelcome">¡Órale! Soy el Maestro Mario con inteligencia artificial. ¿En qué te puedo ayudar? Pregúntame lo que quieras sobre HVAC, refrigeración, o electricidad. 🔧</div>
         </div>
         <div class="speaking-indicator" id="speakingIndicator">
             <div class="waves"><div class="wave"></div><div class="wave"></div><div class="wave"></div><div class="wave"></div></div>
@@ -788,6 +788,7 @@
     <button class="bt" onclick="renderQuizSelector();go('s7b')" style="margin-top:20px" id="profQuizBtn">📝 Tomar un Quiz</button>
     <button class="bt" onclick="toggleMusicPanel()" style="background:var(--card);border:2px solid rgba(0,212,255,0.3);margin-top:10px" id="profMusicBtn">🎶 Cambiar Música</button>
     <button class="bt" onclick="go('s-hub');updateHub()" style="background:var(--card);border:2px solid var(--accent);margin-top:10px" data-lang="volver-hub">← Volver al Hub</button>
+    <button class="bt" onclick="exitApp()" style="background:rgba(255,60,60,0.15);border:2px solid rgba(255,60,60,0.4);color:#ff4444;margin-top:20px" id="exitAppBtn">🚪 Salir del App</button>
 </div>
 </div>
 <div class="cw" id="conf"></div>
@@ -808,7 +809,18 @@
 <script src="quiz-refrigeracion-200.js"></script>
 <script src="quiz-intro.js"></script>
 <script>
-const D={lang:'es',name:'',level:null,specs:[],school:null,goals:[]};
+const D={lang:'es',name:'',level:null,specs:[],school:null,goals:[],gender:'m'};
+
+// Female name detection for inclusive language
+const FEMALE_NAMES=new Set(['maria','maria','ana','andrea','adriana','alejandra','alicia','amanda','amelia','angela','angelica','angie','anna','beatriz','belen','bianca','blanca','brenda','camila','carla','carmen','carolina','catalina','cecilia','celia','claudia','cristina','daniela','danna','diana','elena','elisa','elizabeth','erika','esmeralda','esperanza','estela','esther','eva','fatima','fernanda','flora','francisca','gabriela','genesis','giselle','gladys','gloria','grace','graciela','guadalupe','heidi','ingrid','irene','iris','isabel','isabella','ivana','ivonne','jacqueline','janet','jasmin','jazmin','jennifer','jessica','jimena','joana','josefina','juana','julia','juliana','julieta','karen','karla','karina','katherine','katia','keyla','laura','leonor','leticia','lilia','liliana','linda','lisa','lorena','lucia','luciana','luisa','lupita','luz','magaly','magda','magdalena','maira','manuela','marcela','margarita','mariana','maribel','marisol','marlene','marta','martha','mayra','melanie','melissa','mercedes','michelle','miriam','monica','nadia','nancy','natalia','natasha','nicole','nidia','noemi','nora','norma','olga','paola','patricia','paula','perla','pilar','priscila','raquel','rebeca','regina','renata','rocio','rosa','rosalba','rosario','roxana','ruth','sabrina','samantha','sandra','sara','selena','silvia','sofia','soledad','sonia','stefania','stephanie','susana','tamara','tatiana','teresa','valentina','valeria','vanessa','veronica','victoria','violeta','virginia','viviana','wendy','ximena','yesenia','yolanda','yuri','zoe','zoila']);
+
+function detectGender(name){
+    const first=name.trim().split(/\s+/)[0].toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    return FEMALE_NAMES.has(first)?'f':'m';
+}
+
+// Gender-aware helper: returns male or female form
+function gn(m,f){return D.gender==='f'?f:m;}
 let videoPlaying=false;
 let currentVideoCallback=null;
 let isSpeaking=false;
@@ -843,6 +855,12 @@ const MUSIC_STYLES=[
     {id:'rock8bit',icon:'🎸',name:'Rock 8-Bit',desc:'Rock clásico pixelado',desc_en:'Classic pixel rock'},
     {id:'ambient',icon:'🌙',name:'Ambient Night',desc:'Calmado nocturno',desc_en:'Calm nighttime'},
     {id:'mariachi',icon:'🇲🇽',name:'Mariachi Digital',desc:'Orgullo mexicano',desc_en:'Mexican pride'},
+    {id:'hiphop',icon:'🎤',name:'Hip-Hop Study',desc:'Boom bap para enfocarte',desc_en:'Boom bap to focus'},
+    {id:'edm',icon:'🔊',name:'EDM Energy',desc:'Electrónica motivadora',desc_en:'Motivating electronic'},
+    {id:'corrido',icon:'🤠',name:'Corrido Tumbado',desc:'Estilo norteño digital',desc_en:'Digital norteño style'},
+    {id:'classical',icon:'🎻',name:'Clásica Épica',desc:'Orquesta inspiradora',desc_en:'Inspiring orchestra'},
+    {id:'synthwave',icon:'🌆',name:'Synthwave 80s',desc:'Retro futurista',desc_en:'Retro futuristic'},
+    {id:'salsa',icon:'💃',name:'Salsa Digital',desc:'Sabor caribeño',desc_en:'Caribbean flavor'},
     {id:'silent',icon:'🔇',name:'Sin Música',desc:'Solo silencio',desc_en:'Just silence'}
 ];
 
@@ -980,6 +998,92 @@ function playMusicLoop(){
             if(i%4===0||i%4===3)playNote('triangle',noteFreq('G',3),now+i*half,half*0.3,0.08);
         }
         musicTimers.push(setTimeout(()=>playMusicLoop(),trumpet.length*half*1000-100));
+    }
+    else if(style==='hiphop'){
+        // Hip-Hop boom bap - punchy drums, deep bass, Rhodes keys
+        const melody=[['C',4],['E',4],['G',4],['A',4],['G',4],['E',4],['C',4],['D',4],['F',4],['A',4],['G',4],['F',4],['E',4],['D',4],['C',4],['C',4]];
+        const bass=[['C',2],['C',2],['C',2],['E',2],['F',2],['F',2],['G',2],['G',2],['A',2],['A',2],['G',2],['G',2],['F',2],['E',2],['C',2],['C',2]];
+        for(let i=0;i<melody.length;i++){playNote('sine',noteFreq(melody[i][0],melody[i][1]),now+i*beat,beat*0.5,0.09);}
+        for(let i=0;i<bass.length;i++){playNote('triangle',noteFreq(bass[i][0],bass[i][1]),now+i*beat,beat*0.8,0.14);}
+        // Boom bap drums
+        for(let i=0;i<16;i++){
+            if(i%4===0)playNote('sine',noteFreq('C',2),now+i*beat,beat*0.2,0.2);
+            if(i%4===2)playNote('square',noteFreq('C',7),now+i*beat,beat*0.06,0.05);
+            if(i%2===1)playNote('square',noteFreq('D',6),now+i*beat,beat*0.04,0.04);
+        }
+        musicTimers.push(setTimeout(()=>playMusicLoop(),melody.length*beat*1000-100));
+    }
+    else if(style==='edm'){
+        // EDM Energy - building synth, four on the floor
+        const melody=[['E',5],['E',5],['G',5],['A',5],['B',5],['B',5],['A',5],['G',5],['E',5],['G',5],['B',5],['E',6],['D',6],['B',5],['A',5],['G',5],['A',5],['A',5],['B',5],['D',6],['E',6],['E',6],['D',6],['B',5],['A',5],['B',5],['D',6],['E',6],['B',5],['G',5],['E',5],['E',5]];
+        const bass=[['E',2],['E',2],['E',2],['E',2],['A',2],['A',2],['A',2],['A',2],['C',3],['C',3],['C',3],['C',3],['B',2],['B',2],['B',2],['B',2],['A',2],['A',2],['A',2],['A',2],['C',3],['C',3],['C',3],['C',3],['D',3],['D',3],['D',3],['D',3],['B',2],['B',2],['B',2],['B',2]];
+        for(let i=0;i<melody.length;i++){playNote('sawtooth',noteFreq(melody[i][0],melody[i][1]),now+i*half,half*0.7,0.05);}
+        for(let i=0;i<bass.length;i++){playNote('sine',noteFreq(bass[i][0],bass[i][1]),now+i*half,half*0.9,0.13);}
+        // Four on the floor kick + hi-hat
+        for(let i=0;i<32;i++){
+            if(i%4===0)playNote('sine',noteFreq('C',1),now+i*half,half*0.2,0.18);
+            playNote('square',noteFreq('C',8),now+i*half,half*0.03,0.025);
+        }
+        musicTimers.push(setTimeout(()=>playMusicLoop(),melody.length*half*1000-100));
+    }
+    else if(style==='corrido'){
+        // Corrido tumbado - tuba bass, guitarrón, accordion feel
+        const melody=[['D',5],['F',5],['A',5],['D',6],['A',5],['F',5],['D',5],['E',5],['G',5],['B',5],['A',5],['G',5],['F',5],['E',5],['D',5],['D',5],['F',5],['A',5],['D',6],['C',6],['A',5],['F',5],['E',5],['D',5],['E',5],['F',5],['A',5],['G',5],['F',5],['E',5],['D',5],['D',5]];
+        const tuba=[['D',2],['D',2],['A',2],['A',2],['D',2],['D',2],['A',2],['A',2],['G',2],['G',2],['D',3],['D',3],['A',2],['A',2],['D',2],['D',2],['D',2],['D',2],['F',2],['F',2],['A',2],['A',2],['G',2],['G',2],['F',2],['F',2],['E',2],['E',2],['D',2],['D',2],['A',2],['A',2]];
+        for(let i=0;i<melody.length;i++){playNote('sawtooth',noteFreq(melody[i][0],melody[i][1]),now+i*half,half*0.65,0.06);}
+        for(let i=0;i<tuba.length;i++){playNote('triangle',noteFreq(tuba[i][0],tuba[i][1]),now+i*half,half*0.8,0.12);}
+        // Tumbado rhythm
+        for(let i=0;i<32;i++){
+            if(i%4===0||i%4===3)playNote('sine',noteFreq('D',2),now+i*half,half*0.15,0.16);
+            if(i%2===1)playNote('square',noteFreq('A',6),now+i*half,half*0.04,0.04);
+        }
+        musicTimers.push(setTimeout(()=>playMusicLoop(),melody.length*half*1000-100));
+    }
+    else if(style==='classical'){
+        // Classical epic - strings, French horns feel
+        const strings=[['C',5],['E',5],['G',5],['C',6],['B',5],['G',5],['E',5],['C',5],['D',5],['F',5],['A',5],['D',6],['C',6],['A',5],['F',5],['D',5],['E',5],['G',5],['B',5],['E',6],['D',6],['B',5],['G',5],['E',5],['C',5],['E',5],['G',5],['C',6],['G',5],['E',5],['C',5],['C',5]];
+        const cello=[['C',3],['C',3],['G',2],['G',2],['C',3],['C',3],['E',3],['E',3],['D',3],['D',3],['A',2],['A',2],['D',3],['D',3],['F',3],['F',3],['E',3],['E',3],['B',2],['B',2],['E',3],['E',3],['G',3],['G',3],['C',3],['C',3],['G',2],['G',2],['C',3],['C',3],['C',3],['C',3]];
+        const horn=[['E',4],['G',4],['C',5],['G',4],['F',4],['A',4],['D',5],['A',4],['G',4],['B',4],['E',5],['B',4],['E',4],['G',4],['C',5],['C',5]];
+        for(let i=0;i<strings.length;i++){playNote('sine',noteFreq(strings[i][0],strings[i][1]),now+i*half,half*0.9,0.07);}
+        for(let i=0;i<cello.length;i++){playNote('triangle',noteFreq(cello[i][0],cello[i][1]),now+i*half,half*1.0,0.09);}
+        for(let i=0;i<horn.length;i++){playNote('sawtooth',noteFreq(horn[i][0],horn[i][1]),now+i*beat,beat*0.8,0.035);}
+        musicTimers.push(setTimeout(()=>playMusicLoop(),strings.length*half*1000-100));
+    }
+    else if(style==='synthwave'){
+        // Synthwave 80s - arpeggiated synths, driving bass
+        const arp=[['E',5],['G',5],['B',5],['E',6],['B',5],['G',5],['E',5],['D',5],['F',5],['A',5],['D',6],['A',5],['F',5],['D',5],['E',5],['G',5],['B',5],['E',6],['G',6],['E',6],['B',5],['G',5],['A',5],['C',6],['E',6],['C',6],['A',5],['E',5],['G',5],['B',5],['E',5],['E',5]];
+        const bass=[['E',2],['E',2],['E',2],['E',2],['D',2],['D',2],['D',2],['D',2],['E',2],['E',2],['E',2],['E',2],['A',2],['A',2],['A',2],['A',2],['E',2],['E',2],['E',2],['E',2],['D',2],['D',2],['D',2],['D',2],['A',2],['A',2],['A',2],['A',2],['B',2],['B',2],['B',2],['B',2]];
+        for(let i=0;i<arp.length;i++){playNote('square',noteFreq(arp[i][0],arp[i][1]),now+i*half,half*0.5,0.05);}
+        for(let i=0;i<bass.length;i++){playNote('sawtooth',noteFreq(bass[i][0],bass[i][1]),now+i*half,half*0.9,0.1);}
+        // Snare on 2 and 4, kick on 1 and 3
+        for(let i=0;i<32;i++){
+            if(i%8===0||i%8===4)playNote('sine',noteFreq('C',2),now+i*half,half*0.15,0.15);
+            if(i%8===2||i%8===6)playNote('square',noteFreq('C',7),now+i*half,half*0.05,0.06);
+        }
+        musicTimers.push(setTimeout(()=>playMusicLoop(),arp.length*half*1000-100));
+    }
+    else if(style==='salsa'){
+        // Salsa digital - piano montuno, conga feel, bright brass
+        const piano=[['C',5],['E',5],['G',5],['C',5],['E',5],['G',5],['A',4],['C',5],['F',5],['A',4],['C',5],['F',5],['G',4],['B',4],['D',5],['G',4],['B',4],['D',5],['C',5],['E',5],['G',5],['C',5],['E',5],['G',5]];
+        const bass=[['C',3],['C',3],['G',2],['C',3],['F',2],['F',2],['C',3],['F',2],['G',2],['G',2],['D',3],['G',2],['C',3],['C',3],['G',2],['C',3],['F',2],['F',2],['C',3],['F',2],['G',2],['G',2],['D',3],['G',2]];
+        const bpm2=180;const sbeat=60/bpm2;const shalf=sbeat/2;
+        for(let i=0;i<piano.length;i++){playNote('triangle',noteFreq(piano[i][0],piano[i][1]),now+i*shalf,shalf*0.6,0.08);}
+        for(let i=0;i<bass.length;i++){playNote('sine',noteFreq(bass[i][0],bass[i][1]),now+i*shalf,shalf*0.8,0.12);}
+        // Conga/timbale pattern
+        for(let i=0;i<24;i++){
+            if(i%3===0)playNote('square',noteFreq('A',6),now+i*shalf,shalf*0.08,0.06);
+            if(i%6===2)playNote('sine',noteFreq('E',2),now+i*shalf,shalf*0.12,0.14);
+        }
+        musicTimers.push(setTimeout(()=>playMusicLoop(),piano.length*shalf*1000-100));
+    }
+}
+
+function exitApp(){
+    const msg=D.lang==='es'?'¿Seguro que quieres salir? Tu progreso está guardado.':'Are you sure you want to exit? Your progress is saved.';
+    if(confirm(msg)){
+        stopMusic();
+        if(window.speechSynthesis)window.speechSynthesis.cancel();
+        document.body.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;background:#0a0e1a;color:white;font-family:Fredoka,sans-serif;text-align:center;padding:20px"><div style="font-size:80px;margin-bottom:20px">👋</div><div style="font-size:28px;font-weight:700;margin-bottom:10px">'+(D.lang==='es'?'¡Hasta luego, '+D.name+'!':'See you later, '+D.name+'!')+'</div><div style="font-size:16px;color:#8899aa;margin-bottom:30px">'+(D.lang==='es'?'Tu progreso está guardado. ¡Regresa pronto, '+gn('campeón','campeona')+'!':'Your progress is saved. Come back soon, champ!')+'</div><button onclick="location.reload()" style="padding:14px 32px;border-radius:12px;border:2px solid #00d4ff;background:rgba(0,212,255,0.1);color:#00d4ff;font-size:16px;font-family:Fredoka,sans-serif;font-weight:600;cursor:pointer">'+(D.lang==='es'?'🔄 Volver a Entrar':'🔄 Re-enter App')+'</button></div>';
     }
 }
 
@@ -1277,7 +1381,7 @@ async function getAIResponse(msg){
         });
         if(!r.ok)throw new Error('Chat API error');
         const d=await r.json();
-        return d.content&&d.content[0]?d.content[0].text:(D.lang==='es'?'¡Órale técnico! Hubo un problema, intenta de nuevo.':'Hey technician! There was a problem, try again.');
+        return d.content&&d.content[0]?d.content[0].text:(D.lang==='es'?'¡Órale '+(D.name||gn('técnico','técnica'))+'! Hubo un problema, intenta de nuevo.':'Hey '+(D.name||'technician')+'! There was a problem, try again.');
     }catch(e){
         console.error('AI Chat Error:',e);
         return D.lang==='es'?'¡Órale! Problema de conexión. Intenta de nuevo.':'Connection problem. Please try again.';
@@ -1660,7 +1764,7 @@ function cft(){
 
 // ========== TRANSLATIONS ==========
 const T={
-es:{step_1:'Paso 1 de 5',step_2:'Paso 2 de 5',step_3:'Paso 3 de 5',step_4:'Paso 4 de 5',step_5:'Paso 5 de 5',welcome_speech:'¡Bienvenido técnico! Soy el Maestro Mario y voy a ser tu guía. ¿Cómo te llamas?',name_ph:'Escribe tu nombre aquí...',continue:'Continuar →',level_speech:'¡Mucho gusto, {name}! ¿En qué nivel técnico te encuentras?',spec_speech:'¡Excelente, {name}! ¿En qué áreas te sientes más fuerte?',multi_hint:'Selecciona una o más opciones',school_speech:'¡Vas muy bien, {name}! ¿Dónde estás estudiando?',goals_speech:'¡Última pregunta, {name}! ¿Qué quieres lograr?',route_speech:'¡Perfecto, {name}! He creado tu ruta personalizada. ¡Vamos con todo!',start_btn:'🚀 ¡Empezar a Aprender!',lv1:'Estudiante',lv1d:'Estoy aprendiendo lo básico',lv2:'Ayudante',lv2d:'Ya ando en el campo con un técnico',lv3:'Técnico',lv3d:'Ya trabajo solo pero quiero mejorar',lv4:'Avanzado',lv4d:'Quiero dominar el oficio',lv5:'Maestro',lv5d:'Quiero ser líder / abrir mi empresa',sp_e:'Electricidad',sp_ed:'Circuitos, controles, cableado',sp_a:'Aire Acondicionado',sp_ad:'Splits, centrales, mini splits',sp_r:'Refrigeración',sp_rd:'Cámaras frías, refrigeradores comerciales',sp_h:'Calefacción',sp_hd:'Furnaces, bombas de calor',sp_x:'Estoy empezando en todo',sp_xd:'Quiero aprender de todo',sc_ac:'ACVOLT Tech School',sc_acd:'Estudiante actual de ACVOLT',sc_ot:'Otra escuela',sc_otd:'Estoy en otra institución',sc_sf:'Aprendo por mi cuenta',sc_sfd:'YouTube, libros, campo',sc_dn:'Ya terminé mis estudios',sc_dnd:'Tengo certificación/diploma',gl_c:'Pasar mis certificaciones',gl_cd:'EPA, NATE, OSHA, NCCER',gl_d:'Mejorar mis diagnósticos',gl_dd:'Ser más preciso en el campo',gl_b:'Abrir mi propio negocio',gl_bd:'De técnico a empresario',gl_m:'Ganar más dinero',gl_md:'Subir mi valor como técnico',r_elec:'Fundamentos Eléctricos',r_elecd:'Circuitos, Ley de Ohm, diagramas',r_ac:'Aire Acondicionado',r_acd:'Presiones, carga de refrigerante',r_ref:'Refrigeración Comercial',r_refd:'Cámaras frías, controles, defrost',r_heat:'Calefacción',r_heatd:'Furnaces, bombas de calor, gas',r_cert:'Preparación para Certificaciones',r_certd:'EPA 608 • NATE • OSHA • NCCER',r_biz:'De Técnico a Empresario',r_bizd:'Licencias, estimados, clientes'},
+es:{step_1:'Paso 1 de 5',step_2:'Paso 2 de 5',step_3:'Paso 3 de 5',step_4:'Paso 4 de 5',step_5:'Paso 5 de 5',welcome_speech:'¡Bienvenido! Soy el Maestro Mario y voy a ser tu guía. ¿Cómo te llamas?',name_ph:'Escribe tu nombre aquí...',continue:'Continuar →',level_speech:'¡Mucho gusto, {name}! ¿En qué nivel técnico te encuentras?',spec_speech:'¡Excelente, {name}! ¿En qué áreas te sientes más fuerte?',multi_hint:'Selecciona una o más opciones',school_speech:'¡Vas muy bien, {name}! ¿Dónde estás estudiando?',goals_speech:'¡Última pregunta, {name}! ¿Qué quieres lograr?',route_speech:'¡Perfecto, {name}! He creado tu ruta personalizada. ¡Vamos con todo!',start_btn:'🚀 ¡Empezar a Aprender!',lv1:'Estudiante',lv1d:'Estoy aprendiendo lo básico',lv2:'Ayudante',lv2d:'Ya ando en el campo con un técnico',lv3:'Técnico',lv3d:'Ya trabajo solo pero quiero mejorar',lv4:'Avanzado',lv4d:'Quiero dominar el oficio',lv5:'Maestro',lv5d:'Quiero ser líder / abrir mi empresa',sp_e:'Electricidad',sp_ed:'Circuitos, controles, cableado',sp_a:'Aire Acondicionado',sp_ad:'Splits, centrales, mini splits',sp_r:'Refrigeración',sp_rd:'Cámaras frías, refrigeradores comerciales',sp_h:'Calefacción',sp_hd:'Furnaces, bombas de calor',sp_x:'Estoy empezando en todo',sp_xd:'Quiero aprender de todo',sc_ac:'ACVOLT Tech School',sc_acd:'Estudiante actual de ACVOLT',sc_ot:'Otra escuela',sc_otd:'Estoy en otra institución',sc_sf:'Aprendo por mi cuenta',sc_sfd:'YouTube, libros, campo',sc_dn:'Ya terminé mis estudios',sc_dnd:'Tengo certificación/diploma',gl_c:'Pasar mis certificaciones',gl_cd:'EPA, NATE, OSHA, NCCER',gl_d:'Mejorar mis diagnósticos',gl_dd:'Ser más preciso en el campo',gl_b:'Abrir mi propio negocio',gl_bd:'De técnico a empresario',gl_m:'Ganar más dinero',gl_md:'Subir mi valor como técnico',r_elec:'Fundamentos Eléctricos',r_elecd:'Circuitos, Ley de Ohm, diagramas',r_ac:'Aire Acondicionado',r_acd:'Presiones, carga de refrigerante',r_ref:'Refrigeración Comercial',r_refd:'Cámaras frías, controles, defrost',r_heat:'Calefacción',r_heatd:'Furnaces, bombas de calor, gas',r_cert:'Preparación para Certificaciones',r_certd:'EPA 608 • NATE • OSHA • NCCER',r_biz:'De Técnico a Empresario',r_bizd:'Licencias, estimados, clientes'},
 en:{step_1:'Step 1 of 5',step_2:'Step 2 of 5',step_3:'Step 3 of 5',step_4:'Step 4 of 5',step_5:'Step 5 of 5',welcome_speech:"Welcome technician! I'm Maestro Mario and I'll be your guide. What's your name?",name_ph:'Type your name here...',continue:'Continue →',level_speech:"Nice to meet you, {name}! What's your technical level?",spec_speech:'Excellent, {name}! What areas are you strongest in?',multi_hint:'Select one or more options',school_speech:'Great progress, {name}! Where are you studying?',goals_speech:'Last question, {name}! What do you want to achieve?',route_speech:"Perfect, {name}! I've created your personalized path. Let's go!",start_btn:'🚀 Start Learning!',lv1:'Student',lv1d:"I'm learning the basics",lv2:'Helper',lv2d:"I'm in the field with a technician",lv3:'Technician',lv3d:'I work solo but want to improve',lv4:'Advanced',lv4d:'I want to master the trade',lv5:'Master',lv5d:'I want to lead / start my business',sp_e:'Electrical',sp_ed:'Circuits, controls, wiring',sp_a:'Air Conditioning',sp_ad:'Splits, central, mini splits',sp_r:'Refrigeration',sp_rd:'Walk-in coolers, commercial',sp_h:'Heating',sp_hd:'Furnaces, heat pumps',sp_x:'Starting in everything',sp_xd:'I want to learn it all',sc_ac:'ACVOLT Tech School',sc_acd:'Current ACVOLT student',sc_ot:'Another school',sc_otd:"I'm at another institution",sc_sf:'Self-taught',sc_sfd:'YouTube, books, field',sc_dn:'Completed studies',sc_dnd:'I have certification/diploma',gl_c:'Pass certifications',gl_cd:'EPA, NATE, OSHA, NCCER',gl_d:'Improve diagnostics',gl_dd:'Be more precise in the field',gl_b:'Start my business',gl_bd:'From tech to owner',gl_m:'Earn more money',gl_md:'Increase my value',r_elec:'Electrical Fundamentals',r_elecd:"Circuits, Ohm's law, diagrams",r_ac:'Air Conditioning',r_acd:'Pressure diagnostics, charging',r_ref:'Commercial Refrigeration',r_refd:'Walk-in coolers, controls, defrost',r_heat:'Heating Systems',r_heatd:'Furnaces, heat pumps, gas',r_cert:'Certification Prep',r_certd:'EPA 608 • NATE • OSHA • NCCER',r_biz:'Tech to Business Owner',r_bizd:'Licensing, estimates, clients'}
 };
 
@@ -1670,7 +1774,7 @@ const go=id=>{document.querySelectorAll('.s').forEach(s=>s.classList.remove('on'
 const rx=(id,c)=>{const e=document.getElementById(id);if(e){e.classList.add(c);setTimeout(()=>e.classList.remove(c),1500);}};
 
 function setLang(l){D.lang=l;unlockAudio();u();updateLanguageUI();showVideo('bienvenida',()=>{go('s2');document.getElementById('nm').placeholder=t('name_ph');speakText(t('welcome_speech'));});}
-function sName(){D.name=document.getElementById('nm').value.trim();u();bLvl();go('s3');rx('a3','nod');speakText(t('level_speech'));document.getElementById('profileBtn').classList.add('active');}
+function sName(){D.name=document.getElementById('nm').value.trim();D.gender=detectGender(D.name);u();bLvl();go('s3');rx('a3','nod');speakText(t('level_speech'));document.getElementById('profileBtn').classList.add('active');}
 function pLvl(e,v){document.querySelectorAll('#lo .oc').forEach(o=>o.classList.remove('sel'));e.classList.add('sel');D.level=v;document.getElementById('b3').disabled=false;rx('a3','nod');}
 function sLvl(){u();bSpc();go('s4');speakText(t('spec_speech'));}
 function tSpc(e,k){if(k==='all'){document.querySelectorAll('#so .oc').forEach(o=>o.classList.remove('sel'));e.classList.add('sel');D.specs=['all'];}else{document.querySelector('#so .oc:last-child').classList.remove('sel');D.specs=D.specs.filter(s=>s!=='all');e.classList.toggle('sel');if(e.classList.contains('sel'))D.specs.push(k);else D.specs=D.specs.filter(s=>s!==k);}document.getElementById('b4').disabled=D.specs.length===0;rx('a4','nod');}
@@ -1690,7 +1794,7 @@ function startApp(){
     enterStudyMode();
     updateHub();
     go('s-hub');
-    speakText(D.lang==='es'?'¡'+D.name+'! Bienvenido a tu centro de entrenamiento. Elige qué quieres hacer: tomar un quiz, repasar lo que fallaste, o ver videos.':'Welcome '+D.name+'! Choose what you want to do: take a quiz, study what you missed, or watch videos.');
+    speakText(D.lang==='es'?'¡'+D.name+'! Bienvenid'+gn('o','a')+' a tu centro de entrenamiento. Elige qué quieres hacer: tomar un quiz, repasar lo que fallaste, o ver videos.':'Welcome '+D.name+'! Choose what you want to do: take a quiz, study what you missed, or watch videos.');
 }
 
 // ========== QUIZ TRANSLATION HELPER ==========
@@ -1988,7 +2092,7 @@ function retryQuiz(){
     go('s8');
     showQuestion();
     const q=QUIZ_LIST.find(x=>x.id===currentQuizId);
-    speakText(D.lang==='es'?'¡Vamos a repasar las '+failedQuestions.length+' que fallaste, '+D.name+'! ¡Tú puedes, campeón!':'Let\'s review the '+failedQuestions.length+' you missed, '+D.name+'! You got this!');
+    speakText(D.lang==='es'?'¡Vamos a repasar las '+failedQuestions.length+' que fallaste, '+D.name+'! ¡Tú puedes, '+gn('campeón','campeona')+'!':'Let\'s review the '+failedQuestions.length+' you missed, '+D.name+'! You got this!');
 }
 
 // ========== FORMULA DETECTION SYSTEM ==========
@@ -2313,11 +2417,11 @@ const CHEERS_EN=[
 const MISS_ES=[
     '¡No te preocupes, {name}! Todos fallamos al principio. Así se aprende, echándole ganas.',
     '¡Ey {name}, tranquilo! Los mejores técnicos también empezaron equivocándose. ¡Tú puedes!',
-    '¡{name}, ya eres ganador solo por intentarlo! No te desanimes, vamos campeón.',
+    '¡{name}, ya eres {ganador} solo por intentarlo! No te desanimes, vamos {campeon}.',
     '¡Órale {name}, casi le atinas! Eres una estrella en entrenamiento. Mira la explicación.',
     '¡{name}, no pasa nada! Hasta Mario se equivocaba al principio. Lo importante es aprender.',
     '¡Ánimo {name}! Cada error te acerca más a ser un crack del HVAC. ¡Tú puedes con esto!',
-    '¡Hey {name}! Esta estaba difícil. Pero tú eres chingón, vas a dominar este tema.',
+    '¡Hey {name}! Esta estaba difícil. Pero tú eres {chingon}, vas a dominar este tema.',
     '¡{name}, respira! Los grandes se hacen a base de práctica. Mira la explicación y vas a ver qué fácil es.'
 ];
 const MISS_EN=[
@@ -2343,7 +2447,8 @@ function pickCheer(streak){
 
 function pickMiss(){
     const list=D.lang==='es'?MISS_ES:MISS_EN;
-    const msg=list[Math.floor(Math.random()*list.length)].replace(/\{name\}/g,D.name);
+    let msg=list[Math.floor(Math.random()*list.length)].replace(/\{name\}/g,D.name);
+    msg=msg.replace(/\{campeon\}/g,gn('campeón','campeona')).replace(/\{ganador\}/g,gn('ganador','ganadora')).replace(/\{chingon\}/g,gn('chingón','chingona'));
     const letter=' '+(D.lang==='es'?'La correcta es la ':'Correct answer is ')+['A','B','C','D'][quizData[quizIdx].c]+'.';
     return msg+letter;
 }
@@ -2421,7 +2526,7 @@ function answerQuiz(idx,el){
         // === MILESTONE MESSAGES based on progress ===
         const progressPct=Math.round(((quizIdx+1)/quizData.length)*100);
         if(progressPct>=90&&progressPct<95){
-            cheer=D.lang==='es'?'🎯 ¡Concentración total, '+D.name+'! ¡Ya lo tienes, campeón!':'🎯 Total focus, '+D.name+'! You almost got it, champ!';
+            cheer=D.lang==='es'?'🎯 ¡Concentración total, '+D.name+'! ¡Ya lo tienes, '+gn('campeón','campeona')+'!':'🎯 Total focus, '+D.name+'! You almost got it, champ!';
         }else if(progressPct>=70&&progressPct<75){
             cheer=D.lang==='es'?'👑 ¡Ya puedes saborear la victoria, '+D.name+'! ¡No aflojes!':'👑 You can taste victory, '+D.name+'! Don\'t let up!';
         }else if(progressPct>=48&&progressPct<52){
@@ -2517,7 +2622,7 @@ function showResult(){
         msg=D.lang==='es'?'¡No te desanimes, '+D.name+'! Ya eres ganador por intentarlo. Repasa y vuelve más fuerte.':'Don\'t get discouraged, '+D.name+'! You\'re a winner for trying. Review and come back stronger.';
     }else{
         medal='💪';stars=1;
-        msg=D.lang==='es'?'¡'+D.name+', vamos campeón! Todos fallamos al principio. Tú puedes, eres una estrella. ¡Estudia y regresa con todo!':D.name+', let\'s go champ! Everyone struggles at first. You\'re a star. Study and come back strong!';
+        msg=D.lang==='es'?'¡'+D.name+', vamos '+gn('campeón','campeona')+'! Todos fallamos al principio. Tú puedes, eres una estrella. ¡Estudia y regresa con todo!':D.name+', let\'s go champ! Everyone struggles at first. You\'re a star. Study and come back strong!';
     }
     
     document.getElementById('rMedal').textContent=medal;
@@ -2810,6 +2915,7 @@ function loadProfile(){
             }
             document.getElementById('profileBtn').classList.add('active');
             document.getElementById('profileBtn').textContent=getAvatarIcon(profile.avatar);
+            if(D.name)D.gender=detectGender(D.name);
         }
     }catch(e){}
 }
@@ -2818,7 +2924,7 @@ function renderProfile(){
     const icon=getAvatarIcon(profile.avatar);
     document.getElementById('profAvatar').innerHTML=icon+'<div class="prof-avatar-edit">✏️</div>';
     document.getElementById('profileBtn').textContent=icon;
-    document.getElementById('profName').textContent=D.name||'Técnico';
+    document.getElementById('profName').textContent=D.name||gn('Técnico','Técnica');
     document.getElementById('profTitle').textContent=getTitle(profile.level);
     document.getElementById('profLevel').textContent=profile.level;
     const xpPct=Math.round((profile.xp/profile.xpNeeded)*100);
@@ -2963,7 +3069,7 @@ function updateLanguageUI(){
     
     // === AI CHAT ===
     tx('aiChatStatus',es?'🟢 Disponible para ayudarte':'🟢 Available to help you','🟢 Available to help you');
-    tx('aiChatWelcome',es?'¡Órale técnico! Soy el Maestro Mario con inteligencia artificial. ¿En qué te puedo ayudar? Pregúntame lo que quieras sobre HVAC, refrigeración, o electricidad. 🔧':'Hey technician! I\'m Maestro Mario with AI. How can I help? Ask me anything about HVAC, refrigeration, or electrical. 🔧','');
+    tx('aiChatWelcome',es?'¡Órale '+(D.name||gn('técnico','técnica'))+'! Soy el Maestro Mario con inteligencia artificial. ¿En qué te puedo ayudar? Pregúntame lo que quieras sobre HVAC, refrigeración, o electricidad. 🔧':'Hey '+(D.name||'technician')+'! I\'m Maestro Mario with AI. How can I help? Ask me anything about HVAC, refrigeration, or electrical. 🔧','');
     tx('aiChatTyping',es?'Maestro Mario está hablando...':'Maestro Mario is typing...','Maestro Mario is typing...');
     
     // === AVATAR & MUSIC ===
@@ -3008,6 +3114,7 @@ function updateLanguageUI(){
     tx('profMedalsTitle',es?'🏅 Medallas':'🏅 Medals','🏅 Medals');
     tx('profQuizBtn',es?'📝 Tomar un Quiz':'📝 Take a Quiz','📝 Take a Quiz');
     tx('profMusicBtn',es?'🎶 Cambiar Música':'🎶 Change Music','🎶 Change Music');
+    tx('exitAppBtn',es?'🚪 Salir del App':'🚪 Exit App','🚪 Exit App');
     tx('avatarPickerTitle',es?'🔧 Elige tu Avatar':'🔧 Choose your Avatar','🔧 Choose your Avatar');
     tx('avatarPickerSub',es?'Desbloquea avatares dominando quizzes y subiendo de nivel':'Unlock avatars by mastering quizzes and leveling up','Unlock avatars by mastering quizzes and leveling up');
     
