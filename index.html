@@ -14,9 +14,9 @@
         .home-fab:hover{transform:scale(1.1);border-color:var(--electric);box-shadow:0 4px 20px rgba(0,212,255,0.3)}
 
         /* AI PAYWALL MODAL */
-        .paywall-overlay{position:fixed;inset:0;z-index:10000;background:rgba(10,22,40,0.95);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px}
+        .paywall-overlay{position:fixed;inset:0;z-index:10000;background:rgba(10,22,40,0.95);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;-webkit-overflow-scrolling:touch}
         .paywall-overlay.active{display:flex}
-        .paywall-card{background:var(--card);border:1px solid rgba(0,212,255,0.2);border-radius:20px;max-width:400px;width:100%;padding:36px 28px;text-align:center;position:relative;overflow:hidden;animation:pwSlide 0.4s ease}
+        .paywall-card{background:var(--card);border:1px solid rgba(0,212,255,0.2);border-radius:20px;max-width:400px;width:100%;padding:36px 28px;text-align:center;position:relative;overflow:hidden;animation:pwSlide 0.4s ease;margin:auto 0;flex-shrink:0}
         @keyframes pwSlide{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
         .paywall-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--accent),var(--electric),var(--gold))}
         .pw-icon{font-size:50px;margin-bottom:12px}
@@ -121,7 +121,7 @@
         .bb::after{content:'';position:absolute;top:-8px;left:50%;transform:translateX(-50%);border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:8px solid var(--card)}
         
         /* OTROS ESTILOS */
-        .lo{text-align:center;padding:4px 0}.lo-t{font-family:'Fredoka',sans-serif;font-size:26px;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--electric));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.lo-s{font-size:12px;color:var(--muted);letter-spacing:2.5px;text-transform:uppercase;margin-top:2px}
+        .lo{text-align:center;padding:4px 60px}.lo-t{font-family:'Fredoka',sans-serif;font-size:26px;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--electric));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.lo-s{font-size:12px;color:var(--muted);letter-spacing:2.5px;text-transform:uppercase;margin-top:2px}
         .pb{width:100%;height:5px;background:rgba(255,255,255,.06);border-radius:3px;margin:12px 0 6px;overflow:hidden}.pbf{height:100%;background:linear-gradient(90deg,var(--accent),var(--electric));border-radius:3px;transition:width .6s}
         .ps{font-size:12px;color:var(--muted);margin-bottom:12px;text-align:center}.ps b{color:var(--accent)}
         .os{width:100%;display:flex;flex-direction:column;gap:10px}
@@ -3696,7 +3696,7 @@ function updateHubLibraryCount(){
     </div>
 
     <!-- Benefits -->
-    <div class="pw-features" style="margin:16px 0">
+    <div class="pw-features" style="margin:16px 0" id="pwFeatures">
       <div class="pw-feature"><span>📚</span> 10,000+ preguntas de práctica con explicaciones detalladas</div>
       <div class="pw-feature"><span>🤖</span> Chat con Mario AI — hazme preguntas de campo y te busco la respuesta</div>
       <div class="pw-feature"><span>🗣️</span> Mi voz te guía mientras estudias</div>
@@ -3708,14 +3708,14 @@ function updateHubLibraryCount(){
     </div>
 
     <!-- Community message -->
-    <div style="background:rgba(0,212,255,0.08);border-radius:12px;padding:12px 14px;margin:12px 0;text-align:center;font-size:13px;line-height:1.6;color:var(--electric);border:1px solid rgba(0,212,255,0.15)">
+    <div id="pwCommunity" style="background:rgba(0,212,255,0.08);border-radius:12px;padding:12px 14px;margin:12px 0;text-align:center;font-size:13px;line-height:1.6;color:var(--electric);border:1px solid rgba(0,212,255,0.15)">
       💙 Al suscribirte ayudas a <b>ACVOLT Tech School</b> a seguir mejorando las apps, crear más contenido y ofrecer mejores recursos para toda la comunidad de técnicos HVAC.
     </div>
 
     <div class="pw-price" style="margin-top:16px">$49 USD</div>
-    <div class="pw-period">por mes · cancela cuando quieras</div>
-    <button class="pw-btn" onclick="startStripeCheckout()">💳 Quiero Suscribirme</button>
-    <button class="pw-close" onclick="closePaywall()">Ahora no, gracias</button>
+    <div class="pw-period" id="pwPeriod">por mes · cancela cuando quieras</div>
+    <button class="pw-btn" onclick="startStripeCheckout()" id="pwBtn">💳 Quiero Suscribirme</button>
+    <button class="pw-close" onclick="closePaywall()" id="pwClose">Ahora no, gracias</button>
   </div>
 </div>
 
@@ -3783,14 +3783,32 @@ function updateHubLibraryCount(){
     var d = getPremiumData();
     if(!d.active){
       // Personalize Mario's message
-      var nombre = (typeof D !== 'undefined' && D.name) ? D.name.split(' ')[0] : 'técnico';
+      var nombre = (typeof D !== 'undefined' && D.name) ? D.name.split(' ')[0] : ((typeof D !== 'undefined' && D.lang === 'en') ? 'technician' : 'técnico');
+      var isEn = (typeof D !== 'undefined' && D.lang === 'en');
       var titleEl = document.getElementById('pwTitle');
       var msgEl = document.getElementById('pwMarioMsg');
-      if(titleEl) titleEl.textContent = '¡Hey, ' + nombre + '! 👋';
-      if(msgEl) msgEl.innerHTML = 'Veo que quieres seguir avanzando — eso me dice mucho de ti. 💪 Esta herramienta es poderosa, <b>' + nombre + '</b>. Con AI Premium desbloqueas más de <b>10,000 preguntas</b>, videos de YouTube, y yo personalmente te guío con inteligencia artificial. Pregúntame lo que quieras del campo — diagnósticos, códigos, herramientas — yo te busco la respuesta. Recibes <b>50,000 caracteres de AI por mes</b>, es como tener un mentor contigo 24/7. Y todo lo que aprendas aquí <b>cuenta en Maestro ACVOLT</b> también — las dos apps trabajan juntas para que llegues más lejos.';
+      if(titleEl) titleEl.textContent = isEn ? 'Hey, ' + nombre + '! 👋' : '¡Hey, ' + nombre + '! 👋';
+      if(msgEl) msgEl.innerHTML = isEn
+        ? 'I can see you want to keep growing — that says a lot about you. 💪 This is a powerful tool, <b>' + nombre + '</b>. With A.C.VOLT Premium you unlock over <b>10,000 questions</b>, YouTube videos, and I personally guide you with artificial intelligence. Ask me anything about the field — diagnostics, codes, tools — I\'ll find the answer. You get <b>50,000 AI characters per month</b>, like having a mentor with you 24/7. And everything you learn here <b>counts in Maestro A.C.VOLT</b> too — both apps work together to take you further.'
+        : 'Veo que quieres seguir avanzando — eso me dice mucho de ti. 💪 Esta herramienta es poderosa, <b>' + nombre + '</b>. Con ACVOLT Premium desbloqueas más de <b>10,000 preguntas</b>, videos de YouTube, y yo personalmente te guío con inteligencia artificial. Pregúntame lo que quieras del campo — diagnósticos, códigos, herramientas — yo te busco la respuesta. Recibes <b>50,000 caracteres de AI por mes</b>, es como tener un mentor contigo 24/7. Y todo lo que aprendas aquí <b>cuenta en Maestro ACVOLT</b> también — las dos apps trabajan juntas para que llegues más lejos.';
       document.getElementById('paywallModal').classList.add('active');
-      // Mario speaks the message
-      var speech = '¡Hey, ' + nombre + '! Veo que quieres seguir avanzando, eso me dice mucho de ti. Esta herramienta es poderosa. Con AI Premium desbloqueas más de 10 mil preguntas, videos de YouTube, y yo personalmente te guío con inteligencia artificial. Pregúntame lo que quieras del campo, diagnósticos, códigos, herramientas, yo te busco la respuesta. Recibes 50 mil caracteres de AI por mes, es como tener un mentor contigo las 24 horas. Y todo lo que aprendas aquí cuenta en Maestro ACVOLT también. Al suscribirte ayudas a ACVOLT Tech School a seguir mejorando las apps para toda la comunidad de técnicos.';
+      // Swap all text to English if needed
+      if(isEn){
+        var feat = document.getElementById('pwFeatures');
+        if(feat) feat.innerHTML = '<div class="pw-feature"><span>📚</span> 10,000+ practice questions with detailed explanations</div><div class="pw-feature"><span>🤖</span> Chat with Mario AI — ask me field questions and I\'ll find the answer</div><div class="pw-feature"><span>🗣️</span> My voice guides you while you study</div><div class="pw-feature"><span>🎥</span> YouTube videos with direct links to each topic</div><div class="pw-feature"><span>💬</span> 50,000 AI characters per month — like having a mentor 24/7</div><div class="pw-feature"><span>📊</span> Everything you learn here counts in Maestro ACVOLT</div><div class="pw-feature"><span>🔧</span> Ask me anything — diagnostics, codes, tools</div><div class="pw-feature"><span>🔄</span> BOTH apps connected — one single progress</div>';
+        var comm = document.getElementById('pwCommunity');
+        if(comm) comm.innerHTML = '💙 By subscribing you help <b>ACVOLT Tech School</b> keep improving the apps, create more content, and offer better resources for the entire HVAC technician community.';
+        var period = document.getElementById('pwPeriod');
+        if(period) period.textContent = 'per month · cancel anytime';
+        var btn = document.getElementById('pwBtn');
+        if(btn) btn.innerHTML = '💳 Subscribe Now';
+        var close = document.getElementById('pwClose');
+        if(close) close.textContent = 'Not now, thanks';
+      }
+      // Mario speaks the message - bilingual
+      var speech = isEn 
+        ? 'Hey, ' + nombre + '! I can see you want to keep growing, and that says a lot about you. This is a powerful tool. With A.C.volt Premium you unlock over 10 thousand questions, YouTube videos, and I personally guide you with artificial intelligence. Ask me anything about the field, diagnostics, codes, tools, I will find the answer for you. You get 50 thousand A.I. characters per month, it is like having a mentor with you 24 7. And everything you learn here counts in Maestro A.C.volt too. By subscribing you help A.C.volt Tech School keep improving the apps for the entire HVAC technician community.'
+        : 'Hey, ' + nombre + '! Veo que quieres seguir avanzando, eso me dice mucho de ti. Esta herramienta es poderosa. Con A.C.volt Premium desbloqueas más de 10 mil preguntas, videos de YouTube, y yo personalmente te guío con inteligencia artificial. Pregúntame lo que quieras del campo, diagnósticos, códigos, herramientas, yo te busco la respuesta. Recibes 50 mil caracteres de A.I. por mes, es como tener un mentor contigo las 24 horas. Y todo lo que aprendas aquí cuenta en Maestro A.C.volt también. Al suscribirte ayudas a A.C.volt Tech School a seguir mejorando las apps para toda la comunidad de técnicos.';
       if(typeof speakText === 'function') speakText(speech);
       return false;
     }
