@@ -442,6 +442,10 @@
     <div><div class="sp-t">MAESTRO<br>MARIO</div><div class="badge">⚡ NIVEL 33</div></div>
     <div class="sp-s">Si no mides, estás adivinando<br><span style="font-size:12px;opacity:0.7;font-style:italic">If you don't measure, you're guessing</span></div>
     <button class="bt" onclick="startWithVideo()" style="max-width:260px">Comenzar / Start</button>
+    <div style="margin-top:24px;text-align:center">
+      <div style="font-family:'Fredoka',sans-serif;font-size:14px;font-weight:700;color:#ffffff;letter-spacing:3px;text-transform:uppercase;text-shadow:0 0 15px rgba(37,99,235,0.4)">A.C. VOLT TECHNICAL SCHOOL™</div>
+      <div style="font-size:9px;color:rgba(255,255,255,0.5);margin-top:6px;letter-spacing:1px">© 2026 A.C. VOLT TECH SCHOOL, INC. All Rights Reserved.</div>
+    </div>
 </div></div>
 
 <!-- IDIOMA -->
@@ -1318,8 +1322,8 @@ function showVideo(type,cb){
         const subtitles={
             bienvenida:{
                 both:'<div style="color:#ffd700;font-size:11px;font-weight:700;text-shadow:0 2px 4px rgba(0,0,0,0.8)">⚡ Si no mides, estás adivinando</div><div style="color:rgba(255,255,255,0.7);font-size:9px;font-style:italic;margin-top:2px;text-shadow:0 1px 3px rgba(0,0,0,0.8)">If you don\'t measure, you\'re guessing</div>',
-                es:'<div style="color:#ffd700;font-size:12px;font-weight:700;text-shadow:0 2px 4px rgba(0,0,0,0.8)">⚡ Si no mides, estás adivinando</div><div style="color:rgba(255,255,255,0.6);font-size:9px;margin-top:3px">Welcome to ACVOLT Tech School</div>',
-                en:'<div style="color:#ffd700;font-size:12px;font-weight:700;text-shadow:0 2px 4px rgba(0,0,0,0.8)">⚡ If you don\'t measure, you\'re guessing</div><div style="color:rgba(255,255,255,0.6);font-size:9px;margin-top:3px">Welcome to ACVOLT Tech School</div>'
+                es:'<div style="color:#ffd700;font-size:12px;font-weight:700;text-shadow:0 2px 4px rgba(0,0,0,0.8)">⚡ Si no mides, estás adivinando</div><div style="color:#ffffff;font-size:10px;margin-top:3px;font-weight:600;letter-spacing:1px">A.C. VOLT TECHNICAL SCHOOL™</div>',
+                en:'<div style="color:#ffd700;font-size:12px;font-weight:700;text-shadow:0 2px 4px rgba(0,0,0,0.8)">⚡ If you don\'t measure, you\'re guessing</div><div style="color:#ffffff;font-size:10px;margin-top:3px;font-weight:600;letter-spacing:1px">A.C. VOLT TECHNICAL SCHOOL™</div>'
             },
             correcto:{es:'<div style="color:#2ecc71;font-size:12px;font-weight:700">✅ ¡Correcto!</div>',en:'<div style="color:#2ecc71;font-size:12px;font-weight:700">✅ Correct!</div>'},
             incorrecto:{es:'<div style="color:#ff6b2b;font-size:12px;font-weight:700">❌ ¡Inténtalo de nuevo!</div>',en:'<div style="color:#ff6b2b;font-size:12px;font-weight:700">❌ Try again!</div>'},
@@ -3881,6 +3885,197 @@ function updateHubLibraryCount(){
   updateCharsUI();
   checkStripeReturn();
   setTimeout(detectV1User, 1500);
+})();
+</script>
+
+<!-- NOTIFICATION & REMINDER SYSTEM -->
+<div id="welcomeBackOverlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(10,22,40,0.97);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px">
+  <div style="background:var(--card);border:1px solid rgba(0,212,255,0.2);border-radius:20px;max-width:400px;width:100%;padding:24px 20px;text-align:center;animation:pwSlide 0.4s ease">
+    <div style="width:70px;height:70px;border-radius:50%;overflow:hidden;border:2px solid var(--accent);margin:0 auto 12px;box-shadow:0 0 20px rgba(255,107,43,0.3)">
+      <img src="mario.jpg" alt="Mario" style="width:100%;height:100%;object-fit:cover">
+    </div>
+    <div id="wbTitle" style="font-family:'Fredoka',sans-serif;font-size:20px;font-weight:700;color:var(--txt);margin-bottom:8px">¡Hey, técnico!</div>
+    <div id="wbMessage" style="background:var(--card2);border-radius:12px;padding:14px;text-align:left;font-size:14px;line-height:1.7;color:var(--txt);border-left:3px solid var(--accent);margin-bottom:16px"></div>
+    <div id="wbProgress" style="font-size:13px;color:var(--electric);margin-bottom:16px"></div>
+    <button onclick="closeWelcomeBack()" style="width:100%;padding:14px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--accent),#e84500);color:#fff;font-size:16px;font-weight:700;cursor:pointer;font-family:'Fredoka',sans-serif" id="wbBtn">🚀 ¡Vamos a estudiar!</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var INACTIVITY_HOURS = 4;
+  var CHECK_INTERVAL_MS = 60000; // check every minute
+  var STORAGE_KEY = 'maestro_last_activity';
+  var NOTIF_KEY = 'maestro_notif_sent';
+  var APP_NAME = 'v2';
+
+  // ===== ACTIVITY TRACKING =====
+  function updateActivity(){
+    var now = Date.now();
+    localStorage.setItem(STORAGE_KEY, now.toString());
+    localStorage.removeItem(NOTIF_KEY); // reset notification flag on activity
+  }
+
+  function getLastActivity(){
+    var t = localStorage.getItem(STORAGE_KEY);
+    return t ? parseInt(t) : Date.now();
+  }
+
+  function getInactiveHours(){
+    return (Date.now() - getLastActivity()) / (1000 * 60 * 60);
+  }
+
+  // Track user activity
+  var activityEvents = ['click','keydown','scroll','touchstart'];
+  activityEvents.forEach(function(ev){
+    document.addEventListener(ev, updateActivity, {passive:true});
+  });
+  updateActivity(); // mark activity on load
+
+  // ===== BROWSER NOTIFICATIONS =====
+  function requestNotifPermission(){
+    if('Notification' in window && Notification.permission === 'default'){
+      // Ask after 30 seconds of using app
+      setTimeout(function(){
+        Notification.requestPermission();
+      }, 30000);
+    }
+  }
+
+  function sendBrowserNotification(title, body){
+    if('Notification' in window && Notification.permission === 'granted'){
+      try {
+        var n = new Notification(title, {
+          body: body,
+          icon: 'mario.jpg',
+          badge: 'mario.jpg',
+          tag: 'maestro-reminder',
+          renotify: true
+        });
+        n.onclick = function(){ window.focus(); n.close(); };
+      } catch(e){ console.log('Notif error:', e); }
+    }
+  }
+
+  // ===== INACTIVITY CHECKER (runs while tab is open/background) =====
+  function checkInactivity(){
+    var hours = getInactiveHours();
+    var alreadySent = localStorage.getItem(NOTIF_KEY);
+    
+    if(hours >= INACTIVITY_HOURS && !alreadySent){
+      localStorage.setItem(NOTIF_KEY, 'true');
+      
+      var nombre = 'técnico';
+      try { nombre = D.name ? D.name.split(' ')[0] : 'técnico'; } catch(e){}
+      var isEn = false;
+      try { isEn = D.lang === 'en'; } catch(e){}
+
+      // Send browser notification if tab is in background
+      if(document.hidden){
+        var notifTitle = isEn ? 'Hey ' + nombre + '! 📚' : '¡Hey ' + nombre + '! 📚';
+        var notifBody = isEn 
+          ? 'You haven\'t studied in ' + Math.floor(hours) + ' hours. Maestro Mario is waiting for you!'
+          : 'Llevas ' + Math.floor(hours) + ' horas sin estudiar. ¡El Maestro Mario te espera!';
+        sendBrowserNotification(notifTitle, notifBody);
+      }
+    }
+  }
+
+  setInterval(checkInactivity, CHECK_INTERVAL_MS);
+
+  // ===== WELCOME BACK SCREEN =====
+  function showWelcomeBack(){
+    var hours = getInactiveHours();
+    if(hours < INACTIVITY_HOURS) return;
+
+    var nombre = 'técnico';
+    var isEn = false;
+    var quizCount = 0;
+    var bestScore = 0;
+    
+    try { nombre = D.name ? D.name.split(' ')[0] : 'técnico'; } catch(e){}
+    try { isEn = D.lang === 'en'; } catch(e){}
+    try { 
+      var scores = JSON.parse(localStorage.getItem('maestro_quiz_scores')||'{}');
+      quizCount = Object.keys(scores).length;
+      var vals = Object.values(scores);
+      bestScore = vals.length ? Math.max.apply(null, vals) : 0;
+    } catch(e){}
+
+    var hoursAway = Math.floor(hours);
+    var daysAway = Math.floor(hours / 24);
+    var timeText = '';
+    
+    if(isEn){
+      timeText = daysAway >= 1 ? daysAway + ' day' + (daysAway>1?'s':'') : hoursAway + ' hour' + (hoursAway>1?'s':'');
+    } else {
+      timeText = daysAway >= 1 ? daysAway + ' día' + (daysAway>1?'s':'') : hoursAway + ' hora' + (hoursAway>1?'s':'');
+    }
+
+    // Pick motivational message based on context
+    var messages_es = [
+      '¡' + nombre + ', te extrañaba! Llevas ' + timeText + ' sin estudiar. Recuerda: la consistencia es más importante que la perfección. Cada día que estudias es un día más cerca de tu meta. ¡Vamos con todo!',
+      '¡' + nombre + '! Ya pasaron ' + timeText + '. Un técnico que no practica se oxida como un contacto sin mantenimiento. ¡Vamos a repasar y mantener ese conocimiento afilado!',
+      '¡Órale, ' + nombre + '! ' + timeText + ' sin estudiar es mucho tiempo. Los mejores técnicos practican todos los días. ¡Yo sé que tú puedes, vamos a darle!',
+      '¡' + nombre + ', bienvenido de vuelta! ' + timeText + ' lejos es bastante. Pero lo bueno es que regresaste — eso dice mucho de ti. ¡Ahora sí, a darle con todo!'
+    ];
+    var messages_en = [
+      nombre + ', I missed you! It\'s been ' + timeText + ' since you last studied. Remember: consistency beats perfection. Every day you study is a day closer to your goal. Let\'s go!',
+      nombre + '! ' + timeText + ' have passed. A technician who doesn\'t practice gets rusty like an unmaintained contact. Let\'s review and keep that knowledge sharp!',
+      'Hey ' + nombre + '! ' + timeText + ' without studying is too long. The best techs practice every day. I know you can do it, let\'s get to work!',
+      nombre + ', welcome back! ' + timeText + ' away is a lot. But the good thing is you came back — that says a lot about you. Now let\'s hit it hard!'
+    ];
+
+    var msgs = isEn ? messages_en : messages_es;
+    var msg = msgs[Math.floor(Math.random() * msgs.length)];
+
+    // Progress info
+    var progressHtml = '';
+    if(quizCount > 0){
+      progressHtml = isEn 
+        ? '📊 You\'ve completed <b>' + quizCount + ' quiz' + (quizCount>1?'zes':'') + '</b> with a best score of <b>' + bestScore + '%</b>. Keep it up!'
+        : '📊 Has completado <b>' + quizCount + ' quiz' + (quizCount>1?'zes':'') + '</b> con tu mejor score de <b>' + bestScore + '%</b>. ¡Sigue así!';
+    } else {
+      progressHtml = isEn
+        ? '📝 You haven\'t taken any quizzes yet. Today is a great day to start!'
+        : '📝 Aún no has tomado ningún quiz. ¡Hoy es un gran día para empezar!';
+    }
+
+    document.getElementById('wbTitle').textContent = isEn ? 'Welcome back, ' + nombre + '! 👋' : '¡Bienvenido de vuelta, ' + nombre + '! 👋';
+    document.getElementById('wbMessage').innerHTML = msg;
+    document.getElementById('wbProgress').innerHTML = progressHtml;
+    document.getElementById('wbBtn').textContent = isEn ? '🚀 Let\'s study!' : '🚀 ¡Vamos a estudiar!';
+    
+    var overlay = document.getElementById('welcomeBackOverlay');
+    overlay.style.display = 'flex';
+
+    // Mario speaks
+    if(typeof speakText === 'function') speakText(msg);
+  }
+
+  window.closeWelcomeBack = function(){
+    document.getElementById('welcomeBackOverlay').style.display = 'none';
+    if(window.speechSynthesis) window.speechSynthesis.cancel();
+    updateActivity();
+  };
+
+  // ===== REGISTER SERVICE WORKER FOR BACKGROUND NOTIFICATIONS =====
+  if('serviceWorker' in navigator){
+    // Create inline service worker
+    var swCode = 'self.addEventListener("push",function(e){var d=e.data?e.data.json():{};self.registration.showNotification(d.title||"Maestro Mario",{body:d.body||"Es hora de estudiar!",icon:"mario.jpg",tag:"maestro-reminder"});});';
+    var swBlob = new Blob([swCode], {type:'application/javascript'});
+    var swUrl = URL.createObjectURL(swBlob);
+    navigator.serviceWorker.register(swUrl).catch(function(){});
+  }
+
+  // ===== INIT =====
+  requestNotifPermission();
+  
+  // Show welcome back after a short delay (let app load first)
+  setTimeout(function(){
+    showWelcomeBack();
+  }, 2000);
+
 })();
 </script>
 
