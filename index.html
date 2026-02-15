@@ -2251,7 +2251,7 @@ function showMotivation(qIdx){
         while(idx===lastQuoteIdx&&MOTIVATION_QUOTES.length>1)idx=Math.floor(Math.random()*MOTIVATION_QUOTES.length);
         lastQuoteIdx=idx;
         const quote=MOTIVATION_QUOTES[idx];
-        document.getElementById('qMotiveText').textContent=quote.text;
+        document.getElementById('qMotiveText').textContent=D.lang==='es'?quote.es:quote.en;
         document.getElementById('qMotiveAuthor').textContent=quote.author;
         bar.classList.add('show');
     }else{
