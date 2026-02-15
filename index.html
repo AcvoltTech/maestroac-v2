@@ -816,6 +816,35 @@
     </div>
     <div style="width:100%;margin-top:20px;font-family:'Fredoka',sans-serif;font-size:18px;font-weight:700;text-align:center" id="profMedalsTitle">🏅 Medallas</div>
     <div class="medals-grid" id="medalsGrid"></div>
+    <div id="crossAppSection" style="display:none;width:100%;margin-top:20px">
+      <div style="font-family:'Fredoka',sans-serif;font-size:18px;font-weight:700;text-align:center;margin-bottom:12px">📊 <span id="crossAppTitle">Progreso Total</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="background:var(--card2);border-radius:12px;padding:12px;text-align:center;border:1px solid rgba(0,212,255,0.15)">
+          <div style="font-size:11px;color:var(--muted)">Maestro Mario AI</div>
+          <div style="font-size:24px;font-weight:700;color:var(--electric)" id="crossV2Quizzes">0</div>
+          <div style="font-size:11px;color:var(--muted)">quizzes</div>
+        </div>
+        <div style="background:var(--card2);border-radius:12px;padding:12px;text-align:center;border:1px solid rgba(255,107,43,0.15)">
+          <div style="font-size:11px;color:var(--muted)">Maestro ACVOLT</div>
+          <div style="font-size:24px;font-weight:700;color:var(--accent)" id="crossV1Quizzes">0</div>
+          <div style="font-size:11px;color:var(--muted)">quizzes</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px">
+        <div style="background:var(--card2);border-radius:10px;padding:10px;text-align:center">
+          <div style="font-size:20px;font-weight:700;color:var(--gold)" id="crossTotalQuizzes">0</div>
+          <div style="font-size:10px;color:var(--muted)" id="crossTotalLabel">Total Quizzes</div>
+        </div>
+        <div style="background:var(--card2);border-radius:10px;padding:10px;text-align:center">
+          <div style="font-size:20px;font-weight:700;color:#2ecc71" id="crossAvgScore">0%</div>
+          <div style="font-size:10px;color:var(--muted)" id="crossAvgLabel">Promedio</div>
+        </div>
+        <div style="background:var(--card2);border-radius:10px;padding:10px;text-align:center">
+          <div style="font-size:20px;font-weight:700;color:#9b59b6" id="crossCerts">0</div>
+          <div style="font-size:10px;color:var(--muted)" id="crossCertsLabel">Certificados</div>
+        </div>
+      </div>
+    </div>
     <button class="bt" onclick="renderQuizSelector();go('s7b')" style="margin-top:20px" id="profQuizBtn">📝 Tomar un Quiz</button>
     <button class="bt" onclick="toggleMusicPanel()" style="background:var(--card);border:2px solid rgba(0,212,255,0.3);margin-top:10px" id="profMusicBtn">🎶 Cambiar Música</button>
     <button class="bt" onclick="go('s-hub');updateHub()" style="background:var(--card);border:2px solid var(--accent);margin-top:10px" data-lang="volver-hub">← Volver al Hub</button>
@@ -1284,6 +1313,80 @@ function enterStudyMode(){
 }
 
 const SUPABASE_URL='https://htklsowiyjwsjnacnvnr.supabase.co/functions/v1';
+const SUPABASE_REST='https://htklsowiyjwsjnacnvnr.supabase.co/rest/v1';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh0a2xzb3dpeWp3c2puYWNudm5yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0NjIwMjQsImV4cCI6MjA4NjAzODAyNH0.6A3F7MI4YJEMo98b4Zfzao9p_hMh2T0ha0dRJ4SUhv0';
+
+// === SUPABASE PROGRESS SYNC (V2 → Supabase) ===
+function syncV2Profile(){
+  try {
+    var email = null;
+    try { email = D.email || null; } catch(e){}
+    if(!email) try { email = JSON.parse(localStorage.getItem('tecnico_user')||'{}').email; } catch(e){}
+    if(!email) return;
+
+    var nombre = 'Técnico';
+    try { nombre = D.name || 'Técnico'; } catch(e){}
+
+    fetch(SUPABASE_REST+'/rpc/sync_v2_profile', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY},
+      body:JSON.stringify({
+        p_email: email,
+        p_name: nombre,
+        p_level: profile.level,
+        p_xp: profile.xp,
+        p_xp_needed: profile.xpNeeded,
+        p_total_correct: profile.totalCorrect,
+        p_total_answered: profile.totalAnswered,
+        p_quizzes_taken: profile.quizzesTaken,
+        p_best_streak: profile.bestStreak,
+        p_perfect_streak: profile.perfectStreakCount||0,
+        p_medals: profile.medals||[],
+        p_avatar: profile.avatar||'novato'
+      })
+    }).catch(function(e){ console.log('V2 profile sync error:', e); });
+  } catch(e){ console.log('syncV2Profile error:', e); }
+}
+
+function syncV2QuizAttempt(quizId, totalQ, correct, wrong, pct, tiempoSeg){
+  try {
+    var email = null;
+    try { email = D.email || null; } catch(e){}
+    if(!email) try { email = JSON.parse(localStorage.getItem('tecnico_user')||'{}').email; } catch(e){}
+    if(!email) return;
+
+    fetch(SUPABASE_REST+'/rpc/save_v2_quiz_attempt', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY},
+      body:JSON.stringify({
+        p_email: email,
+        p_quiz_id: quizId,
+        p_total_questions: totalQ,
+        p_correct_answers: correct,
+        p_wrong_answers: wrong,
+        p_porcentaje: pct,
+        p_tiempo_segundos: tiempoSeg||null
+      })
+    }).catch(function(e){ console.log('V2 quiz sync error:', e); });
+  } catch(e){ console.log('syncV2QuizAttempt error:', e); }
+}
+
+// === LOAD OTHER APP'S PROGRESS ===
+async function loadCrossAppProgress(){
+  try {
+    var email = null;
+    try { email = D.email || null; } catch(e){}
+    if(!email) try { email = JSON.parse(localStorage.getItem('tecnico_user')||'{}').email; } catch(e){}
+    if(!email) return null;
+
+    // Get V1 stats from admin_combined_progress view
+    var res = await fetch(SUPABASE_REST+'/admin_combined_progress?email=eq.'+encodeURIComponent(email)+'&select=*', {
+      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}
+    });
+    var data = await res.json();
+    return data && data.length > 0 ? data[0] : null;
+  } catch(e){ console.log('loadCrossApp error:', e); return null; }
+}
 
 const VIDEOS={
     bienvenida:'bienvenida.mp4.mp4',
@@ -2679,6 +2782,10 @@ function showResult(){
     if(!scores[currentQuizId]||pct>scores[currentQuizId])scores[currentQuizId]=pct;
     localStorage.setItem('maestro_quiz_scores',JSON.stringify(scores));
     
+    // === SYNC TO SUPABASE ===
+    syncV2Profile();
+    syncV2QuizAttempt(currentQuizId, quizData.length, quizRight, quizWrong, pct, null);
+    
     // Electricity-specific medal
     if(currentQuizId==='electricidad'&&pct===100&&!profile.medals.includes('bronze_electricidad')){
         profile.medals.push('bronze_electricidad');
@@ -2980,6 +3087,25 @@ function renderProfile(){
         const mDesc=D.lang==='es'?m.desc:(m.desc_en||m.desc);
         return '<div class="medal-slot'+(earned?' earned':'')+'"><div class="medal-icon">'+(earned?m.icon:'🔒')+'</div><div class="medal-name">'+mName+'</div><div style="font-size:10px;color:var(--muted);margin-top:2px">'+mDesc+'</div></div>';
     }).join('');
+
+    // Load cross-app progress from Supabase
+    loadCrossAppProgress().then(function(data){
+      if(!data) return;
+      var section = document.getElementById('crossAppSection');
+      section.style.display = 'block';
+      document.getElementById('crossV2Quizzes').textContent = data.v2_quizzes || 0;
+      document.getElementById('crossV1Quizzes').textContent = data.v1_quizzes || 0;
+      document.getElementById('crossTotalQuizzes').textContent = data.total_quizzes || 0;
+      document.getElementById('crossAvgScore').textContent = (data.overall_avg_score || 0) + '%';
+      document.getElementById('crossCerts').textContent = data.total_certificates || 0;
+      
+      if(D.lang==='en'){
+        document.getElementById('crossAppTitle').textContent = 'Total Progress';
+        document.getElementById('crossTotalLabel').textContent = 'Total Quizzes';
+        document.getElementById('crossAvgLabel').textContent = 'Average';
+        document.getElementById('crossCertsLabel').textContent = 'Certificates';
+      }
+    }).catch(function(){});
 }
 
 // Load profile on start
