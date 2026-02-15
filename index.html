@@ -3216,6 +3216,7 @@ function goStudyZone(){
 }
 
 function goVideoZone(){
+    if(!window.checkAIPremium || !window.checkAIPremium()) return;
     renderVideoZone();
     go('s-videos');
     speakText(D.lang==='es'?'Zona de videos. Pronto tendrás videos del Maestro Mario aquí.':'Video zone. Maestro Mario videos coming soon.');
@@ -3696,7 +3697,7 @@ function updateHubLibraryCount(){
     <!-- Mario's personal message -->
     <div class="pw-title" style="font-size:17px" id="pwTitle">¡Hey, técnico!</div>
     <div style="background:var(--card2);border-radius:12px;padding:12px;margin:8px 0;text-align:left;font-size:13px;line-height:1.6;color:var(--txt);border-left:3px solid var(--accent)">
-      <span id="pwMarioMsg">Esta es una herramienta poderosa que te puede cambiar la carrera. 🚀 Con AI Premium desbloqueas más de 10,000 preguntas, videos de YouTube, y yo te guío con inteligencia artificial. Pregúntame lo que necesites del campo — diagnósticos, códigos, herramientas. Recibes 50,000 caracteres de AI por mes, como tener un mentor 24/7.</span>
+      <span id="pwMarioMsg">Esta es una herramienta poderosa que te puede cambiar la carrera. 🚀 Con AI Premium desbloqueas más de 10,000 preguntas, videos personalizados, y yo te guío con inteligencia artificial. Pregúntame lo que necesites del campo — diagnósticos, códigos, herramientas. Recibes 50,000 caracteres de AI por mes, como tener un mentor 24/7.</span>
     </div>
 
     <!-- Benefits -->
@@ -3704,7 +3705,7 @@ function updateHubLibraryCount(){
       <div class="pw-feature"><span>📚</span> 10,000+ preguntas de práctica con explicaciones detalladas</div>
       <div class="pw-feature"><span>🤖</span> Chat con Mario AI — hazme preguntas de campo y te busco la respuesta</div>
       <div class="pw-feature"><span>🗣️</span> Mi voz te guía mientras estudias</div>
-      <div class="pw-feature"><span>🎥</span> Videos de YouTube con enlaces directos a cada tema</div>
+      <div class="pw-feature"><span>🎥</span> Videos personalizados con enlaces directos a cada tema</div>
       <div class="pw-feature"><span>💬</span> 50,000 caracteres de AI por mes — como tener un mentor 24/7</div>
       <div class="pw-feature"><span>📊</span> Todo lo que aprendas aquí cuenta en Maestro ACVOLT</div>
       <div class="pw-feature"><span>🔧</span> Pregúntame lo que sea del campo — diagnóstico, códigos, herramientas</div>
@@ -3793,13 +3794,13 @@ function updateHubLibraryCount(){
       var msgEl = document.getElementById('pwMarioMsg');
       if(titleEl) titleEl.textContent = isEn ? 'Hey, ' + nombre + '! 👋' : '¡Hey, ' + nombre + '! 👋';
       if(msgEl) msgEl.innerHTML = isEn
-        ? 'I can see you want to keep growing — that says a lot about you. 💪 This is a powerful tool, <b>' + nombre + '</b>. With A.C.VOLT Premium you unlock over <b>10,000 questions</b>, YouTube videos, and I personally guide you with artificial intelligence. Ask me anything about the field — diagnostics, codes, tools — I\'ll find the answer. You get <b>50,000 AI characters per month</b>, like having a mentor with you 24/7. And everything you learn here <b>counts in Maestro A.C.VOLT</b> too — both apps work together to take you further.'
-        : 'Veo que quieres seguir avanzando — eso me dice mucho de ti. 💪 Esta herramienta es poderosa, <b>' + nombre + '</b>. Con ACVOLT Premium desbloqueas más de <b>10,000 preguntas</b>, videos de YouTube, y yo personalmente te guío con inteligencia artificial. Pregúntame lo que quieras del campo — diagnósticos, códigos, herramientas — yo te busco la respuesta. Recibes <b>50,000 caracteres de AI por mes</b>, es como tener un mentor contigo 24/7. Y todo lo que aprendas aquí <b>cuenta en Maestro ACVOLT</b> también — las dos apps trabajan juntas para que llegues más lejos.';
+        ? 'I can see you want to keep growing — that says a lot about you. 💪 This is a powerful tool, <b>' + nombre + '</b>. With A.C.VOLT Premium you unlock over <b>10,000 questions</b>, personalized videos, and I personally guide you with artificial intelligence. Ask me anything about the field — diagnostics, codes, tools — I\'ll find the answer. You get <b>50,000 AI characters per month</b>, like having a mentor with you 24/7. And everything you learn here <b>counts in Maestro A.C.VOLT</b> too — both apps work together to take you further.'
+        : 'Veo que quieres seguir avanzando — eso me dice mucho de ti. 💪 Esta herramienta es poderosa, <b>' + nombre + '</b>. Con ACVOLT Premium desbloqueas más de <b>10,000 preguntas</b>, videos personalizados, y yo personalmente te guío con inteligencia artificial. Pregúntame lo que quieras del campo — diagnósticos, códigos, herramientas — yo te busco la respuesta. Recibes <b>50,000 caracteres de AI por mes</b>, es como tener un mentor contigo 24/7. Y todo lo que aprendas aquí <b>cuenta en Maestro ACVOLT</b> también — las dos apps trabajan juntas para que llegues más lejos.';
       document.getElementById('paywallModal').classList.add('active');
       // Swap all text to English if needed
       if(isEn){
         var feat = document.getElementById('pwFeatures');
-        if(feat) feat.innerHTML = '<div class="pw-feature"><span>📚</span> 10,000+ practice questions with detailed explanations</div><div class="pw-feature"><span>🤖</span> Chat with Mario AI — ask me field questions and I\'ll find the answer</div><div class="pw-feature"><span>🗣️</span> My voice guides you while you study</div><div class="pw-feature"><span>🎥</span> YouTube videos with direct links to each topic</div><div class="pw-feature"><span>💬</span> 50,000 AI characters per month — like having a mentor 24/7</div><div class="pw-feature"><span>📊</span> Everything you learn here counts in Maestro ACVOLT</div><div class="pw-feature"><span>🔧</span> Ask me anything — diagnostics, codes, tools</div><div class="pw-feature"><span>🔄</span> BOTH apps connected — one single progress</div>';
+        if(feat) feat.innerHTML = '<div class="pw-feature"><span>📚</span> 10,000+ practice questions with detailed explanations</div><div class="pw-feature"><span>🤖</span> Chat with Mario AI — ask me field questions and I\'ll find the answer</div><div class="pw-feature"><span>🗣️</span> My voice guides you while you study</div><div class="pw-feature"><span>🎥</span> personalized videos with direct links to each topic</div><div class="pw-feature"><span>💬</span> 50,000 AI characters per month — like having a mentor 24/7</div><div class="pw-feature"><span>📊</span> Everything you learn here counts in Maestro ACVOLT</div><div class="pw-feature"><span>🔧</span> Ask me anything — diagnostics, codes, tools</div><div class="pw-feature"><span>🔄</span> BOTH apps connected — one single progress</div>';
         var comm = document.getElementById('pwCommunity');
         if(comm) comm.innerHTML = '💙 By subscribing you help <b>ACVOLT Tech School</b> keep improving the apps, create more content, and offer better resources for the entire HVAC technician community.';
         var period = document.getElementById('pwPeriod');
@@ -3811,8 +3812,8 @@ function updateHubLibraryCount(){
       }
       // Mario speaks the message - bilingual
       var speech = isEn 
-        ? 'Hey, ' + nombre + '! I can see you want to keep growing, and that says a lot about you. This is a powerful tool. With A.C.volt Premium you unlock over 10 thousand questions, YouTube videos, and I personally guide you with artificial intelligence. Ask me anything about the field, diagnostics, codes, tools, I will find the answer for you. You get 50 thousand A.I. characters per month, it is like having a mentor with you 24 7. And everything you learn here counts in Maestro A.C.volt too. By subscribing you help A.C.volt Tech School keep improving the apps for the entire HVAC technician community.'
-        : 'Hey, ' + nombre + '! Veo que quieres seguir avanzando, eso me dice mucho de ti. Esta herramienta es poderosa. Con A.C.volt Premium desbloqueas más de 10 mil preguntas, videos de YouTube, y yo personalmente te guío con inteligencia artificial. Pregúntame lo que quieras del campo, diagnósticos, códigos, herramientas, yo te busco la respuesta. Recibes 50 mil caracteres de A.I. por mes, es como tener un mentor contigo las 24 horas. Y todo lo que aprendas aquí cuenta en Maestro A.C.volt también. Al suscribirte ayudas a A.C.volt Tech School a seguir mejorando las apps para toda la comunidad de técnicos.';
+        ? 'Hey, ' + nombre + '! I can see you want to keep growing, and that says a lot about you. This is a powerful tool. With A.C.volt Premium you unlock over 10 thousand questions, personalized videos, and I personally guide you with artificial intelligence. Ask me anything about the field, diagnostics, codes, tools, I will find the answer for you. You get 50 thousand A.I. characters per month, it is like having a mentor with you 24 7. And everything you learn here counts in Maestro A.C.volt too. By subscribing you help A.C.volt Tech School keep improving the apps for the entire HVAC technician community.'
+        : 'Hey, ' + nombre + '! Veo que quieres seguir avanzando, eso me dice mucho de ti. Esta herramienta es poderosa. Con A.C.volt Premium desbloqueas más de 10 mil preguntas, videos personalizados, y yo personalmente te guío con inteligencia artificial. Pregúntame lo que quieras del campo, diagnósticos, códigos, herramientas, yo te busco la respuesta. Recibes 50 mil caracteres de A.I. por mes, es como tener un mentor contigo las 24 horas. Y todo lo que aprendas aquí cuenta en Maestro A.C.volt también. Al suscribirte ayudas a A.C.volt Tech School a seguir mejorando las apps para toda la comunidad de técnicos.';
       if(typeof speakText === 'function') speakText(speech);
       return false;
     }
@@ -3908,12 +3909,78 @@ function updateHubLibraryCount(){
   var STORAGE_KEY = 'maestro_last_activity';
   var NOTIF_KEY = 'maestro_notif_sent';
   var APP_NAME = 'v2';
+  var SUPABASE_ACTIVITY_URL = 'https://htklsowiyjwsjnacnvnr.supabase.co/rest/v1/rpc/update_user_activity';
+  var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh0a2xzb3dpeWp3c2puYWNudm5yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0NjIwMjQsImV4cCI6MjA4NjAzODAyNH0.6A3F7MI4YJEMo98b4Zfzao9p_hMh2T0ha0dRJ4SUhv0';
+  var lastSyncTime = 0;
+  var SYNC_INTERVAL = 300000; // sync to Supabase every 5 minutes max
+
+  // ===== SUPABASE ACTIVITY SYNC =====
+  function syncActivityToSupabase(){
+    var now = Date.now();
+    if(now - lastSyncTime < SYNC_INTERVAL) return; // throttle
+    lastSyncTime = now;
+
+    try {
+      var nombre = 'técnico';
+      var email = null;
+      var telefono = null;
+      var lang = 'es';
+      var quizCount = 0;
+      var bestScore = null;
+      var premium = false;
+
+      try { nombre = D.name || 'técnico'; } catch(e){}
+      try { lang = D.lang || 'es'; } catch(e){}
+      try { email = D.email || null; } catch(e){}
+      try { telefono = D.telefono || D.phone || null; } catch(e){}
+      try {
+        var scores = JSON.parse(localStorage.getItem('maestro_quiz_scores')||'{}');
+        quizCount = Object.keys(scores).length;
+        var vals = Object.values(scores);
+        bestScore = vals.length ? Math.max.apply(null, vals) : null;
+      } catch(e){}
+      try { premium = !!JSON.parse(localStorage.getItem('ai_premium_data')||'{}').active; } catch(e){}
+
+      // Only sync if we have an email
+      if(!email) {
+        // Try to get from tecnico_user
+        try { 
+          var tu = JSON.parse(localStorage.getItem('tecnico_user')||'{}');
+          email = tu.email || null;
+          if(!nombre || nombre === 'técnico') nombre = tu.nombre || nombre;
+          telefono = telefono || tu.telefono || null;
+        } catch(e){}
+      }
+
+      if(!email) return; // can't sync without email
+
+      fetch(SUPABASE_ACTIVITY_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+        },
+        body: JSON.stringify({
+          p_nombre: nombre,
+          p_email: email,
+          p_telefono: telefono,
+          p_lang: lang,
+          p_app: APP_NAME,
+          p_quiz_score: bestScore,
+          p_quizzes: quizCount,
+          p_premium: premium
+        })
+      }).catch(function(e){ console.log('Activity sync error:', e); });
+    } catch(e){ console.log('Sync prep error:', e); }
+  }
 
   // ===== ACTIVITY TRACKING =====
   function updateActivity(){
     var now = Date.now();
     localStorage.setItem(STORAGE_KEY, now.toString());
     localStorage.removeItem(NOTIF_KEY); // reset notification flag on activity
+    syncActivityToSupabase(); // sync to Supabase (throttled)
   }
 
   function getLastActivity(){
