@@ -2223,18 +2223,37 @@ function shuffleArray(arr){
     return a;
 }
 
+// Shuffle questions WITHIN each category, but keep categories in order
+function shuffleByCat(arr){
+    const a=[...arr];
+    // Group by category preserving order of first appearance
+    const catOrder=[];
+    const groups={};
+    a.forEach(q=>{
+        const c=q.cat||'General';
+        if(!groups[c]){groups[c]=[];catOrder.push(c);}
+        groups[c].push(q);
+    });
+    // Shuffle within each group, then concatenate in original category order
+    let result=[];
+    catOrder.forEach(c=>{
+        result=result.concat(shuffleArray(groups[c]));
+    });
+    return result;
+}
+
 function startQuiz(id){
     const qId=id||currentQuizId||'principiante';
     currentQuizId=qId;
-    if(qId==='intro')quizData=shuffleArray(QUIZ_INTRO);
-    else if(qId==='electricidad')quizData=shuffleArray(QUIZ_ELECTRICIDAD);
-    else if(qId==='refrigeracion')quizData=shuffleArray(QUIZ_REFRIGERACION);
-    else if(qId==='intro_elec')quizData=shuffleArray(QUIZ_INTRO_ELECTRICIDAD);
-    else if(qId==='intro_refri')quizData=shuffleArray(QUIZ_INTRO_REFRIGERACION);
-    else if(qId==='study_elec')quizData=shuffleArray(QUIZ_STUDY_ELECTRICIDAD);
-    else if(qId==='study_refri')quizData=shuffleArray(QUIZ_STUDY_REFRIGERACION);
-    else if(qId==='elec_comercial')quizData=shuffleArray(QUIZ_ELECTRICIDAD_COMERCIAL_P2);
-    else quizData=shuffleArray(QUIZ_PRINCIPIANTE);
+    if(qId==='intro')quizData=shuffleByCat(QUIZ_INTRO);
+    else if(qId==='electricidad')quizData=shuffleByCat(QUIZ_ELECTRICIDAD);
+    else if(qId==='refrigeracion')quizData=shuffleByCat(QUIZ_REFRIGERACION);
+    else if(qId==='intro_elec')quizData=shuffleByCat(QUIZ_INTRO_ELECTRICIDAD);
+    else if(qId==='intro_refri')quizData=shuffleByCat(QUIZ_INTRO_REFRIGERACION);
+    else if(qId==='study_elec')quizData=shuffleByCat(QUIZ_STUDY_ELECTRICIDAD);
+    else if(qId==='study_refri')quizData=shuffleByCat(QUIZ_STUDY_REFRIGERACION);
+    else if(qId==='elec_comercial')quizData=shuffleByCat(QUIZ_ELECTRICIDAD_COMERCIAL_P2);
+    else quizData=shuffleByCat(QUIZ_PRINCIPIANTE);
     quizIdx=0;quizRight=0;quizWrong=0;quizStreak=0;
     quizAnswers=new Array(quizData.length).fill(-1);
     document.getElementById('qRight').textContent='0';
@@ -4184,7 +4203,7 @@ function updateHubLibraryCount(){
     }
   }
 
-  // ===== INACTIVITY CHECKER (runs while tab is open/background) =====
+  // ===== INACTIVITY CHECKER =====
   function checkInactivity(){
     var hours = getInactiveHours();
     var alreadySent = localStorage.getItem(NOTIF_KEY);
@@ -4197,18 +4216,28 @@ function updateHubLibraryCount(){
       var isEn = false;
       try { isEn = D.lang === 'en'; } catch(e){}
 
-      // Send browser notification if tab is in background
-      if(document.hidden){
-        var notifTitle = isEn ? 'Hey ' + nombre + '! 📚' : '¡Hey ' + nombre + '! 📚';
-        var notifBody = isEn 
-          ? 'You haven\'t studied in ' + Math.floor(hours) + ' hours. Maestro Mario is waiting for you!'
-          : 'Llevas ' + Math.floor(hours) + ' horas sin estudiar. ¡El Maestro Mario te espera!';
-        sendBrowserNotification(notifTitle, notifBody);
-      }
+      // Send browser notification (works if tab is open in background)
+      var notifTitle = isEn ? 'Hey ' + nombre + '! 📚' : '¡Hey ' + nombre + '! 📚';
+      var notifBody = isEn 
+        ? 'You haven\'t studied in ' + Math.floor(hours) + ' hours. Maestro Mario is waiting for you!'
+        : 'Llevas ' + Math.floor(hours) + ' horas sin estudiar. ¡El Maestro Mario te espera!';
+      sendBrowserNotification(notifTitle, notifBody);
     }
   }
 
   setInterval(checkInactivity, CHECK_INTERVAL_MS);
+
+  // ===== CHECK ON VISIBILITY CHANGE (user returns to tab) =====
+  document.addEventListener('visibilitychange', function(){
+    if(!document.hidden){
+      checkInactivity();
+    }
+  });
+
+  // ===== CHECK ON WINDOW FOCUS (user returns to app) =====
+  window.addEventListener('focus', function(){
+    checkInactivity();
+  });
 
   // ===== WELCOME BACK SCREEN =====
   function showWelcomeBack(){
@@ -4288,11 +4317,69 @@ function updateHubLibraryCount(){
 
   // ===== REGISTER SERVICE WORKER FOR BACKGROUND NOTIFICATIONS =====
   if('serviceWorker' in navigator){
-    // Create inline service worker
-    var swCode = 'self.addEventListener("push",function(e){var d=e.data?e.data.json():{};self.registration.showNotification(d.title||"Maestro Mario",{body:d.body||"Es hora de estudiar!",icon:"mario.jpg",tag:"maestro-reminder"});});';
+    var swCode = [
+      'var INACTIVITY_MS = 4 * 60 * 60 * 1000;', // 4 hours
+      'var CHECK_MS = 60 * 60 * 1000;', // check every hour
+      '',
+      'self.addEventListener("push",function(e){',
+      '  var d=e.data?e.data.json():{};',
+      '  self.registration.showNotification(d.title||"Maestro Mario",{body:d.body||"Es hora de estudiar!",icon:"mario.jpg",tag:"maestro-reminder",renotify:true});',
+      '});',
+      '',
+      'self.addEventListener("message",function(e){',
+      '  if(e.data && e.data.type === "activity"){',
+      '    self.lastActivity = Date.now();',
+      '    self.notifSent = false;',
+      '  }',
+      '  if(e.data && e.data.type === "config"){',
+      '    self.userName = e.data.name || "técnico";',
+      '    self.userLang = e.data.lang || "es";',
+      '  }',
+      '});',
+      '',
+      'setInterval(function(){',
+      '  if(!self.lastActivity) return;',
+      '  var hours = (Date.now() - self.lastActivity) / (1000*60*60);',
+      '  if(hours >= 4 && !self.notifSent){',
+      '    self.notifSent = true;',
+      '    var name = self.userName || "técnico";',
+      '    var isEn = self.userLang === "en";',
+      '    var title = isEn ? "Hey "+name+"!" : "¡Hey "+name+"!";',
+      '    var body = isEn ? "You haven\'t studied in "+Math.floor(hours)+" hours. Maestro Mario is waiting!" : "Llevas "+Math.floor(hours)+" horas sin estudiar. ¡El Maestro Mario te espera!";',
+      '    self.registration.showNotification(title,{body:body,icon:"mario.jpg",tag:"maestro-reminder",renotify:true});',
+      '  }',
+      '}, CHECK_MS);',
+      '',
+      'self.addEventListener("notificationclick",function(e){',
+      '  e.notification.close();',
+      '  e.waitUntil(clients.matchAll({type:"window"}).then(function(cs){',
+      '    if(cs.length>0) return cs[0].focus();',
+      '    return clients.openWindow("./");',
+      '  }));',
+      '});'
+    ].join('\n');
     var swBlob = new Blob([swCode], {type:'application/javascript'});
     var swUrl = URL.createObjectURL(swBlob);
-    navigator.serviceWorker.register(swUrl).catch(function(){});
+    navigator.serviceWorker.register(swUrl).then(function(reg){
+      // Send initial config to SW
+      if(reg.active){
+        var nombre = 'técnico';
+        var lang = 'es';
+        try { nombre = D.name || 'técnico'; } catch(e){}
+        try { lang = D.lang || 'es'; } catch(e){}
+        reg.active.postMessage({type:'config', name:nombre, lang:lang});
+        reg.active.postMessage({type:'activity'});
+      }
+    }).catch(function(){});
+
+    // Keep SW informed of activity
+    var origUpdateActivity = updateActivity;
+    updateActivity = function(){
+      origUpdateActivity();
+      if(navigator.serviceWorker.controller){
+        navigator.serviceWorker.controller.postMessage({type:'activity'});
+      }
+    };
   }
 
   // ===== INIT =====
