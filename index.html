@@ -872,6 +872,7 @@ h<!DOCTYPE html>
 <script src="quiz-intro-refrigeracion.js"></script>
 <script src="quiz-study-electricidad.js"></script>
 <script src="quiz-study-refrigeracion.js"></script>
+<script src="QUIZ_ELECTRICIDAD_COMERCIAL_278.js"></script>
 <script>
 const D={lang:'es',name:'',level:null,specs:[],school:null,goals:[],gender:'m'};
 
@@ -1949,12 +1950,13 @@ function tq(q,field){
 const QUIZ_LIST=[
     {id:'intro',icon:'🆕',title:'Intro HVACR',title_en:'Intro to HVACR',desc:'50 preguntas: La industria, carrera, salarios, herramientas, seguridad, certificaciones y terminología',desc_en:'50 questions: The industry, career, salary, tools, safety, certifications and terminology',count:50,data:QUIZ_INTRO,color:'#3498db'},
     {id:'principiante',icon:'📚',title:'Principiante HVAC',title_en:'HVAC Beginner',desc:'50 preguntas de electricidad básica, refrigeración, AC, herramientas y seguridad',desc_en:'50 questions on basic electrical, refrigeration, AC, tools and safety',count:50,data:QUIZ_PRINCIPIANTE,color:'#00d4ff'},
+    {id:'intro_elec',icon:'🔌',title:'Intro Electricidad (Capciosas)',title_en:'Intro Electricity (Tricky)',desc:'100 preguntas capciosas de electricidad básica — opciones similares, solo el que sabe contesta',desc_en:'100 tricky basic electricity questions — similar options, only real knowledge works',count:100,data:typeof QUIZ_INTRO_ELECTRICIDAD!=='undefined'?QUIZ_INTRO_ELECTRICIDAD:[],color:'#e74c3c'},
+    {id:'intro_refri',icon:'🧊',title:'Intro Refrigeración (Capciosas)',title_en:'Intro Refrigeration (Tricky)',desc:'100 preguntas capciosas de refrigeración básica — presiones, temperaturas, diagnóstico',desc_en:'100 tricky basic refrigeration questions — pressures, temperatures, diagnostics',count:100,data:typeof QUIZ_INTRO_REFRIGERACION!=='undefined'?QUIZ_INTRO_REFRIGERACION:[],color:'#1abc9c'},
     {id:'electricidad',icon:'⚡',title:'Electricidad Avanzada',title_en:'Advanced Electrical',desc:'117 preguntas: Ley de Ohm, NEC, motores, VFD, GFCI, AFCI, circuitos, contactores',desc_en:'117 questions: Ohm\'s Law, NEC, motors, VFD, GFCI, AFCI, circuits, contactors',count:117,data:QUIZ_ELECTRICIDAD,color:'#ffd700'},
     {id:'refrigeracion',icon:'❄️',title:'Refrigeración Completa',title_en:'Complete Refrigeration',desc:'200 preguntas: Doméstica, Comercial, Walk-in, EPA 608, Troubleshooting, Refrigerantes, Seguridad',desc_en:'200 questions: Domestic, Commercial, Walk-in, EPA 608, Troubleshooting, Refrigerants, Safety',count:200,data:QUIZ_REFRIGERACION,color:'#00e5ff'},
-    {id:'intro_elec',icon:'🔌',title:'Intro Electricidad (Capciosas)',title_en:'Intro Electricity (Tricky)',desc:'100 preguntas capciosas de electricidad básica — opciones similares, solo el que sabe contesta',desc_en:'100 tricky basic electricity questions — similar options, only real knowledge works',count:100,data:QUIZ_INTRO_ELECTRICIDAD,color:'#e74c3c'},
-    {id:'intro_refri',icon:'🧊',title:'Intro Refrigeración (Capciosas)',title_en:'Intro Refrigeration (Tricky)',desc:'100 preguntas capciosas de refrigeración básica — presiones, temperaturas, diagnóstico',desc_en:'100 tricky basic refrigeration questions — pressures, temperatures, diagnostics',count:100,data:QUIZ_INTRO_REFRIGERACION,color:'#1abc9c'},
-    {id:'study_elec',icon:'⚡',title:'Estudio Electricidad Avanzada',title_en:'Advanced Electricity Study',desc:'100 preguntas avanzadas: VFD, trifásico, BACnet, megóhmetro, IPM inverter',desc_en:'100 advanced questions: VFD, three-phase, BACnet, megohmmeter, IPM inverter',count:100,data:QUIZ_STUDY_ELECTRICIDAD,color:'#9b59b6'},
-    {id:'study_refri',icon:'🌡️',title:'Estudio Refrigeración Avanzada',title_en:'Advanced Refrigeration Study',desc:'100 preguntas avanzadas: chillers, VRF, CO2 transcrítico, torres, AIM Act',desc_en:'100 advanced questions: chillers, VRF, transcritical CO2, towers, AIM Act',count:100,data:QUIZ_STUDY_REFRIGERACION,color:'#e67e22'}
+    {id:'study_elec',icon:'⚡',title:'Estudio Electricidad Avanzada',title_en:'Advanced Electricity Study',desc:'100 preguntas avanzadas: VFD, trifásico, BACnet, megóhmetro, IPM inverter',desc_en:'100 advanced questions: VFD, three-phase, BACnet, megohmmeter, IPM inverter',count:100,data:typeof QUIZ_STUDY_ELECTRICIDAD!=='undefined'?QUIZ_STUDY_ELECTRICIDAD:[],color:'#9b59b6'},
+    {id:'study_refri',icon:'🌡️',title:'Estudio Refrigeración Avanzada',title_en:'Advanced Refrigeration Study',desc:'100 preguntas avanzadas: chillers, VRF, CO2 transcrítico, torres, AIM Act',desc_en:'100 advanced questions: chillers, VRF, transcritical CO2, towers, AIM Act',count:100,data:typeof QUIZ_STUDY_REFRIGERACION!=='undefined'?QUIZ_STUDY_REFRIGERACION:[],color:'#e67e22'},
+    {id:'elec_comercial',icon:'🏢',title:'Electricidad Comercial (278)',title_en:'Commercial Electrical (278)',desc:'278 preguntas avanzadas de electricidad comercial — capciosas con explicaciones y analogías',desc_en:'278 advanced commercial electrical questions — tricky with explanations and analogies',count:278,data:typeof QUIZ_ELECTRICIDAD_COMERCIAL_P2!=='undefined'?QUIZ_ELECTRICIDAD_COMERCIAL_P2:[],color:'#f39c12'}
 ];
 
 function renderQuizSelector(){
@@ -2213,6 +2215,7 @@ function startQuiz(id){
     else if(qId==='intro_refri')quizData=shuffleArray(QUIZ_INTRO_REFRIGERACION);
     else if(qId==='study_elec')quizData=shuffleArray(QUIZ_STUDY_ELECTRICIDAD);
     else if(qId==='study_refri')quizData=shuffleArray(QUIZ_STUDY_REFRIGERACION);
+    else if(qId==='elec_comercial')quizData=shuffleArray(QUIZ_ELECTRICIDAD_COMERCIAL_P2);
     else quizData=shuffleArray(QUIZ_PRINCIPIANTE);
     quizIdx=0;quizRight=0;quizWrong=0;quizStreak=0;
     quizAnswers=new Array(quizData.length).fill(-1);
@@ -3670,6 +3673,7 @@ function getAllQuizQuestions(){
     if(typeof QUIZ_INTRO_REFRIGERACION!=='undefined')all.push(...QUIZ_INTRO_REFRIGERACION.map(q=>({...q,_source:'intro_refri'})));
     if(typeof QUIZ_STUDY_ELECTRICIDAD!=='undefined')all.push(...QUIZ_STUDY_ELECTRICIDAD.map(q=>({...q,_source:'study_elec'})));
     if(typeof QUIZ_STUDY_REFRIGERACION!=='undefined')all.push(...QUIZ_STUDY_REFRIGERACION.map(q=>({...q,_source:'study_refri'})));
+    if(typeof QUIZ_ELECTRICIDAD_COMERCIAL_P2!=='undefined')all.push(...QUIZ_ELECTRICIDAD_COMERCIAL_P2.map(q=>({...q,_source:'elec_comercial'})));
     return all;
 }
 
