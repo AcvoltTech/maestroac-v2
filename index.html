@@ -162,19 +162,39 @@ h<!DOCTYPE html>
         .music-settings{position:fixed;top:60px;right:128px;z-index:800;width:44px;height:44px;border-radius:50%;background:var(--card);border:2px solid rgba(0,212,255,0.15);color:var(--electric);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.3s;box-shadow:0 4px 12px rgba(0,0,0,0.3)}
         .music-settings:hover{transform:scale(1.15);border-color:var(--electric)}
         
-        /* QUIZ SELECTOR */
+        /* QUIZ SELECTOR - SECTIONS */
+        .qs-section{background:var(--card);border:2px solid rgba(255,255,255,0.06);border-radius:16px;overflow:hidden;transition:all 0.3s}
+        .qs-section.locked{opacity:0.5}
+        .qs-section-head{padding:16px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:background 0.2s}
+        .qs-section-head:hover{background:rgba(255,255,255,0.03)}
+        .qs-section-icon{font-size:36px;width:52px;height:52px;display:flex;align-items:center;justify-content:center;border-radius:14px;flex-shrink:0}
+        .qs-section-info{flex:1}
+        .qs-section-title{font-family:'Fredoka',sans-serif;font-size:17px;font-weight:700}
+        .qs-section-meta{font-size:11px;color:var(--muted);margin-top:2px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+        .qs-section-progress{font-size:11px;font-weight:700;padding:2px 8px;border-radius:8px}
+        .qs-section-arrow{font-size:18px;color:var(--muted);transition:transform 0.3s;flex-shrink:0}
+        .qs-section.open .qs-section-arrow{transform:rotate(180deg)}
+        .qs-section-body{max-height:0;overflow:hidden;transition:max-height 0.4s ease}
+        .qs-section.open .qs-section-body{max-height:800px}
+        .qs-section-levels{padding:0 12px 14px 12px;display:flex;flex-direction:column;gap:8px}
+        .qs-level{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:12px 14px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:all 0.2s}
+        .qs-level:hover{border-color:var(--electric);background:rgba(0,212,255,0.05)}
+        .qs-level-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+        .qs-level-info{flex:1}
+        .qs-level-name{font-size:14px;font-weight:600}
+        .qs-level-count{font-size:11px;color:var(--muted)}
+        .qs-level-badge{font-size:10px;padding:2px 8px;border-radius:8px;font-weight:700}
+        .qs-level-badge.new{background:var(--electric);color:var(--bg)}
+        .qs-level-badge.done{background:rgba(76,175,80,0.2);color:#4caf50}
+        .qs-level-stars{font-size:11px;margin-left:4px}
+        .qs-lock-badge{font-size:10px;padding:3px 10px;border-radius:8px;background:rgba(255,255,255,0.06);color:var(--muted);font-weight:600}
+        /* Legacy compat */
         .quiz-sel-card{background:var(--card);border:2px solid rgba(255,255,255,0.06);border-radius:16px;padding:18px 16px;cursor:pointer;transition:all 0.3s;display:flex;align-items:center;gap:14px;position:relative;overflow:hidden}
         .quiz-sel-card:hover{border-color:var(--electric);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,212,255,0.15)}
-        .quiz-sel-card.locked{opacity:0.5;cursor:not-allowed}
         .quiz-sel-card .qs-icon{font-size:40px;width:56px;height:56px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.04);border-radius:14px;flex-shrink:0}
         .quiz-sel-card .qs-info{flex:1}
         .quiz-sel-card .qs-title{font-family:'Fredoka',sans-serif;font-size:17px;font-weight:700;margin-bottom:2px}
         .quiz-sel-card .qs-desc{font-size:12px;color:var(--muted);line-height:1.3}
-        .quiz-sel-card .qs-badge{position:absolute;top:8px;right:10px;font-size:10px;padding:2px 8px;border-radius:8px;font-weight:700;text-transform:uppercase}
-        .quiz-sel-card .qs-badge.new{background:var(--electric);color:var(--bg)}
-        .quiz-sel-card .qs-badge.done{background:rgba(76,175,80,0.2);color:#4caf50}
-        .quiz-sel-card .qs-count{font-size:11px;color:var(--electric);font-weight:600;margin-top:4px}
-        .quiz-sel-card .qs-stars{margin-top:4px;font-size:12px}
 
         /* QUIZ STYLES */
         .quiz-header{width:100%;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
@@ -1950,36 +1970,137 @@ function tq(q,field){
 }
 
 const QUIZ_LIST=[
-    {id:'intro',icon:'🆕',title:'Intro HVACR',title_en:'Intro to HVACR',desc:'50 preguntas: La industria, carrera, salarios, herramientas, seguridad, certificaciones y terminología',desc_en:'50 questions: The industry, career, salary, tools, safety, certifications and terminology',count:50,data:QUIZ_INTRO,color:'#3498db'},
-    {id:'principiante',icon:'📚',title:'Principiante HVAC',title_en:'HVAC Beginner',desc:'50 preguntas de electricidad básica, refrigeración, AC, herramientas y seguridad',desc_en:'50 questions on basic electrical, refrigeration, AC, tools and safety',count:50,data:QUIZ_PRINCIPIANTE,color:'#00d4ff'},
-    {id:'intro_elec',icon:'🔌',title:'Intro Electricidad (Capciosas)',title_en:'Intro Electricity (Tricky)',desc:'100 preguntas capciosas de electricidad básica — opciones similares, solo el que sabe contesta',desc_en:'100 tricky basic electricity questions — similar options, only real knowledge works',count:100,data:typeof QUIZ_INTRO_ELECTRICIDAD!=='undefined'?QUIZ_INTRO_ELECTRICIDAD:[],color:'#e74c3c'},
-    {id:'intro_refri',icon:'🧊',title:'Intro Refrigeración (Capciosas)',title_en:'Intro Refrigeration (Tricky)',desc:'100 preguntas capciosas de refrigeración básica — presiones, temperaturas, diagnóstico',desc_en:'100 tricky basic refrigeration questions — pressures, temperatures, diagnostics',count:100,data:typeof QUIZ_INTRO_REFRIGERACION!=='undefined'?QUIZ_INTRO_REFRIGERACION:[],color:'#1abc9c'},
-    {id:'electricidad',icon:'⚡',title:'Electricidad Avanzada',title_en:'Advanced Electrical',desc:'117 preguntas: Ley de Ohm, NEC, motores, VFD, GFCI, AFCI, circuitos, contactores',desc_en:'117 questions: Ohm\'s Law, NEC, motors, VFD, GFCI, AFCI, circuits, contactors',count:117,data:QUIZ_ELECTRICIDAD,color:'#ffd700'},
-    {id:'refrigeracion',icon:'❄️',title:'Refrigeración Completa',title_en:'Complete Refrigeration',desc:'200 preguntas: Doméstica, Comercial, Walk-in, EPA 608, Troubleshooting, Refrigerantes, Seguridad',desc_en:'200 questions: Domestic, Commercial, Walk-in, EPA 608, Troubleshooting, Refrigerants, Safety',count:200,data:QUIZ_REFRIGERACION,color:'#00e5ff'},
-    {id:'study_elec',icon:'⚡',title:'Estudio Electricidad Avanzada',title_en:'Advanced Electricity Study',desc:'100 preguntas avanzadas: VFD, trifásico, BACnet, megóhmetro, IPM inverter',desc_en:'100 advanced questions: VFD, three-phase, BACnet, megohmmeter, IPM inverter',count:100,data:typeof QUIZ_STUDY_ELECTRICIDAD!=='undefined'?QUIZ_STUDY_ELECTRICIDAD:[],color:'#9b59b6'},
-    {id:'study_refri',icon:'🌡️',title:'Estudio Refrigeración Avanzada',title_en:'Advanced Refrigeration Study',desc:'100 preguntas avanzadas: chillers, VRF, CO2 transcrítico, torres, AIM Act',desc_en:'100 advanced questions: chillers, VRF, transcritical CO2, towers, AIM Act',count:100,data:typeof QUIZ_STUDY_REFRIGERACION!=='undefined'?QUIZ_STUDY_REFRIGERACION:[],color:'#e67e22'},
-    {id:'elec_comercial',icon:'🏢',title:'Electricidad Comercial (278)',title_en:'Commercial Electrical (278)',desc:'278 preguntas avanzadas de electricidad comercial — capciosas con explicaciones y analogías',desc_en:'278 advanced commercial electrical questions — tricky with explanations and analogies',count:278,data:typeof QUIZ_ELECTRICIDAD_COMERCIAL_P2!=='undefined'?QUIZ_ELECTRICIDAD_COMERCIAL_P2:[],color:'#f39c12'},
-    {id:'ac_principiante',icon:'❄️',title:'AC Principiante (200)',title_en:'AC Beginner (200)',desc:'200 preguntas de AC: fundamentos, componentes, refrigerantes, diagnóstico, herramientas y seguridad',desc_en:'200 AC questions: fundamentals, components, refrigerants, diagnostics, tools and safety',count:200,data:typeof quizACPrincipiante!=='undefined'?quizACPrincipiante:[],color:'#2ecc71'},
-    {id:'heating_intro',icon:'🔥',title:'Heating Intro (100)',title_en:'Heating Intro (100)',desc:'100 preguntas de calefacción: seguridad/CO, gas furnaces, heat pumps, boilers, radiant y fundamentos',desc_en:'100 heating questions: safety/CO, gas furnaces, heat pumps, boilers, radiant and fundamentals',count:100,data:typeof QUIZ_HEATING_INTRO!=='undefined'?QUIZ_HEATING_INTRO:[],color:'#e74c3c'},
-    {id:'wh_intro',icon:'💧',title:'Water Heaters Intro (100)',title_en:'Water Heaters Intro (100)',desc:'100 preguntas: tank, tankless, pool/spa, sizing, seguridad y fundamentos de water heaters',desc_en:'100 questions: tank, tankless, pool/spa, sizing, safety and water heater fundamentals',count:100,data:typeof QUIZ_WH_INTRO!=='undefined'?QUIZ_WH_INTRO:[],color:'#3498db'},
-    {id:'acca_intro',icon:'📐',title:'ACCA Manuales Intro (100)',title_en:'ACCA Manuals Intro (100)',desc:'100 preguntas: Manual J (Casa de Bob), Manual N (Cocina de María), ventilación ASHRAE',desc_en:'100 questions: Manual J (Bobs House), Manual N (Marias Kitchen), ASHRAE ventilation',count:100,data:typeof QUIZ_ACCA_INTRO!=='undefined'?QUIZ_ACCA_INTRO:[],color:'#9b59b6'},
-    {id:'ventas_intro',icon:'💼',title:'Plan de Ventas Intro (121)',title_en:'Sales Plan Intro (121)',desc:'121 preguntas: Precio, cierre, presentación, evaluación, leads, servicio, financiamiento, objeciones',desc_en:'121 questions: Price, closing, presentation, evaluation, leads, service, financing, objections',count:121,data:typeof QUIZ_VENTAS_INTRO!=='undefined'?QUIZ_VENTAS_INTRO:[],color:'#e67e22'}
+    {id:'intro',icon:'🆕',title:'Intro HVACR',title_en:'Intro to HVACR',count:50,data:typeof QUIZ_INTRO!=='undefined'?QUIZ_INTRO:[],color:'#3498db'},
+    {id:'principiante',icon:'📚',title:'Principiante HVAC',title_en:'HVAC Beginner',count:50,data:typeof QUIZ_PRINCIPIANTE!=='undefined'?QUIZ_PRINCIPIANTE:[],color:'#00d4ff'},
+    {id:'intro_elec',icon:'🔌',title:'Intro Electricidad',title_en:'Intro Electricity',count:100,data:typeof QUIZ_INTRO_ELECTRICIDAD!=='undefined'?QUIZ_INTRO_ELECTRICIDAD:[],color:'#e74c3c'},
+    {id:'intro_refri',icon:'🧊',title:'Intro Refrigeración',title_en:'Intro Refrigeration',count:100,data:typeof QUIZ_INTRO_REFRIGERACION!=='undefined'?QUIZ_INTRO_REFRIGERACION:[],color:'#1abc9c'},
+    {id:'electricidad',icon:'⚡',title:'Electricidad Avanzada',title_en:'Advanced Electrical',count:117,data:typeof QUIZ_ELECTRICIDAD!=='undefined'?QUIZ_ELECTRICIDAD:[],color:'#ffd700'},
+    {id:'refrigeracion',icon:'❄️',title:'Refrigeración Completa',title_en:'Complete Refrigeration',count:200,data:typeof QUIZ_REFRIGERACION!=='undefined'?QUIZ_REFRIGERACION:[],color:'#00e5ff'},
+    {id:'study_elec',icon:'⚡',title:'Estudio Electricidad Avanzada',title_en:'Advanced Electricity Study',count:100,data:typeof QUIZ_STUDY_ELECTRICIDAD!=='undefined'?QUIZ_STUDY_ELECTRICIDAD:[],color:'#9b59b6'},
+    {id:'study_refri',icon:'🌡️',title:'Estudio Refrigeración Avanzada',title_en:'Advanced Refrigeration Study',count:100,data:typeof QUIZ_STUDY_REFRIGERACION!=='undefined'?QUIZ_STUDY_REFRIGERACION:[],color:'#e67e22'},
+    {id:'elec_comercial',icon:'🏢',title:'Electricidad Comercial',title_en:'Commercial Electrical',count:278,data:typeof QUIZ_ELECTRICIDAD_COMERCIAL_P2!=='undefined'?QUIZ_ELECTRICIDAD_COMERCIAL_P2:[],color:'#f39c12'},
+    {id:'ac_principiante',icon:'❄️',title:'AC Principiante',title_en:'AC Beginner',count:200,data:typeof quizACPrincipiante!=='undefined'?quizACPrincipiante:[],color:'#2ecc71'},
+    {id:'heating_intro',icon:'🔥',title:'Heating Intro',title_en:'Heating Intro',count:100,data:typeof QUIZ_HEATING_INTRO!=='undefined'?QUIZ_HEATING_INTRO:[],color:'#e74c3c'},
+    {id:'wh_intro',icon:'💧',title:'Water Heaters Intro',title_en:'Water Heaters Intro',count:100,data:typeof QUIZ_WH_INTRO!=='undefined'?QUIZ_WH_INTRO:[],color:'#3498db'},
+    {id:'acca_intro',icon:'📐',title:'ACCA Manuales Intro',title_en:'ACCA Manuals Intro',count:100,data:typeof QUIZ_ACCA_INTRO!=='undefined'?QUIZ_ACCA_INTRO:[],color:'#9b59b6'},
+    {id:'ventas_intro',icon:'💼',title:'Plan de Ventas Intro',title_en:'Sales Plan Intro',count:121,data:typeof QUIZ_VENTAS_INTRO!=='undefined'?QUIZ_VENTAS_INTRO:[],color:'#e67e22'}
 ];
+
+const QUIZ_SECTIONS=[
+    {num:1,icon:'❄️',title:'Aire Acondicionado',title_en:'Air Conditioning',color:'#00d4ff',
+     levels:[{id:'ac_principiante',level:'Intro',level_en:'Intro',dot:'#2ecc71'},{id:'intro_refri',level:'Principiante',level_en:'Beginner',dot:'#f1c40f'}]},
+    {num:2,icon:'⚡',title:'Electricidad',title_en:'Electrical',color:'#ffd700',
+     levels:[{id:'intro_elec',level:'Intro',level_en:'Intro',dot:'#2ecc71'},{id:'electricidad',level:'Avanzada',level_en:'Advanced',dot:'#f1c40f'},{id:'study_elec',level:'Estudio Avanzado',level_en:'Advanced Study',dot:'#e67e22'},{id:'elec_comercial',level:'Comercial',level_en:'Commercial',dot:'#e74c3c'}]},
+    {num:3,icon:'🧊',title:'Refrigeración',title_en:'Refrigeration',color:'#1abc9c',
+     levels:[{id:'intro_refri',level:'Intro',level_en:'Intro',dot:'#2ecc71'},{id:'refrigeracion',level:'Completa',level_en:'Complete',dot:'#f1c40f'},{id:'study_refri',level:'Estudio Avanzado',level_en:'Advanced Study',dot:'#e74c3c'}]},
+    {num:4,icon:'🔥',title:'Heating',title_en:'Heating',color:'#e74c3c',
+     levels:[{id:'heating_intro',level:'Intro',level_en:'Intro',dot:'#2ecc71'}]},
+    {num:5,icon:'💧',title:'Water Heaters',title_en:'Water Heaters',color:'#3498db',
+     levels:[{id:'wh_intro',level:'Intro',level_en:'Intro',dot:'#2ecc71'}]},
+    {num:6,icon:'📐',title:'ACCA Manuales',title_en:'ACCA Manuals',color:'#9b59b6',
+     levels:[{id:'acca_intro',level:'Intro',level_en:'Intro',dot:'#2ecc71'}]},
+    {num:7,icon:'🏗️',title:'Estructura de Compañía',title_en:'Company Structure',color:'#95a5a6',levels:[]},
+    {num:8,icon:'💼',title:'Plan de Venta',title_en:'Sales Plan',color:'#e67e22',
+     levels:[{id:'ventas_intro',level:'Intro',level_en:'Intro',dot:'#2ecc71'}]},
+    {num:9,icon:'🎓',title:'Escuela / Director',title_en:'School / Director',color:'#95a5a6',levels:[]},
+    {num:10,icon:'🏪',title:'Franquiciar',title_en:'Franchising',color:'#95a5a6',levels:[]},
+    {num:11,icon:'🏷️',title:'Vender la Empresa',title_en:'Selling the Business',color:'#95a5a6',levels:[]},
+    {num:12,icon:'⚖️',title:'Leyes Laborales',title_en:'Labor Laws',color:'#95a5a6',levels:[]},
+    {num:13,icon:'📣',title:'Marketing',title_en:'Marketing',color:'#95a5a6',levels:[]},
+    {num:14,icon:'🏢',title:'Manejo de Empresa',title_en:'Business Management',color:'#95a5a6',levels:[]}
+];
+const QUIZ_SECTION_GENERAL={icon:'🆕',title:'General HVACR',title_en:'General HVACR',color:'#3498db',
+    levels:[{id:'intro',level:'Intro HVACR',level_en:'Intro HVACR',dot:'#2ecc71'},{id:'principiante',level:'Principiante',level_en:'Beginner',dot:'#f1c40f'}]};
 
 function renderQuizSelector(){
     if(!window.checkAIPremium || !window.checkAIPremium()) return;
     const el=document.getElementById('quizSelList');
     const scores=JSON.parse(localStorage.getItem('maestro_quiz_scores')||'{}');
-    el.innerHTML=QUIZ_LIST.map(q=>{
-        const best=scores[q.id];
-        const badge=best?'<span class="qs-badge done">✅ '+best+'%</span>':'<span class="qs-badge new">Nuevo</span>';
-        const stars=best?'<div class="qs-stars">'+getStarsHTML(best)+'</div>':'';
-        return '<div class="quiz-sel-card" onclick="selectQuiz(\''+q.id+'\')" style="border-color:'+q.color+'22">'+
-            '<div class="qs-icon" style="background:'+q.color+'15;color:'+q.color+'">'+q.icon+'</div>'+
-            '<div class="qs-info"><div class="qs-title" style="color:'+q.color+'">'+q.title+'</div>'+
-            '<div class="qs-desc">'+(D.lang==='es'?q.desc:(q.desc_en||q.desc))+'</div>'+
-            '<div class="qs-count">📝 '+q.count+(D.lang==='es'?' preguntas':' questions')+'</div>'+stars+'</div>'+badge+'</div>';
-    }).join('');
+    const es=D.lang==='es';
+    let html='';
+
+    // Total progress bar
+    let totalQ=0,totalDone=0;
+    QUIZ_LIST.forEach(q=>{if(scores[q.id])totalDone++;totalQ++;});
+    html+='<div style="background:var(--card);border-radius:12px;padding:14px 16px;margin-bottom:8px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span style="font-size:13px;font-weight:700;color:var(--electric)">'+(es?'📊 Progreso Total':'📊 Total Progress')+'</span><span style="font-size:12px;color:var(--muted)">'+totalDone+'/'+totalQ+(es?' quizzes completados':' quizzes completed')+'</span></div><div class="pb" style="margin:0"><div class="pbf" style="width:'+(totalQ?Math.round(totalDone/totalQ*100):0)+'%;background:var(--electric)"></div></div></div>';
+
+    // Render each section
+    QUIZ_SECTIONS.forEach(sec=>{
+        const locked=sec.levels.length===0;
+        const secLevels=sec.levels.map(lv=>{
+            const q=QUIZ_LIST.find(x=>x.id===lv.id);
+            return q?{...lv,count:q.count,score:scores[lv.id]}:{...lv,count:0,score:null};
+        });
+        const secTotal=secLevels.reduce((s,l)=>s+l.count,0);
+        const secDone=secLevels.filter(l=>l.score).length;
+        const secId='qsec_'+sec.num;
+
+        html+='<div class="qs-section'+(locked?' locked':'')+'" id="'+secId+'">';
+        html+='<div class="qs-section-head" onclick="'+(locked?'':'toggleQSection(\''+secId+'\')')+'">';
+        html+='<div class="qs-section-icon" style="background:'+sec.color+'15;color:'+sec.color+'">'+sec.icon+'</div>';
+        html+='<div class="qs-section-info">';
+        html+='<div class="qs-section-title" style="color:'+(locked?'var(--muted)':sec.color)+'">'+(es?sec.title:sec.title_en)+'</div>';
+        html+='<div class="qs-section-meta">';
+        if(locked){
+            html+='<span>🔒 '+(es?'Próximamente':'Coming soon')+'</span>';
+        } else {
+            html+='<span>📝 '+secTotal+(es?' preguntas':' questions')+'</span>';
+            html+='<span>📊 '+secLevels.length+(es?' niveles':' levels')+'</span>';
+            if(secDone>0) html+='<span style="color:#4caf50">✅ '+secDone+'/'+secLevels.length+'</span>';
+        }
+        html+='</div></div>';
+        if(locked){
+            html+='<span class="qs-lock-badge">🔒</span>';
+        } else {
+            html+='<span class="qs-section-arrow">▼</span>';
+        }
+        html+='</div>';
+
+        if(!locked){
+            html+='<div class="qs-section-body"><div class="qs-section-levels">';
+            secLevels.forEach(lv=>{
+                const badge=lv.score?'<span class="qs-level-badge done">✅ '+lv.score+'%</span><span class="qs-level-stars">'+getStarsHTML(lv.score)+'</span>':'<span class="qs-level-badge new">'+(es?'Nuevo':'New')+'</span>';
+                html+='<div class="qs-level" onclick="selectQuiz(\''+lv.id+'\')">';
+                html+='<div class="qs-level-dot" style="background:'+lv.dot+'"></div>';
+                html+='<div class="qs-level-info"><div class="qs-level-name">'+(es?lv.level:lv.level_en)+'</div>';
+                html+='<div class="qs-level-count">'+lv.count+(es?' preguntas':' questions')+'</div></div>';
+                html+=badge+'</div>';
+            });
+            html+='</div></div>';
+        }
+        html+='</div>';
+    });
+
+    // General HVACR section at bottom
+    const gen=QUIZ_SECTION_GENERAL;
+    const genLevels=gen.levels.map(lv=>{
+        const q=QUIZ_LIST.find(x=>x.id===lv.id);
+        return q?{...lv,count:q.count,score:scores[lv.id]}:{...lv,count:0,score:null};
+    });
+    const genTotal=genLevels.reduce((s,l)=>s+l.count,0);
+    html+='<div class="qs-section" id="qsec_gen">';
+    html+='<div class="qs-section-head" onclick="toggleQSection(\'qsec_gen\')">';
+    html+='<div class="qs-section-icon" style="background:'+gen.color+'15;color:'+gen.color+'">'+gen.icon+'</div>';
+    html+='<div class="qs-section-info"><div class="qs-section-title" style="color:'+gen.color+'">'+(es?gen.title:gen.title_en)+'</div>';
+    html+='<div class="qs-section-meta"><span>📝 '+genTotal+(es?' preguntas':' questions')+'</span></div></div>';
+    html+='<span class="qs-section-arrow">▼</span></div>';
+    html+='<div class="qs-section-body"><div class="qs-section-levels">';
+    genLevels.forEach(lv=>{
+        const badge=lv.score?'<span class="qs-level-badge done">✅ '+lv.score+'%</span><span class="qs-level-stars">'+getStarsHTML(lv.score)+'</span>':'<span class="qs-level-badge new">'+(es?'Nuevo':'New')+'</span>';
+        html+='<div class="qs-level" onclick="selectQuiz(\''+lv.id+'\')">';
+        html+='<div class="qs-level-dot" style="background:'+lv.dot+'"></div>';
+        html+='<div class="qs-level-info"><div class="qs-level-name">'+(es?lv.level:lv.level_en)+'</div>';
+        html+='<div class="qs-level-count">'+lv.count+(es?' preguntas':' questions')+'</div></div>';
+        html+=badge+'</div>';
+    });
+    html+='</div></div></div>';
+
+    el.innerHTML=html;
+}
+
+function toggleQSection(id){
+    const el=document.getElementById(id);
+    if(el) el.classList.toggle('open');
 }
 
 function getStarsHTML(pct){
