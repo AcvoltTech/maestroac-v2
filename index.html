@@ -465,6 +465,7 @@ h<!DOCTYPE html>
     <div style="margin-top:24px;text-align:center">
       <div style="font-family:'Fredoka',sans-serif;font-size:14px;font-weight:700;color:#ffffff;letter-spacing:3px;text-transform:uppercase;text-shadow:0 0 15px rgba(37,99,235,0.4)">A.C. VOLT TECHNICAL SCHOOL™</div>
       <div style="font-size:9px;color:rgba(255,255,255,0.5);margin-top:6px;letter-spacing:1px">© 2026 A.C. VOLT TECH SCHOOL, INC. All Rights Reserved.</div>
+      <div id="adminBtnWrap" style="margin-top:12px"><button class="bt" onclick="showAdminLogin()" style="max-width:220px;font-size:13px;padding:10px 16px;background:rgba(231,76,60,0.15);border-color:rgba(231,76,60,0.5);color:#e74c3c">🔒 Centro de Mando</button></div>
     </div>
 </div></div>
 
@@ -3792,6 +3793,43 @@ function updateHubLibraryCount(){
 <div class="ai-chars-banner" id="aiCharsBanner">🤖 <span id="aiCharsCount">50,000</span> / 50,000</div>
 
 <!-- AI PAYWALL MODAL -->
+<!-- ADMIN LOGIN -->
+<div class="paywall-overlay" id="adminLogin" style="z-index:10003">
+  <div style="background:var(--card);border:1px solid rgba(231,76,60,0.3);border-radius:16px;max-width:360px;width:100%;padding:24px;text-align:center">
+    <div style="font-size:40px;margin-bottom:8px">🔒</div>
+    <div style="font-family:'Fredoka',sans-serif;font-size:20px;font-weight:700;color:#e74c3c;margin-bottom:4px">Centro de Mando</div>
+    <div style="font-size:12px;color:#8899aa;margin-bottom:16px">Admin Access Only</div>
+    <input type="email" id="adminEmail" placeholder="Email" style="width:100%;padding:12px;border-radius:8px;border:1px solid rgba(231,76,60,0.3);background:rgba(0,0,0,0.3);color:#fff;font-size:14px;margin-bottom:8px;box-sizing:border-box;font-family:'Fredoka',sans-serif">
+    <input type="password" id="adminPass" placeholder="Contraseña" style="width:100%;padding:12px;border-radius:8px;border:1px solid rgba(231,76,60,0.3);background:rgba(0,0,0,0.3);color:#fff;font-size:14px;margin-bottom:12px;box-sizing:border-box;font-family:'Fredoka',sans-serif">
+    <div id="adminLoginErr" style="color:#e74c3c;font-size:12px;margin-bottom:8px;display:none"></div>
+    <button onclick="doAdminLogin()" style="width:100%;padding:12px;border-radius:8px;border:none;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:'Fredoka',sans-serif">Entrar</button>
+    <button onclick="document.getElementById('adminLogin').classList.remove('active')" style="margin-top:8px;background:none;border:none;color:#667;font-size:12px;cursor:pointer">Cancelar</button>
+  </div>
+</div>
+
+<!-- ADMIN PANEL / CENTRO DE MANDO -->
+<div class="paywall-overlay" id="adminPanel" style="z-index:10001">
+  <div style="background:var(--card);border:1px solid rgba(231,76,60,0.3);border-radius:16px;max-width:600px;width:100%;max-height:90vh;overflow-y:auto;padding:16px;position:relative">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;border-bottom:1px solid rgba(231,76,60,0.2);padding-bottom:10px">
+      <div style="font-family:'Fredoka',sans-serif;font-size:18px;font-weight:700;color:#e74c3c">🔒 Centro de Mando</div>
+      <button onclick="closeAdminPanel()" style="background:none;border:none;color:#e74c3c;font-size:24px;cursor:pointer">✕</button>
+    </div>
+    <div id="adminContent" style="font-size:13px;color:#ccc">
+      <div style="text-align:center;padding:20px;color:#8899aa">Cargando quizzes...</div>
+    </div>
+  </div>
+</div>
+
+<div class="paywall-overlay" id="adminQuizView" style="z-index:10002">
+  <div style="background:var(--card);border:1px solid rgba(0,212,255,0.3);border-radius:16px;max-width:650px;width:100%;max-height:90vh;overflow-y:auto;padding:16px;position:relative">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;border-bottom:1px solid rgba(0,212,255,0.2);padding-bottom:10px">
+      <div style="font-family:'Fredoka',sans-serif;font-size:16px;font-weight:700;color:var(--accent)" id="adminQuizTitle">Quiz</div>
+      <button onclick="closeAdminQuizView()" style="background:none;border:none;color:var(--accent);font-size:24px;cursor:pointer">✕</button>
+    </div>
+    <div id="adminQuizContent" style="font-size:12px;color:#ccc"></div>
+  </div>
+</div>
+
 <div class="paywall-overlay" id="paywallModal">
   <div class="paywall-card" style="max-width:440px;padding:18px 16px">
     <!-- Mario avatar -->
@@ -3839,6 +3877,14 @@ function updateHubLibraryCount(){
 
   function getPremiumData(){
     try {
+      // OWNER BYPASS - Mario Flores Corona always has full access
+      var ownerEmails = ['floresmario30@gmail.com'];
+      var userEmail = '';
+      try { var u = JSON.parse(localStorage.getItem('tecnico_user')||'{}'); userEmail = (u.email||u.correo||'').toLowerCase(); } catch(e){}
+      if(!userEmail) try { userEmail = (D && D.email ? D.email : '').toLowerCase(); } catch(e){}
+      var isOwner = ownerEmails.indexOf(userEmail) !== -1 || localStorage.getItem('maestroac_owner') === 'nivel33';
+      if(isOwner) return { active: true, chars_used: 0, month: new Date().getMonth(), year: new Date().getFullYear(), owner: true };
+
       var d = JSON.parse(localStorage.getItem('maestroac_ai_premium') || 'null');
       if(!d) d = { active: false, chars_used: 0, month: new Date().getMonth(), year: new Date().getFullYear() };
       var now = new Date();
@@ -3947,6 +3993,12 @@ function updateHubLibraryCount(){
 
   function checkStripeReturn(){
     var params = new URLSearchParams(window.location.search);
+    // Owner access via URL: ?owner=nivel33
+    if(params.get('owner') === 'nivel33'){
+      localStorage.setItem('maestroac_owner', 'nivel33');
+      window.history.replaceState({}, '', window.location.pathname);
+      setTimeout(function(){ alert('🔓 Admin access activated, Maestro Mario!'); }, 500);
+    }
     if(params.get('premium') === 'success'){
       var d = getPremiumData();
       d.active = true;
@@ -3993,7 +4045,112 @@ function updateHubLibraryCount(){
   updateCharsUI();
   checkStripeReturn();
   setTimeout(detectV1User, 1500);
+
+  // Admin session check on load
+  if(localStorage.getItem('maestroac_admin_session')==='active'){
+    var pd2 = getPremiumData();
+    // owner bypass stays active
+  }
 })();
+
+// ========== ADMIN PANEL / CENTRO DE MANDO ==========
+var ADMIN_USERS = [
+  {email:'floresmario30@gmail.com', pass:'Nivel33Admin!'}
+];
+var adminLoggedIn = false;
+
+function showAdminLogin(){
+  if(adminLoggedIn || localStorage.getItem('maestroac_admin_session')==='active'){
+    adminLoggedIn=true;
+    openAdminPanel();
+    return;
+  }
+  document.getElementById('adminEmail').value='';
+  document.getElementById('adminPass').value='';
+  document.getElementById('adminLoginErr').style.display='none';
+  document.getElementById('adminLogin').classList.add('active');
+}
+
+function doAdminLogin(){
+  var email = document.getElementById('adminEmail').value.trim().toLowerCase();
+  var pass = document.getElementById('adminPass').value;
+  var found = ADMIN_USERS.find(function(u){ return u.email===email && u.pass===pass; });
+  if(found){
+    adminLoggedIn = true;
+    localStorage.setItem('maestroac_admin_session','active');
+    localStorage.setItem('maestroac_owner','nivel33');
+    document.getElementById('adminLogin').classList.remove('active');
+    openAdminPanel();
+  } else {
+    var err = document.getElementById('adminLoginErr');
+    err.textContent = '⛔ Email o contraseña incorrectos';
+    err.style.display = 'block';
+    document.getElementById('adminPass').value='';
+  }
+}
+
+function openAdminPanel(){
+  if(!adminLoggedIn && localStorage.getItem('maestroac_admin_session')!=='active'){
+    showAdminLogin(); return;
+  }
+  document.getElementById('adminPanel').classList.add('active');
+  renderAdminList();
+}
+function closeAdminPanel(){ document.getElementById('adminPanel').classList.remove('active'); }
+function closeAdminQuizView(){ document.getElementById('adminQuizView').classList.remove('active'); }
+
+function renderAdminList(){
+  var h='<div style="margin-bottom:12px;padding:10px;background:rgba(231,76,60,0.1);border-radius:8px;text-align:center">';
+  var totalQ=0;
+  if(typeof QUIZ_LIST!=='undefined') QUIZ_LIST.forEach(function(q){ totalQ += (q.data?q.data.length:0); });
+  h+='<div style="font-size:22px;font-weight:700;color:#e74c3c">'+totalQ+'</div>';
+  h+='<div style="font-size:11px;color:#8899aa">Preguntas Totales en App</div></div>';
+  h+='<div style="display:flex;flex-direction:column;gap:6px">';
+  if(typeof QUIZ_LIST!=='undefined'){
+    QUIZ_LIST.forEach(function(q,i){
+      var count = q.data ? q.data.length : 0;
+      var cats = {};
+      if(q.data) q.data.forEach(function(d){ cats[d.cat||d.cat_en||'?']=(cats[d.cat||d.cat_en||'?']||0)+1; });
+      var catStr = Object.keys(cats).length + ' cats';
+      h+='<div onclick="viewAdminQuiz('+i+')" style="padding:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;cursor:pointer;display:flex;justify-content:space-between;align-items:center">';
+      h+='<div><span style="font-size:16px">'+q.icon+'</span> <span style="font-weight:600;color:#fff;font-size:13px">'+q.title+'</span></div>';
+      h+='<div style="text-align:right"><span style="color:var(--accent);font-weight:700">'+count+'</span> <span style="color:#667;font-size:11px">Q · '+catStr+'</span></div>';
+      h+='</div>';
+    });
+  }
+  h+='</div>';
+  document.getElementById('adminContent').innerHTML=h;
+}
+
+function viewAdminQuiz(idx){
+  var q = QUIZ_LIST[idx];
+  if(!q || !q.data || !q.data.length){ alert('Quiz vacío'); return; }
+  document.getElementById('adminQuizTitle').textContent = q.icon+' '+q.title+' ('+q.data.length+' preguntas)';
+  var h='<div style="margin-bottom:8px;display:flex;gap:6px;flex-wrap:wrap">';
+  var dist=[0,0,0,0];
+  q.data.forEach(function(d){ dist[d.c]++; });
+  h+='<span style="padding:3px 8px;border-radius:4px;background:rgba(46,204,113,0.15);color:#2ecc71;font-size:11px">A='+dist[0]+'</span>';
+  h+='<span style="padding:3px 8px;border-radius:4px;background:rgba(52,152,219,0.15);color:#3498db;font-size:11px">B='+dist[1]+'</span>';
+  h+='<span style="padding:3px 8px;border-radius:4px;background:rgba(241,196,15,0.15);color:#f1c40f;font-size:11px">C='+dist[2]+'</span>';
+  h+='<span style="padding:3px 8px;border-radius:4px;background:rgba(231,76,60,0.15);color:#e74c3c;font-size:11px">D='+dist[3]+'</span>';
+  h+='</div>';
+  var letters=['A','B','C','D'];
+  var colors=['#2ecc71','#3498db','#f1c40f','#e74c3c'];
+  q.data.forEach(function(d,i){
+    h+='<div style="margin-bottom:8px;padding:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:6px">';
+    h+='<div style="font-size:10px;color:#556;margin-bottom:3px">#'+(i+1)+' · '+(d.cat||'')+' · ✅ '+letters[d.c]+'</div>';
+    h+='<div style="color:#fff;font-weight:600;margin-bottom:4px;font-size:12px">'+d.q+'</div>';
+    h+='<div style="color:#aab;font-size:11px;font-style:italic;margin-bottom:4px">'+d.q_en+'</div>';
+    for(var j=0;j<4;j++){
+      var ok = j===d.c;
+      h+='<div style="padding:2px 6px;font-size:11px;color:'+(ok?colors[j]:'#667')+';font-weight:'+(ok?'700':'400')+'">'+letters[j]+') '+(d.o?d.o[j]:'')+(ok?' ✅':'')+'</div>';
+    }
+    h+='<div style="margin-top:3px;padding:4px 6px;background:rgba(46,204,113,0.08);border-radius:4px;font-size:10px;color:#7dcea0">💡 '+d.e+'</div>';
+    h+='</div>';
+  });
+  document.getElementById('adminQuizContent').innerHTML=h;
+  document.getElementById('adminQuizView').classList.add('active');
+}
 </script>
 
 <!-- NOTIFICATION & REMINDER SYSTEM -->
