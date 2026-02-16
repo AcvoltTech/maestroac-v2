@@ -1947,20 +1947,7 @@ function tq(q,field){
     return q[field];
 }
 
-const QUIZ_LIST=[
-    {id:'intro',icon:'🆕',title:'Intro HVACR',title_en:'Intro to HVACR',desc:'50 preguntas: La industria, carrera, salarios, herramientas, seguridad, certificaciones y terminología',desc_en:'50 questions: The industry, career, salary, tools, safety, certifications and terminology',count:50,data:QUIZ_INTRO,color:'#3498db'},
-    {id:'principiante',icon:'📚',title:'Principiante HVAC',title_en:'HVAC Beginner',desc:'50 preguntas de electricidad básica, refrigeración, AC, herramientas y seguridad',desc_en:'50 questions on basic electrical, refrigeration, AC, tools and safety',count:50,data:QUIZ_PRINCIPIANTE,color:'#00d4ff'},
-    {id:'intro_elec',icon:'🔌',title:'Intro Electricidad (Capciosas)',title_en:'Intro Electricity (Tricky)',desc:'100 preguntas capciosas de electricidad básica — opciones similares, solo el que sabe contesta',desc_en:'100 tricky basic electricity questions — similar options, only real knowledge works',count:100,data:typeof QUIZ_INTRO_ELECTRICIDAD!=='undefined'?QUIZ_INTRO_ELECTRICIDAD:[],color:'#e74c3c'},
-    {id:'intro_refri',icon:'🧊',title:'Intro Refrigeración (Capciosas)',title_en:'Intro Refrigeration (Tricky)',desc:'100 preguntas capciosas de refrigeración básica — presiones, temperaturas, diagnóstico',desc_en:'100 tricky basic refrigeration questions — pressures, temperatures, diagnostics',count:100,data:typeof QUIZ_INTRO_REFRIGERACION!=='undefined'?QUIZ_INTRO_REFRIGERACION:[],color:'#1abc9c'},
-    {id:'electricidad',icon:'⚡',title:'Electricidad Avanzada',title_en:'Advanced Electrical',desc:'117 preguntas: Ley de Ohm, NEC, motores, VFD, GFCI, AFCI, circuitos, contactores',desc_en:'117 questions: Ohm\'s Law, NEC, motors, VFD, GFCI, AFCI, circuits, contactors',count:117,data:QUIZ_ELECTRICIDAD,color:'#ffd700'},
-    {id:'refrigeracion',icon:'❄️',title:'Refrigeración Completa',title_en:'Complete Refrigeration',desc:'200 preguntas: Doméstica, Comercial, Walk-in, EPA 608, Troubleshooting, Refrigerantes, Seguridad',desc_en:'200 questions: Domestic, Commercial, Walk-in, EPA 608, Troubleshooting, Refrigerants, Safety',count:200,data:QUIZ_REFRIGERACION,color:'#00e5ff'},
-    {id:'study_elec',icon:'⚡',title:'Estudio Electricidad Avanzada',title_en:'Advanced Electricity Study',desc:'100 preguntas avanzadas: VFD, trifásico, BACnet, megóhmetro, IPM inverter',desc_en:'100 advanced questions: VFD, three-phase, BACnet, megohmmeter, IPM inverter',count:100,data:typeof QUIZ_STUDY_ELECTRICIDAD!=='undefined'?QUIZ_STUDY_ELECTRICIDAD:[],color:'#9b59b6'},
-    {id:'study_refri',icon:'🌡️',title:'Estudio Refrigeración Avanzada',title_en:'Advanced Refrigeration Study',desc:'100 preguntas avanzadas: chillers, VRF, CO2 transcrítico, torres, AIM Act',desc_en:'100 advanced questions: chillers, VRF, transcritical CO2, towers, AIM Act',count:100,data:typeof QUIZ_STUDY_REFRIGERACION!=='undefined'?QUIZ_STUDY_REFRIGERACION:[],color:'#e67e22'},
-    {id:'elec_comercial',icon:'🏢',title:'Electricidad Comercial (278)',title_en:'Commercial Electrical (278)',desc:'278 preguntas avanzadas de electricidad comercial — capciosas con explicaciones y analogías',desc_en:'278 advanced commercial electrical questions — tricky with explanations and analogies',count:278,data:typeof QUIZ_ELECTRICIDAD_COMERCIAL_P2!=='undefined'?QUIZ_ELECTRICIDAD_COMERCIAL_P2:[],color:'#f39c12'}
-];
-
 function renderQuizSelector(){
-    if(!window.checkAIPremium || !window.checkAIPremium()) return;
     const el=document.getElementById('quizSelList');
     const scores=JSON.parse(localStorage.getItem('maestro_quiz_scores')||'{}');
     el.innerHTML=QUIZ_LIST.map(q=>{
@@ -1983,7 +1970,6 @@ function getStarsHTML(pct){
 let currentQuizId='principiante';
 
 function selectQuiz(id){
-    if(!window.checkAIPremium || !window.checkAIPremium()) return;
     currentQuizId=id;
     const q=QUIZ_LIST.find(x=>x.id===id);
     startQuiz(id);
@@ -2191,6 +2177,18 @@ const QUIZ_ELECTRICIDAD=[
 {cat:"📖 NEC Código",cat_en:"📖 NEC Code",q:"Según NEC 310.15(B)(3)(a), cuando tienes más de 3 conductores portando corriente en un mismo conduit, debes:",q_en:"According to NEC 310.15(B)(3)(a), when you have more than 3 current-carrying conductors in a conduit, you must:",o:["No hay ajuste necesario — el conduit protege los cables","Aplicar factor de reducción de amperaje (derating) a los conductores","Solo agregar un conductor de tierra extra","Cambiar a un conduit de mayor tamaño solamente"],o_en:["Use larger conduit only","Apply ampacity derating — reduce the maximum allowed current per conductor","Add ventilation to the conduit","Nothing changes — the number of conductors doesn't matter"],c:1,e:"Con 4-6 conductores: 80% de capacidad. 7-9: 70%. 10-20: 50%. El calor se acumula y los cables deben reducir su carga.",e_en:"More conductors in conduit = more heat = must derate ampacity. 4-6 conductors = derate to 80%. 7-9 = 70%. This prevents overheating.",a:"Imagina un autobús lleno: entre más gente, más calor genera cada persona. Los cables en un tubo son igual: más cables = más calor = cada cable puede llevar MENOS corriente. El NEC te dice cuánto reducir.",a_en:"More wires in a pipe = more heat with less room to cool. It's like stuffing more people in an elevator — everyone gets hotter. The NEC says reduce the current limit so the wires don't overheat: 4-6 wires = 80%, 7-9 = 70%."}
 ];
 
+const QUIZ_LIST=[
+    {id:'intro',icon:'🆕',title:'Intro HVACR',title_en:'Intro to HVACR',desc:'50 preguntas: La industria, carrera, salarios, herramientas, seguridad, certificaciones y terminología',desc_en:'50 questions: The industry, career, salary, tools, safety, certifications and terminology',count:50,data:typeof QUIZ_INTRO!=='undefined'?QUIZ_INTRO:[],color:'#3498db'},
+    {id:'principiante',icon:'📚',title:'Principiante HVAC',title_en:'HVAC Beginner',desc:'50 preguntas de electricidad básica, refrigeración, AC, herramientas y seguridad',desc_en:'50 questions on basic electrical, refrigeration, AC, tools and safety',count:50,data:QUIZ_PRINCIPIANTE,color:'#00d4ff'},
+    {id:'intro_elec',icon:'🔌',title:'Intro Electricidad (Capciosas)',title_en:'Intro Electricity (Tricky)',desc:'100 preguntas capciosas de electricidad básica — opciones similares, solo el que sabe contesta',desc_en:'100 tricky basic electricity questions — similar options, only real knowledge works',count:100,data:typeof QUIZ_INTRO_ELECTRICIDAD!=='undefined'?QUIZ_INTRO_ELECTRICIDAD:[],color:'#e74c3c'},
+    {id:'intro_refri',icon:'🧊',title:'Intro Refrigeración (Capciosas)',title_en:'Intro Refrigeration (Tricky)',desc:'100 preguntas capciosas de refrigeración básica — presiones, temperaturas, diagnóstico',desc_en:'100 tricky basic refrigeration questions — pressures, temperatures, diagnostics',count:100,data:typeof QUIZ_INTRO_REFRIGERACION!=='undefined'?QUIZ_INTRO_REFRIGERACION:[],color:'#1abc9c'},
+    {id:'electricidad',icon:'⚡',title:'Electricidad Avanzada',title_en:'Advanced Electrical',desc:'117 preguntas: Ley de Ohm, NEC, motores, VFD, GFCI, AFCI, circuitos, contactores',desc_en:'117 questions: Ohm\'s Law, NEC, motors, VFD, GFCI, AFCI, circuits, contactors',count:117,data:QUIZ_ELECTRICIDAD,color:'#ffd700'},
+    {id:'refrigeracion',icon:'❄️',title:'Refrigeración Completa',title_en:'Complete Refrigeration',desc:'200 preguntas: Doméstica, Comercial, Walk-in, EPA 608, Troubleshooting, Refrigerantes, Seguridad',desc_en:'200 questions: Domestic, Commercial, Walk-in, EPA 608, Troubleshooting, Refrigerants, Safety',count:200,data:typeof QUIZ_REFRIGERACION!=='undefined'?QUIZ_REFRIGERACION:[],color:'#00e5ff'},
+    {id:'study_elec',icon:'⚡',title:'Estudio Electricidad Avanzada',title_en:'Advanced Electricity Study',desc:'100 preguntas avanzadas: VFD, trifásico, BACnet, megóhmetro, IPM inverter',desc_en:'100 advanced questions: VFD, three-phase, BACnet, megohmmeter, IPM inverter',count:100,data:typeof QUIZ_STUDY_ELECTRICIDAD!=='undefined'?QUIZ_STUDY_ELECTRICIDAD:[],color:'#9b59b6'},
+    {id:'study_refri',icon:'🌡️',title:'Estudio Refrigeración Avanzada',title_en:'Advanced Refrigeration Study',desc:'100 preguntas avanzadas: chillers, VRF, CO2 transcrítico, torres, AIM Act',desc_en:'100 advanced questions: chillers, VRF, transcritical CO2, towers, AIM Act',count:100,data:typeof QUIZ_STUDY_REFRIGERACION!=='undefined'?QUIZ_STUDY_REFRIGERACION:[],color:'#e67e22'},
+    {id:'elec_comercial',icon:'🏢',title:'Electricidad Comercial (278)',title_en:'Commercial Electrical (278)',desc:'278 preguntas avanzadas de electricidad comercial — capciosas con explicaciones y analogías',desc_en:'278 advanced commercial electrical questions — tricky with explanations and analogies',count:278,data:typeof QUIZ_ELECTRICIDAD_COMERCIAL_P2!=='undefined'?QUIZ_ELECTRICIDAD_COMERCIAL_P2:[],color:'#f39c12'}
+];
+
 
 let quizData=[];
 let quizIdx=0;
@@ -2226,7 +2224,6 @@ function startQuiz(id){
 }
 
 function retryQuiz(){
-    if(!window.checkAIPremium || !window.checkAIPremium()) return;
     // Only retry the questions the user got WRONG (not the entire quiz)
     const failedQuestions=[];
     for(let i=0;i<quizData.length;i++){
@@ -3413,7 +3410,6 @@ function renderNewbieZone(){
 
 // === STUDY ZONE RENDER ===
 function renderStudyZone(){
-    if(!window.checkAIPremium || !window.checkAIPremium()) return;
     const container=document.getElementById('studyContent');
     const questions=getStudyQuestions();
     const cats=getStudyCategories();
@@ -3467,7 +3463,6 @@ let studyAnswers=[];
 let lastStudyCat='all';
 
 function startStudyQuiz(catFilter){
-    if(!window.checkAIPremium || !window.checkAIPremium()) return;
     lastStudyCat=catFilter;
     const questions=catFilter==='all'?getStudyQuestions():getStudyQuestions(catFilter);
     if(questions.length===0){
@@ -3689,7 +3684,6 @@ function getLibraryCategories(){
 }
 
 function renderStudyLibrary(){
-    if(!window.checkAIPremium || !window.checkAIPremium()) return;
     const container=document.getElementById('libraryContent');
     const cats=getLibraryCategories();
     const allQ=getAllQuizQuestions();
