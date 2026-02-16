@@ -864,6 +864,45 @@
     <button class="bt" onclick="go('s-hub');updateHub()" style="background:var(--card);border:2px solid var(--accent);margin-top:10px" data-lang="volver-hub">← Volver al Hub</button>
     <button class="bt" onclick="exitApp()" style="background:rgba(255,60,60,0.15);border:2px solid rgba(255,60,60,0.4);color:#ff4444;margin-top:20px" id="exitAppBtn">🚪 Salir del App</button>
 </div>
+
+<!-- ADMIN SCREEN (inside .app) -->
+<div class="s" id="s-admin">
+<div style="max-width:800px;margin:0 auto;padding:10px">
+  <div id="adminLogin" style="text-align:center;padding-top:60px">
+    <div style="font-size:48px;margin-bottom:10px">🔐</div>
+    <h2 style="color:var(--accent);margin-bottom:20px">Admin Panel</h2>
+    <input type="email" id="adminEmail" placeholder="Email" style="width:90%;max-width:300px;padding:12px;border-radius:10px;border:1px solid rgba(0,212,255,0.3);background:var(--card);color:var(--txt);margin-bottom:10px;font-size:16px;display:block;margin-left:auto;margin-right:auto">
+    <input type="password" id="adminPass" placeholder="Contraseña" style="width:90%;max-width:300px;padding:12px;border-radius:10px;border:1px solid rgba(0,212,255,0.3);background:var(--card);color:var(--txt);margin-bottom:15px;font-size:16px;display:block;margin-left:auto;margin-right:auto">
+    <div id="adminError" style="color:#e74c3c;font-size:13px;margin-bottom:10px;display:none"></div>
+    <button class="bt" onclick="adminDoLogin()" style="background:linear-gradient(135deg,var(--accent),var(--electric));max-width:300px">🔑 Entrar</button>
+    <button class="bt" onclick="go('s0')" style="background:var(--card);border:1px solid rgba(255,255,255,0.1);max-width:300px;margin-top:8px">← Volver</button>
+  </div>
+  <div id="adminDash" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+      <h2 style="color:var(--accent);margin:0;font-size:18px">🛠️ Admin — Maestro Mario</h2>
+      <div style="display:flex;gap:6px">
+        <button onclick="go('s-hub');updateHub()" style="padding:8px 14px;border-radius:8px;border:1px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer;font-size:13px">← App</button>
+        <button onclick="adminLogout()" style="padding:8px 14px;border-radius:8px;border:1px solid #e74c3c;background:transparent;color:#e74c3c;cursor:pointer;font-size:13px">Salir</button>
+      </div>
+    </div>
+    <div id="adminStats" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:15px"></div>
+    <div id="adminQuizList" style="margin-bottom:12px"></div>
+    <div id="adminQView" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+        <h3 id="adminQTitle" style="color:var(--electric);margin:0;font-size:16px"></h3>
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+          <input type="text" id="adminSearch" placeholder="🔍 Buscar..." oninput="adminFilterQ()" style="padding:8px 12px;border-radius:8px;border:1px solid rgba(0,212,255,0.2);background:var(--card);color:var(--txt);font-size:13px;width:140px">
+          <select id="adminCatFilter" onchange="adminFilterQ()" style="padding:8px;border-radius:8px;border:1px solid rgba(0,212,255,0.2);background:var(--card);color:var(--txt);font-size:13px"></select>
+          <button onclick="adminBackToList()" style="padding:8px 14px;border-radius:8px;border:1px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer;font-size:13px">← Quizzes</button>
+        </div>
+      </div>
+      <div id="adminQCount" style="color:var(--sub);font-size:12px;margin-bottom:8px"></div>
+      <div id="adminQCards" style="display:flex;flex-direction:column;gap:8px"></div>
+    </div>
+  </div>
+</div>
+</div>
+
 </div>
 <div class="cw" id="conf"></div>
 <button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵</button>
@@ -4411,44 +4450,6 @@ function updateHubLibraryCount(){
 
 })();
 </script>
-
-<!-- ========== ADMIN PANEL ========== -->
-<div class="s" id="s-admin">
-<div style="max-width:800px;margin:0 auto;padding:10px">
-  <div id="adminLogin" style="text-align:center;padding-top:60px">
-    <div style="font-size:48px;margin-bottom:10px">🔐</div>
-    <h2 style="color:var(--accent);margin-bottom:20px">Admin Panel</h2>
-    <input type="email" id="adminEmail" placeholder="Email" style="width:90%;max-width:300px;padding:12px;border-radius:10px;border:1px solid rgba(0,212,255,0.3);background:var(--card);color:var(--txt);margin-bottom:10px;font-size:16px;display:block;margin-left:auto;margin-right:auto">
-    <input type="password" id="adminPass" placeholder="Contraseña" style="width:90%;max-width:300px;padding:12px;border-radius:10px;border:1px solid rgba(0,212,255,0.3);background:var(--card);color:var(--txt);margin-bottom:15px;font-size:16px;display:block;margin-left:auto;margin-right:auto">
-    <div id="adminError" style="color:#e74c3c;font-size:13px;margin-bottom:10px;display:none"></div>
-    <button class="bt" onclick="adminDoLogin()" style="background:linear-gradient(135deg,var(--accent),var(--electric));max-width:300px">🔑 Entrar</button>
-    <button class="bt" onclick="go('s0')" style="background:var(--card);border:1px solid rgba(255,255,255,0.1);max-width:300px;margin-top:8px">← Volver</button>
-  </div>
-  <div id="adminDash" style="display:none">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
-      <h2 style="color:var(--accent);margin:0;font-size:18px">🛠️ Admin Panel — Maestro Mario</h2>
-      <div style="display:flex;gap:6px">
-        <button onclick="go('s-hub');updateHub()" style="padding:8px 14px;border-radius:8px;border:1px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer;font-size:13px">← App</button>
-        <button onclick="adminLogout()" style="padding:8px 14px;border-radius:8px;border:1px solid #e74c3c;background:transparent;color:#e74c3c;cursor:pointer;font-size:13px">Salir</button>
-      </div>
-    </div>
-    <div id="adminStats" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:15px"></div>
-    <div id="adminQuizList" style="margin-bottom:12px"></div>
-    <div id="adminQView" style="display:none">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px">
-        <h3 id="adminQTitle" style="color:var(--electric);margin:0;font-size:16px"></h3>
-        <div style="display:flex;gap:6px;align-items:center">
-          <input type="text" id="adminSearch" placeholder="🔍 Buscar..." oninput="adminFilterQ()" style="padding:8px 12px;border-radius:8px;border:1px solid rgba(0,212,255,0.2);background:var(--card);color:var(--txt);font-size:13px;width:160px">
-          <select id="adminCatFilter" onchange="adminFilterQ()" style="padding:8px;border-radius:8px;border:1px solid rgba(0,212,255,0.2);background:var(--card);color:var(--txt);font-size:13px"></select>
-          <button onclick="adminBackToList()" style="padding:8px 14px;border-radius:8px;border:1px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer;font-size:13px">← Quizzes</button>
-        </div>
-      </div>
-      <div id="adminQCount" style="color:var(--sub);font-size:12px;margin-bottom:8px"></div>
-      <div id="adminQCards" style="display:flex;flex-direction:column;gap:8px"></div>
-    </div>
-  </div>
-</div>
-</div>
 
 <!-- ADMIN EDIT MODAL -->
 <div id="adminEditModal" style="position:fixed;inset:0;z-index:20000;background:rgba(10,22,40,0.97);display:none;align-items:flex-start;justify-content:center;padding:15px;overflow-y:auto">
